@@ -1504,7 +1504,7 @@
       <!-- ============================================ STAFF: RETAIL ============================================ -->
       <template x-if="session.role==='staff' && view==='retail'">
         <div>
-          <div class="flex items-end justify-between mb-5">
+          <div class="flex items-end justify-between mb-3">
             <div>
               <h1 class="text-2xl font-black tracking-tight">Retail Products</h1>
               <p class="text-sm text-slate-500">Drinks, air fresheners, essentials, OTC. (Vending candy &amp; snacks not tracked here.)</p>
@@ -1512,6 +1512,15 @@
             <div class="text-xs text-slate-500" x-text="squareConfig.connected ? ('Last sync: ' + relativeTime(squareConfig.lastSyncAt)) : 'Showing demo data'"></div>
           </div>
 
+          <!-- Tabs -->
+          <div class="card p-1 mb-4 inline-flex gap-1 text-sm">
+            <button @click="retailTab='overview'" :class="retailTab==='overview' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📊 Overview</button>
+            <button @click="retailTab='catalog'"  :class="retailTab==='catalog'  ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📦 Catalog &amp; Inventory</button>
+            <button @click="retailTab='receive'; $nextTick(()=>$refs.skuInput?.focus())"  :class="retailTab==='receive'  ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📥 Receive (SKU scan)</button>
+          </div>
+
+        <!-- ============ OVERVIEW TAB (existing dashboard) ============ -->
+        <div x-show="retailTab==='overview'">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             <div class="card p-4">
               <div class="text-xs uppercase font-bold tracking-wider text-slate-500">Today</div>
@@ -1600,6 +1609,261 @@
                     <div class="text-[10px] text-slate-500" x-text="d.label"></div>
                   </div>
                 </template>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ============ /OVERVIEW TAB ============ -->
+
+        <!-- ============ CATALOG & INVENTORY TAB ============ -->
+        <div x-show="retailTab==='catalog'">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="card p-4"><div class="text-xs uppercase font-bold text-slate-500">SKUs</div><div class="text-2xl font-black mt-1" x-text="retailProducts.length"></div></div>
+            <div class="card p-4"><div class="text-xs uppercase font-bold text-slate-500">Total stock</div><div class="text-2xl font-black mt-1" x-text="retailProducts.reduce((s,p)=>s+(p.stock||0),0)"></div></div>
+            <div class="card p-4" x-show="canSeePrices"><div class="text-xs uppercase font-bold text-slate-500">Inventory value</div><div class="text-2xl font-black mt-1" x-text="money(totalInventoryValue)"></div></div>
+            <div class="card p-4" :class="lowStockProducts.length ? 'border-rose-300' : ''"><div class="text-xs uppercase font-bold text-slate-500">Low stock</div><div class="text-2xl font-black mt-1" :class="lowStockProducts.length ? 'text-rose-600' : ''" x-text="lowStockProducts.length"></div></div>
+          </div>
+
+          <div class="card overflow-hidden">
+            <div class="p-3 flex items-center justify-between border-b border-slate-100">
+              <h3 class="font-bold">Catalog</h3>
+              <button @click="openProductDrawer('new')" class="btn btn-primary text-sm">+ Add product</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th class="text-left p-3">SKU</th>
+                    <th class="text-left p-3">Name</th>
+                    <th class="text-left p-3">Category</th>
+                    <th class="text-right p-3" x-show="canSeePrices">Cost</th>
+                    <th class="text-right p-3" x-show="canSeePrices">Price</th>
+                    <th class="text-right p-3" x-show="canSeePrices">Margin</th>
+                    <th class="text-right p-3">Stock</th>
+                    <th class="text-right p-3">Reorder at</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <template x-for="p in retailProducts" :key="p.id">
+                    <tr class="hover:bg-slate-50 cursor-pointer" :class="p.stock <= (p.reorderPoint||0) ? 'bg-rose-50/40' : ''" @click="openProductDrawer(p.id)">
+                      <td class="p-3 font-mono text-xs" x-text="p.sku"></td>
+                      <td class="p-3">
+                        <div class="font-semibold" x-text="p.name"></div>
+                        <div class="text-xs text-slate-500" x-text="p.description || ''"></div>
+                      </td>
+                      <td class="p-3 text-xs"><span class="px-2 py-0.5 bg-slate-100 rounded-full" x-text="p.category"></span></td>
+                      <td class="p-3 text-right font-semibold" x-show="canSeePrices" x-text="money(p.cost||0)"></td>
+                      <td class="p-3 text-right font-semibold" x-show="canSeePrices" x-text="money(p.price||0)"></td>
+                      <td class="p-3 text-right text-xs" x-show="canSeePrices" :class="margin(p) > 50 ? 'text-emerald-700 font-semibold' : margin(p) < 30 ? 'text-rose-600' : ''" x-text="Math.round(margin(p)) + '%'"></td>
+                      <td class="p-3 text-right">
+                        <div class="flex items-center justify-end gap-1" @click.stop>
+                          <button @click="adjustStock(p.id, -1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 text-sm font-bold">−</button>
+                          <input type="number" class="w-14 px-1 py-0.5 text-right border border-slate-200 rounded text-sm font-bold" :value="p.stock" @change="setStock(p.id, $event.target.value)" />
+                          <button @click="adjustStock(p.id, 1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 text-sm font-bold">+</button>
+                        </div>
+                      </td>
+                      <td class="p-3 text-right text-xs text-slate-500" x-text="p.reorderPoint || 0"></td>
+                      <td class="p-3 text-right">
+                        <span x-show="p.stock <= (p.reorderPoint||0)" class="text-[10px] uppercase font-bold text-rose-600">Low</span>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div x-show="!retailProducts.length" class="p-8 text-center text-sm text-slate-400">No products yet — add your first one above.</div>
+          </div>
+        </div>
+        <!-- ============ /CATALOG TAB ============ -->
+
+        <!-- ============ RECEIVE TAB ============ -->
+        <div x-show="retailTab==='receive'">
+          <!-- Scanner input -->
+          <div class="card p-5 mb-4 bg-slate-900 text-white border-slate-700">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">📥</div>
+              <div class="flex-1">
+                <div class="font-bold text-base">Receive inventory</div>
+                <div class="text-xs text-slate-400">Scan SKU barcodes with your scanner gun (acts as a keyboard) or type manually + Enter.</div>
+              </div>
+              <label class="text-xs flex items-center gap-2 cursor-pointer bg-white/10 px-3 py-1.5 rounded">
+                <input type="checkbox" x-model="receiveQuickMode" />
+                <span x-text="receiveQuickMode ? 'Each scan = +1' : 'Prompt for qty'"></span>
+              </label>
+            </div>
+            <input
+              x-ref="skuInput"
+              x-model="receiveSkuInput"
+              @keydown.enter.prevent="handleSkuScan()"
+              placeholder="Scan or type SKU, then press Enter…"
+              class="w-full p-4 text-2xl font-mono bg-black border-2 border-emerald-500/40 rounded-lg text-emerald-300 placeholder-slate-600 focus:border-emerald-400 focus:outline-none"
+              autofocus
+            />
+            <div class="text-xs text-slate-400 mt-2" x-text="'Cursor active in scan field — ' + receiveBatch.length + ' item(s) in batch'"></div>
+          </div>
+
+          <!-- Batch -->
+          <div class="card overflow-hidden mb-4">
+            <div class="p-3 flex items-center justify-between border-b border-slate-100">
+              <h3 class="font-bold">Pending receipt</h3>
+              <div class="flex gap-2">
+                <button x-show="receiveBatch.length" @click="receiveBatch=[]" class="btn btn-outline text-xs">Clear</button>
+                <button @click="confirmReceipt()" :disabled="!receiveBatch.length" class="btn btn-primary text-sm" :class="!receiveBatch.length && 'opacity-40 cursor-not-allowed'">✓ Confirm receipt</button>
+              </div>
+            </div>
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th class="text-left p-3">SKU</th>
+                  <th class="text-left p-3">Product</th>
+                  <th class="text-right p-3">Current stock</th>
+                  <th class="text-right p-3">Qty received</th>
+                  <th class="text-right p-3">After</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <template x-for="b in receiveBatch" :key="b.productId">
+                  <tr>
+                    <td class="p-3 font-mono text-xs" x-text="b.sku"></td>
+                    <td class="p-3 font-semibold" x-text="b.name"></td>
+                    <td class="p-3 text-right" x-text="(retailProducts.find(p=>p.id===b.productId)?.stock || 0)"></td>
+                    <td class="p-3 text-right">
+                      <input type="number" min="1" class="w-20 px-2 py-1 text-right border border-slate-200 rounded text-sm font-bold" :value="b.qty" @change="updateBatchQty(b.productId, $event.target.value)" />
+                    </td>
+                    <td class="p-3 text-right font-bold text-emerald-700" x-text="(retailProducts.find(p=>p.id===b.productId)?.stock || 0) + b.qty"></td>
+                    <td class="p-3 text-right"><button @click="removeFromBatch(b.productId)" class="text-xs text-rose-600 hover:underline">Remove</button></td>
+                  </tr>
+                </template>
+                <tr x-show="!receiveBatch.length"><td colspan="6" class="p-6 text-center text-xs text-slate-400 italic">Scan an SKU above to add to batch — or pick a product manually below.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Manual add -->
+          <div class="card p-3 mb-4">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Add manually</div>
+            <select class="select" @change="addManualToBatch($event.target.value); $event.target.value=''">
+              <option value="">Pick a product…</option>
+              <template x-for="p in retailProducts" :key="p.id">
+                <option :value="p.id" x-text="p.name + ' (SKU ' + p.sku + ')'"></option>
+              </template>
+            </select>
+          </div>
+
+          <!-- Receipt history -->
+          <div class="card overflow-hidden">
+            <div class="p-3 border-b border-slate-100">
+              <h3 class="font-bold">Receipt history</h3>
+            </div>
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th class="text-left p-3">When</th>
+                  <th class="text-left p-3">By</th>
+                  <th class="text-left p-3">Items</th>
+                  <th class="text-right p-3">Units</th>
+                  <th class="text-right p-3" x-show="canSeePrices">Cost</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <template x-for="r in retailReceivings.slice(0,30)" :key="r.id">
+                  <tr>
+                    <td class="p-3 text-xs text-slate-500" x-text="formatDate(r.at,'long')"></td>
+                    <td class="p-3 text-xs" x-text="r.receivedBy"></td>
+                    <td class="p-3 text-xs" x-text="r.items.map(i=>i.qty + '× ' + i.name).join(', ')"></td>
+                    <td class="p-3 text-right font-bold" x-text="r.totalUnits"></td>
+                    <td class="p-3 text-right" x-show="canSeePrices" x-text="money(r.totalCost)"></td>
+                  </tr>
+                </template>
+                <tr x-show="!retailReceivings.length"><td colspan="5" class="p-6 text-center text-xs text-slate-400 italic">No receipts yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- ============ /RECEIVE TAB ============ -->
+
+        </div>
+      </template>
+
+      <!-- ============================================ PRODUCT DRAWER ============================================ -->
+      <template x-if="productDrawer">
+        <div class="fixed inset-0 z-40 flex" @keydown.escape.window="productDrawer=null">
+          <div class="absolute inset-0 bg-slate-900/40 ab-drawer-backdrop" @click="productDrawer=null"></div>
+          <div class="ab-drawer ml-auto bg-white w-full max-w-xl h-full overflow-hidden relative shadow-2xl flex flex-col">
+            <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+              <div>
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider" x-text="productDrawer.id ? 'Edit product' : 'New product'"></div>
+                <h2 class="text-xl font-bold text-slate-900 mt-0.5" x-text="productDrawer.name || 'Untitled'"></h2>
+              </div>
+              <button @click="productDrawer=null" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 text-xl">×</button>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+              <div class="ab-section">
+                <h3>Identification</h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="ab-label">SKU / Barcode *</label>
+                    <input class="ab-input font-mono" x-model="productDrawer.sku" placeholder="012345678910" />
+                  </div>
+                  <div>
+                    <label class="ab-label">Product name *</label>
+                    <input class="ab-input" x-model="productDrawer.name" placeholder="Coca-Cola 20oz" />
+                  </div>
+                  <div>
+                    <label class="ab-label">Description</label>
+                    <input class="ab-input" x-model="productDrawer.description" placeholder="Optional" />
+                  </div>
+                  <div>
+                    <label class="ab-label">Category</label>
+                    <select class="ab-input" x-model="productDrawer.category">
+                      <option>Drinks</option><option>Air Care</option><option>Essentials</option><option>Auto Care</option><option>OTC</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="ab-label">Supplier (optional)</label>
+                    <input class="ab-input" x-model="productDrawer.supplier" />
+                  </div>
+                </div>
+              </div>
+              <div class="ab-section">
+                <h3>Pricing</h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="ab-label">Cost ($)</label>
+                    <input type="number" step="0.01" min="0" class="ab-input" x-model.number="productDrawer.cost" />
+                  </div>
+                  <div>
+                    <label class="ab-label">Sell price ($)</label>
+                    <input type="number" step="0.01" min="0" class="ab-input" x-model.number="productDrawer.price" />
+                  </div>
+                </div>
+                <div class="text-xs text-slate-500 mt-2">
+                  Margin: <span class="font-bold" x-text="Math.round(margin(productDrawer)) + '%'"></span>
+                  · Profit per unit: <span class="font-bold" x-text="money((productDrawer.price||0) - (productDrawer.cost||0))"></span>
+                </div>
+              </div>
+              <div class="ab-section">
+                <h3>Inventory</h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="ab-label">Current stock</label>
+                    <input type="number" min="0" class="ab-input" x-model.number="productDrawer.stock" />
+                  </div>
+                  <div>
+                    <label class="ab-label">Reorder at</label>
+                    <input type="number" min="0" class="ab-input" x-model.number="productDrawer.reorderPoint" />
+                  </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">Low-stock alert appears when stock drops to or below this level.</p>
+              </div>
+            </div>
+            <div class="px-8 py-4 border-t border-slate-100 flex items-center justify-between flex-shrink-0 bg-white">
+              <button x-show="productDrawer.id" @click="deleteProduct(productDrawer.id)" class="ab-btn ab-btn-danger">Delete</button>
+              <div class="flex gap-2 ml-auto">
+                <button @click="productDrawer=null" class="ab-btn ab-btn-ghost">Cancel</button>
+                <button @click="saveProduct()" class="ab-btn ab-btn-primary" x-text="productDrawer.id ? 'Save changes' : 'Add product'"></button>
               </div>
             </div>
           </div>
@@ -3341,6 +3605,12 @@ function app() {
     reportCompare: true,
     reportCustomStart: '',
     reportCustomEnd: '',
+    retailTab: 'overview', // overview | catalog | receive
+    productDrawer: null,
+    receiveBatch: [], // [{ productId, qty, sku }]
+    receiveSkuInput: '',
+    receiveQuickMode: true, // true = each scan +1; false = prompt for qty
+    retailReceivings: [], // history of receipts
 
     intake: {},
     compose: { dealershipId:'', subject:'', body:'', email:true, sms:false, inApp:true },
@@ -3407,6 +3677,7 @@ function app() {
       this.visits        = data.visits        || [];
       this.liveLane      = data.liveLane      || [];
       this.cameraConfig  = data.cameraConfig  || { connected:false, name:'', lastDetectionAt:null };
+      this.retailReceivings = data.retailReceivings || [];
     },
     async load() {
       // 1. Try Supabase first (server-side via /api/state)
@@ -3441,6 +3712,14 @@ function app() {
           this.applyState(data);
           if (!this.washPackages.length || !this.retailProducts.length) this.seedWashAndRetail();
           if (!this.customers.length) this.seedCRM();
+          // migration: ensure each retail product has SKU, cost, etc.
+          this.retailProducts.forEach((p, i) => {
+            if (!p.sku) p.sku = String(100000000000 + Math.floor(Math.random()*900000000000));
+            if (typeof p.cost !== 'number') p.cost = +(p.price * 0.4).toFixed(2);
+            if (typeof p.reorderPoint !== 'number') p.reorderPoint = Math.max(8, Math.floor((p.stock||0) * 0.4));
+            if (!p.description) p.description = '';
+            if (!p.supplier) p.supplier = '';
+          });
           // migration: ensure each service has a standard price
           const defaults = { svc_exp:25, svc_full:165, svc_int:110, svc_pol:200, svc_eng:75, svc_lot:65, svc_odor:140, svc_head:90 };
           this.services.forEach(s=>{
@@ -3470,7 +3749,8 @@ function app() {
         retailProducts: this.retailProducts, retailSales: this.retailSales,
         squareConfig: this.squareConfig,
         customers: this.customers, visits: this.visits, liveLane: this.liveLane,
-        cameraConfig: this.cameraConfig
+        cameraConfig: this.cameraConfig,
+        retailReceivings: this.retailReceivings
       };
       // Instant local cache
       localStorage.setItem('washdepot_v1', JSON.stringify(data));
@@ -3756,16 +4036,16 @@ function app() {
         { id:'wp_unl', name:'Unlimited Membership',  price: 35, description:'Monthly unlimited Premium washes' }
       ];
       this.retailProducts = [
-        { id:'rp_coke',     name:'Coke 20oz',                price: 2.50, category:'Drinks',     stock: 48 },
-        { id:'rp_water',    name:'Bottled Water 16oz',       price: 1.50, category:'Drinks',     stock: 96 },
-        { id:'rp_redbull',  name:'Red Bull 8.4oz',           price: 4.00, category:'Drinks',     stock: 24 },
-        { id:'rp_gatorade', name:'Gatorade 20oz',            price: 3.00, category:'Drinks',     stock: 36 },
-        { id:'rp_air_pine', name:'Pine Air Freshener',       price: 5.00, category:'Air Care',   stock: 30 },
-        { id:'rp_air_new',  name:'New Car Air Freshener',    price: 5.00, category:'Air Care',   stock: 28 },
-        { id:'rp_kleenex',  name:'Kleenex Travel Pack',      price: 3.00, category:'Essentials', stock: 40 },
-        { id:'rp_wipes',    name:'Microfiber Wipes',         price: 4.00, category:'Essentials', stock: 22 },
-        { id:'rp_fluid',    name:'Windshield Fluid 1gal',    price: 8.00, category:'Auto Care',  stock: 18 },
-        { id:'rp_tylenol',  name:'Tylenol Travel Pack',      price: 4.00, category:'OTC',        stock: 16 }
+        { id:'rp_coke',     sku:'049000028911', name:'Coke 20oz',             price: 2.50, cost: 1.10, category:'Drinks',     stock: 48, reorderPoint: 24, description:'Coca-Cola 20oz bottle',           supplier:'Coca-Cola Distrib.' },
+        { id:'rp_water',    sku:'012000001031', name:'Bottled Water 16oz',    price: 1.50, cost: 0.45, category:'Drinks',     stock: 96, reorderPoint: 48, description:'Spring water 16oz',                supplier:'Niagara' },
+        { id:'rp_redbull',  sku:'9002490100070', name:'Red Bull 8.4oz',       price: 4.00, cost: 1.85, category:'Drinks',     stock: 24, reorderPoint: 18, description:'Red Bull energy drink 8.4oz',     supplier:'Red Bull NA' },
+        { id:'rp_gatorade', sku:'052000338829', name:'Gatorade 20oz',         price: 3.00, cost: 1.35, category:'Drinks',     stock: 36, reorderPoint: 24, description:'Gatorade Thirst Quencher 20oz',   supplier:'PepsiCo' },
+        { id:'rp_air_pine', sku:'071241010012', name:'Pine Air Freshener',    price: 5.00, cost: 1.20, category:'Air Care',   stock: 30, reorderPoint: 15, description:'Little Trees Royal Pine',          supplier:'Car-Freshner Corp' },
+        { id:'rp_air_new',  sku:'071241010029', name:'New Car Air Freshener', price: 5.00, cost: 1.20, category:'Air Care',   stock: 28, reorderPoint: 15, description:'Little Trees New Car Scent',       supplier:'Car-Freshner Corp' },
+        { id:'rp_kleenex',  sku:'036000451887', name:'Kleenex Travel Pack',   price: 3.00, cost: 0.95, category:'Essentials', stock: 40, reorderPoint: 20, description:'Kleenex on-the-go 10ct travel',    supplier:'Kimberly-Clark' },
+        { id:'rp_wipes',    sku:'810081501122', name:'Microfiber Wipes',      price: 4.00, cost: 1.40, category:'Essentials', stock: 22, reorderPoint: 12, description:'3-pack microfiber detail wipes',   supplier:'Chemical Guys' },
+        { id:'rp_fluid',    sku:'041335404062', name:'Windshield Fluid 1gal', price: 8.00, cost: 3.20, category:'Auto Care',  stock: 18, reorderPoint: 10, description:'-20°F bug-wash windshield fluid', supplier:'Prestone' },
+        { id:'rp_tylenol',  sku:'300450449108', name:'Tylenol Travel Pack',   price: 4.00, cost: 1.55, category:'OTC',        stock: 16, reorderPoint: 8,  description:'Tylenol Extra Strength 2-pk',     supplier:'McNeil' }
       ];
       // Generate 14 days of sales (today + 13 prior)
       const washSales = [], retailSales = [];
@@ -4031,6 +4311,120 @@ function app() {
         });
       });
       return Object.values(map).sort((a,b)=>b.count-a.count).slice(0,6);
+    },
+
+    /* ========= Product management ========= */
+    productBySku(sku){ if(!sku) return null; const s = String(sku).trim(); return this.retailProducts.find(p => p.sku === s); },
+    margin(p){ if (!p || !p.price) return 0; return ((p.price - (p.cost||0)) / p.price) * 100; },
+    inventoryValue(p){ return (p.stock || 0) * (p.cost || 0); },
+    get totalInventoryValue(){ return this.retailProducts.reduce((s,p)=>s+this.inventoryValue(p),0); },
+    get lowStockProducts(){ return this.retailProducts.filter(p => p.stock <= (p.reorderPoint || 0)); },
+
+    openProductDrawer(idOrNew){
+      if (idOrNew === 'new') {
+        this.productDrawer = { id:null, sku:'', name:'', category:'Drinks', price:0, cost:0, stock:0, reorderPoint:10, description:'', supplier:'' };
+      } else {
+        const p = this.retailProducts.find(x=>x.id===idOrNew);
+        if (p) this.productDrawer = JSON.parse(JSON.stringify(p));
+      }
+    },
+    saveProduct(){
+      const d = this.productDrawer;
+      if (!d.name || !d.sku) { this.toast('Name and SKU required','warning'); return; }
+      // SKU uniqueness
+      if (this.retailProducts.some(p => p.sku === d.sku && p.id !== d.id)) {
+        this.toast('SKU already exists','warning'); return;
+      }
+      d.price = +d.price || 0;
+      d.cost = +d.cost || 0;
+      d.stock = +d.stock || 0;
+      d.reorderPoint = +d.reorderPoint || 0;
+      if (d.id) {
+        const idx = this.retailProducts.findIndex(p=>p.id===d.id);
+        this.retailProducts[idx] = d;
+      } else {
+        d.id = 'rp_'+Math.random().toString(36).slice(2,9);
+        this.retailProducts.push(d);
+      }
+      this.persist();
+      this.productDrawer = null;
+      this.toast('Product saved');
+    },
+    deleteProduct(id){
+      if (!confirm('Delete this product? Sales history is preserved.')) return;
+      this.retailProducts = this.retailProducts.filter(p=>p.id!==id);
+      this.persist();
+      this.productDrawer = null;
+      this.toast('Product removed');
+    },
+    adjustStock(id, delta){
+      const p = this.retailProducts.find(x=>x.id===id); if(!p) return;
+      p.stock = Math.max(0, (p.stock||0) + delta);
+      this.persist();
+    },
+    setStock(id, value){
+      const p = this.retailProducts.find(x=>x.id===id); if(!p) return;
+      p.stock = Math.max(0, +value || 0);
+      this.persist();
+    },
+
+    /* ========= SKU scan / receive inventory ========= */
+    handleSkuScan(){
+      const sku = (this.receiveSkuInput || '').trim();
+      if (!sku) return;
+      const p = this.productBySku(sku);
+      if (!p) {
+        if (confirm(`SKU "${sku}" not found in catalog. Add it as a new product?`)) {
+          this.openProductDrawer('new');
+          this.productDrawer.sku = sku;
+        } else {
+          this.toast('SKU not found','warning');
+        }
+        this.receiveSkuInput = '';
+        return;
+      }
+      // Add to receive batch
+      const existing = this.receiveBatch.find(b => b.productId === p.id);
+      const incrementBy = this.receiveQuickMode ? 1 : (parseInt(prompt(`Quantity received for ${p.name}?`, '1')) || 0);
+      if (incrementBy <= 0) { this.receiveSkuInput=''; return; }
+      if (existing) existing.qty += incrementBy;
+      else this.receiveBatch.unshift({ productId: p.id, qty: incrementBy, sku: p.sku, name: p.name });
+      this.receiveSkuInput = '';
+    },
+    addManualToBatch(productId){
+      const p = this.retailProducts.find(x=>x.id===productId); if(!p) return;
+      const existing = this.receiveBatch.find(b => b.productId === p.id);
+      if (existing) existing.qty += 1;
+      else this.receiveBatch.unshift({ productId: p.id, qty: 1, sku: p.sku, name: p.name });
+    },
+    updateBatchQty(productId, qty){
+      const b = this.receiveBatch.find(x=>x.productId===productId);
+      if (b) b.qty = Math.max(0, +qty || 0);
+    },
+    removeFromBatch(productId){
+      this.receiveBatch = this.receiveBatch.filter(b => b.productId !== productId);
+    },
+    confirmReceipt(){
+      if (!this.receiveBatch.length) { this.toast('Nothing to receive','warning'); return; }
+      let totalUnits = 0, totalCost = 0;
+      this.receiveBatch.forEach(b => {
+        const p = this.retailProducts.find(x=>x.id===b.productId);
+        if (p) {
+          p.stock = (p.stock||0) + b.qty;
+          totalUnits += b.qty;
+          totalCost += b.qty * (p.cost || 0);
+        }
+      });
+      this.retailReceivings.unshift({
+        id: 'rcv_'+Math.random().toString(36).slice(2,9),
+        at: Date.now(),
+        receivedBy: this.session?.name || 'Staff',
+        items: this.receiveBatch.map(b => ({ productId:b.productId, sku:b.sku, name:b.name, qty:b.qty })),
+        totalUnits, totalCost
+      });
+      this.receiveBatch = [];
+      this.persist();
+      this.toast(`✓ Received ${totalUnits} unit${totalUnits===1?'':'s'} (${this.money(totalCost)} at cost)`);
     },
 
     /* ========= Reporting helpers ========= */
