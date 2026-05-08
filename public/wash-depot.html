@@ -1349,6 +1349,7 @@
               <h1 class="text-2xl font-black tracking-tight">Customers (CRM)</h1>
               <p class="text-sm text-slate-500">Built from license plate scans + manual additions. Notes, tags, spend, and visit history per customer.</p>
             </div>
+            <button @click="openNewCustomerDrawer()" class="btn btn-primary">+ Add Customer</button>
           </div>
 
           <!-- KPI strip -->
@@ -3396,6 +3397,125 @@
   </div>
 </template>
 
+<!-- ============================================ NEW CUSTOMER DRAWER (Airbnb-style minimal) ============================================ -->
+<template x-if="newCustomerDrawer">
+  <div class="fixed inset-0 z-40 flex" @keydown.escape.window="newCustomerDrawer=null">
+    <div class="absolute inset-0 bg-slate-900/40 ab-drawer-backdrop" @click="newCustomerDrawer=null"></div>
+    <div class="ab-drawer ml-auto bg-white w-full max-w-xl h-full overflow-hidden relative shadow-2xl flex flex-col">
+      <!-- Header -->
+      <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+        <div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">New customer</div>
+          <h2 class="text-xl font-bold text-slate-900 mt-0.5" x-text="(newCustomerDrawer.firstName + ' ' + newCustomerDrawer.lastName).trim() || 'Add a customer'"></h2>
+        </div>
+        <button @click="newCustomerDrawer=null" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 text-xl">×</button>
+      </div>
+
+      <!-- Body (scrollable) -->
+      <div class="flex-1 overflow-y-auto">
+        <!-- Contact -->
+        <div class="ab-section">
+          <h3>Contact</h3>
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="ab-label">First name *</label>
+                <input class="ab-input" x-model="newCustomerDrawer.firstName" placeholder="Tina" />
+              </div>
+              <div>
+                <label class="ab-label">Last name</label>
+                <input class="ab-input" x-model="newCustomerDrawer.lastName" placeholder="Alvarez" />
+              </div>
+            </div>
+            <div>
+              <label class="ab-label">Phone</label>
+              <input class="ab-input" type="tel" x-model="newCustomerDrawer.phone" placeholder="(555) 123-4567" />
+            </div>
+            <div>
+              <label class="ab-label">Email</label>
+              <input class="ab-input" type="email" x-model="newCustomerDrawer.email" placeholder="customer@example.com" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle -->
+        <div class="ab-section">
+          <h3>Vehicle</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="ab-label">License plate</label>
+              <input class="ab-input font-mono uppercase" x-model="newCustomerDrawer.plate" placeholder="ABC-1234" />
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="ab-label">Year</label>
+                <input class="ab-input" x-model="newCustomerDrawer.vehicleYear" placeholder="2024" />
+              </div>
+              <div class="col-span-2">
+                <label class="ab-label">Make</label>
+                <input class="ab-input" x-model="newCustomerDrawer.vehicleMake" placeholder="Toyota" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="ab-label">Model</label>
+                <input class="ab-input" x-model="newCustomerDrawer.vehicleModel" placeholder="RAV4" />
+              </div>
+              <div>
+                <label class="ab-label">Color</label>
+                <input class="ab-input" x-model="newCustomerDrawer.vehicleColor" placeholder="Pearl White" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership (optional) -->
+        <div class="ab-section">
+          <h3>Membership</h3>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" x-model="newCustomerDrawer.membershipActive" class="w-5 h-5" />
+            <div>
+              <div class="font-semibold text-sm">Activate Unlimited Membership</div>
+              <div class="text-xs text-slate-500">$35/mo · Unlimited Premium washes</div>
+            </div>
+          </label>
+          <div x-show="newCustomerDrawer.membershipActive" class="mt-4">
+            <label class="ab-label">Initial term (months)</label>
+            <select class="ab-input max-w-[140px]" x-model.number="newCustomerDrawer.membershipMonths">
+              <option value="1">1 month</option>
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tags + initial note -->
+        <div class="ab-section">
+          <h3>Tags &amp; notes</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="ab-label">Tags (comma-separated)</label>
+              <input class="ab-input" x-model="newCustomerDrawer.tagsCSV" placeholder="vip, tipper, weekend-only" />
+              <p class="text-[11px] text-slate-500 mt-1">Common tags: <span class="text-slate-700">vip</span>, <span class="text-slate-700">tipper</span>, <span class="text-slate-700">weekend-only</span>, <span class="text-slate-700">commuter</span>, <span class="text-slate-700">tesla-owner</span></p>
+            </div>
+            <div>
+              <label class="ab-label">First note (optional)</label>
+              <textarea class="ab-input" rows="3" x-model="newCustomerDrawer.initialNote" placeholder="Met them at intake — prefers contactless, lives in Lakeside, referred by Sarah Brown."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky footer -->
+      <div class="px-8 py-4 border-t border-slate-100 flex items-center justify-end gap-2 flex-shrink-0 bg-white">
+        <button @click="newCustomerDrawer=null" class="ab-btn ab-btn-ghost">Cancel</button>
+        <button @click="saveNewCustomer()" class="ab-btn ab-btn-primary">Add customer</button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <!-- ============================================ DEALERSHIP DRAWER (Airbnb-style minimal) ============================================ -->
 <template x-if="dealershipDrawer">
   <div class="fixed inset-0 z-40 flex" @keydown.escape.window="dealershipDrawer=null">
@@ -3968,6 +4088,7 @@ function app() {
       { id:'promo_birthday', name:'Birthday wash on us',        description:'Free Premium during birthday month', code:'BDAY',value:18, type:'comp',    expiresInDays:31 }
     ],
     customerApp: { tab:'home', alertEnabled:false, alertThreshold:3, alertChannel:'sms', selectedCustomerId:null },
+    newCustomerDrawer: null,
     booking: { dealershipId:'', year:'', make:'', model:'', color:'', stockNumber:'', vin:'', services:[], date:'', timeSlot:'morning', deliveryMethod:'pickup', notes:'' },
     reportPeriod: 'thisMonth',
     reportStream: 'all',
@@ -5182,6 +5303,68 @@ function app() {
     get activeCustomerVisits(){ return this.activeCustomer ? this.customerVisits(this.activeCustomer.id) : []; },
 
     openCustomer(id){ this.activeCustomerId = id; },
+    openNewCustomerDrawer(){
+      this.newCustomerDrawer = {
+        firstName:'', lastName:'',
+        email:'', phone:'',
+        plate:'', vehicleYear:'', vehicleMake:'', vehicleModel:'', vehicleColor:'',
+        tagsCSV:'', initialNote:'',
+        membershipActive:false, membershipMonths:1
+      };
+    },
+    saveNewCustomer(){
+      const d = this.newCustomerDrawer;
+      if (!d.firstName?.trim()) { this.toast('First name is required','warning'); return; }
+      if (!d.plate?.trim() && !d.phone?.trim() && !d.email?.trim()) { this.toast('Add a license plate, phone, or email so we can identify them','warning'); return; }
+      // Duplicate detection by plate / phone / email
+      const np = (d.phone||'').replace(/\D/g,'');
+      const ne = (d.email||'').toLowerCase().trim();
+      const npl = (d.plate||'').replace(/[\s-]/g,'').toUpperCase();
+      const dup = this.customers.find(c =>
+        (np && (c.phone||'').replace(/\D/g,'')===np) ||
+        (ne && (c.email||'').toLowerCase()===ne) ||
+        (npl && (c.plate||'').replace(/[\s-]/g,'').toUpperCase()===npl)
+      );
+      if (dup) {
+        if (!confirm(`A customer with this ${npl && (dup.plate||'').replace(/[\s-]/g,'').toUpperCase()===npl ? 'plate' : ne && (dup.email||'').toLowerCase()===ne ? 'email' : 'phone'} already exists (${this.customerName(dup)}). Open their record instead?`)) return;
+        this.newCustomerDrawer = null;
+        this.openCustomer(dup.id);
+        return;
+      }
+      const now = Date.now();
+      const tags = ['manual', ...(d.tagsCSV||'').split(',').map(t=>t.trim()).filter(Boolean)];
+      const customer = {
+        id: 'cust_'+Math.random().toString(36).slice(2,11),
+        firstName: d.firstName.trim(),
+        lastName: (d.lastName||'').trim(),
+        email: (d.email||'').trim(),
+        phone: (d.phone||'').trim(),
+        plate: (d.plate||'').trim().toUpperCase(),
+        vehicleYear: (d.vehicleYear||'').trim(),
+        vehicleMake: (d.vehicleMake||'').trim(),
+        vehicleModel: (d.vehicleModel||'').trim(),
+        vehicleColor: (d.vehicleColor||'').trim(),
+        visitCount: 0,
+        totalSpend: 0,
+        firstSeenAt: now,
+        lastSeenAt: now,
+        membership: d.membershipActive ? { type:'unlimited', startedAt: now, expiresAt: now + (d.membershipMonths||1)*30*86400000 } : null,
+        tags,
+        notes: [
+          { at: now, by: this.session?.name || 'Staff', text: 'Manually added to CRM' },
+          ...(d.initialNote?.trim() ? [{ at: now, by: this.session?.name || 'Staff', text: d.initialNote.trim() }] : [])
+        ],
+        gifts: [],
+        favoritePackageId: null,
+        notificationPrefs: { sms: !!d.phone, push:false, email: !!d.email },
+        signupSource: 'manual'
+      };
+      this.customers.push(customer);
+      this.persist();
+      this.newCustomerDrawer = null;
+      this.toast('Customer added');
+      this.openCustomer(customer.id);
+    },
     addCustomerNote(id, text){
       const c = this.customerById(id); if (!c || !text?.trim()) return;
       c.notes = c.notes || [];
