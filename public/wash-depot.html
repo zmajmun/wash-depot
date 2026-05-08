@@ -1391,7 +1391,10 @@
                 <template x-for="c in filteredCustomers" :key="c.id">
                   <tr class="hover:bg-slate-50 cursor-pointer" @click="openCustomer(c.id)">
                     <td class="p-3">
-                      <div class="font-semibold" x-text="customerName(c)"></div>
+                      <div class="font-semibold flex items-center gap-1.5">
+                        <span x-text="customerName(c)"></span>
+                        <span x-show="c.signupSource==='mobile-app' || c.tags?.includes('app-signup')" title="Joined via mobile app" class="text-xs">📱</span>
+                      </div>
                       <div class="text-xs text-slate-500" x-text="(c.email || c.phone || '—')"></div>
                     </td>
                     <td class="p-3 font-mono text-xs" x-text="c.plate"></td>

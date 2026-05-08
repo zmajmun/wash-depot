@@ -26,28 +26,146 @@
   .tier-badge.vip { background:#db2777; color:#fff; }
   .install-banner { animation: slidein .3s ease-out; }
   @keyframes slidein { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .input-mob { width: 100%; padding: 14px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 16px; background: #fff; }
+  .input-mob:focus { outline: none; border-color: #0f172a; box-shadow: 0 0 0 1px #0f172a; }
+  .btn-mob-primary { width: 100%; padding: 14px; background: #0f172a; color: #fff; border-radius: 12px; font-weight: 700; font-size: 15px; }
+  .btn-mob-primary:disabled { opacity: .4; }
+  .btn-mob-ghost { width: 100%; padding: 14px; background: transparent; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 12px; font-weight: 600; font-size: 15px; }
+  .label-mob { display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
 </style>
 </head>
 <body x-data="customerApp()" x-init="init()" x-cloak class="min-h-screen flex flex-col bg-slate-50">
 
-  <!-- Top header (black, like the brand) -->
+<!-- ===================== AUTH SCREENS (welcome / signin / signup) ===================== -->
+<template x-if="!auth.signedIn">
+  <div class="flex-1 flex flex-col" style="padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);">
+
+    <!-- WELCOME -->
+    <div x-show="auth.step==='welcome'" class="flex-1 flex flex-col bg-black text-white">
+      <div class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+        <div class="w-24 h-24 rounded-3xl bg-white text-black flex items-center justify-center font-black text-3xl mb-6">WD</div>
+        <h1 class="text-3xl font-black mb-2">Wash Depot</h1>
+        <p class="text-white/70 text-sm max-w-xs">Track your washes, earn free ones, and skip the line.</p>
+      </div>
+      <div class="p-6 space-y-3 bg-black">
+        <button @click="auth.step='signup'" class="btn-mob-primary" style="background:#22d3ee; color:#000;">Create account</button>
+        <button @click="auth.step='signin'" class="btn-mob-ghost" style="background:transparent; color:#fff; border-color:rgba(255,255,255,.25);">I already have an account</button>
+      </div>
+    </div>
+
+    <!-- SIGN IN -->
+    <div x-show="auth.step==='signin'" class="flex-1 bg-slate-50 p-6">
+      <button @click="auth.step='welcome'" class="text-sm text-slate-500 mb-6">← Back</button>
+      <h2 class="text-2xl font-black mb-2">Welcome back</h2>
+      <p class="text-sm text-slate-500 mb-6">Find your account by phone or email.</p>
+      <div class="space-y-4">
+        <div>
+          <label class="label-mob">Phone</label>
+          <input class="input-mob" type="tel" x-model="auth.contact.phone" placeholder="(555) 123-4567" />
+        </div>
+        <div class="text-center text-xs text-slate-400 uppercase tracking-widest">or</div>
+        <div>
+          <label class="label-mob">Email</label>
+          <input class="input-mob" type="email" x-model="auth.contact.email" placeholder="you@example.com" />
+        </div>
+        <button @click="signIn()" :disabled="auth.busy" class="btn-mob-primary" x-text="auth.busy ? 'Looking up…' : 'Continue'"></button>
+        <p x-show="auth.error" class="text-rose-600 text-xs text-center" x-text="auth.error"></p>
+        <p class="text-center text-xs text-slate-500 pt-2">New here? <button @click="auth.step='signup'" class="text-cyan-700 font-bold underline">Create an account →</button></p>
+      </div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div x-show="auth.step==='signup'" class="flex-1 bg-slate-50 p-6 overflow-y-auto">
+      <button @click="auth.step='welcome'" class="text-sm text-slate-500 mb-6">← Back</button>
+      <h2 class="text-2xl font-black mb-1">Welcome to Wash Depot</h2>
+      <p class="text-sm text-slate-500 mb-1">Step <span x-text="auth.signupStep"></span> of 2</p>
+      <div class="h-1 bg-slate-200 rounded mb-6 overflow-hidden">
+        <div class="h-full bg-cyan-500 transition-all" :style="`width:${(auth.signupStep/2)*100}%`"></div>
+      </div>
+
+      <!-- Step 1: contact info -->
+      <div x-show="auth.signupStep===1" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="label-mob">First name *</label>
+            <input class="input-mob" x-model="auth.signup.firstName" placeholder="Tina" />
+          </div>
+          <div>
+            <label class="label-mob">Last name</label>
+            <input class="input-mob" x-model="auth.signup.lastName" placeholder="Alvarez" />
+          </div>
+        </div>
+        <div>
+          <label class="label-mob">Phone *</label>
+          <input class="input-mob" type="tel" x-model="auth.signup.phone" placeholder="(555) 123-4567" />
+          <p class="text-[11px] text-slate-500 mt-1">For receipts and line alerts. Standard messaging rates apply.</p>
+        </div>
+        <div>
+          <label class="label-mob">Email</label>
+          <input class="input-mob" type="email" x-model="auth.signup.email" placeholder="you@example.com" />
+        </div>
+        <button @click="signupNext()" :disabled="!auth.signup.firstName || !auth.signup.phone" class="btn-mob-primary">Continue</button>
+        <p x-show="auth.error" class="text-rose-600 text-xs text-center" x-text="auth.error"></p>
+      </div>
+
+      <!-- Step 2: vehicle info -->
+      <div x-show="auth.signupStep===2" class="space-y-4">
+        <p class="text-sm text-slate-500">Tell us about your vehicle. Our cameras will recognize you next time.</p>
+        <div>
+          <label class="label-mob">License plate *</label>
+          <input class="input-mob font-mono uppercase" x-model="auth.signup.plate" placeholder="ABC-1234" />
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="label-mob">Year</label>
+            <input class="input-mob" x-model="auth.signup.vehicleYear" placeholder="2024" />
+          </div>
+          <div class="col-span-2">
+            <label class="label-mob">Make *</label>
+            <input class="input-mob" x-model="auth.signup.vehicleMake" placeholder="Toyota" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="label-mob">Model *</label>
+            <input class="input-mob" x-model="auth.signup.vehicleModel" placeholder="RAV4" />
+          </div>
+          <div>
+            <label class="label-mob">Color</label>
+            <input class="input-mob" x-model="auth.signup.vehicleColor" placeholder="White" />
+          </div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900">
+          🎁 <b>Welcome bonus:</b> $5 off your first wash, on us!
+        </div>
+        <div class="flex gap-2">
+          <button @click="auth.signupStep=1" class="btn-mob-ghost flex-1">Back</button>
+          <button @click="signUp()" :disabled="auth.busy || !auth.signup.vehicleMake || !auth.signup.vehicleModel" class="btn-mob-primary flex-1" x-text="auth.busy ? 'Creating…' : 'Create account'"></button>
+        </div>
+        <p x-show="auth.error" class="text-rose-600 text-xs text-center" x-text="auth.error"></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- ===================== MAIN APP (signed in) ===================== -->
+<template x-if="auth.signedIn">
+<div class="min-h-screen flex flex-col">
   <header class="bg-black text-white" style="padding-top: env(safe-area-inset-top);">
     <div class="px-4 py-3 flex items-center gap-2">
       <div class="w-9 h-9 rounded-lg bg-white text-black flex items-center justify-center font-black text-xs flex-shrink-0">WD</div>
       <div class="flex-1 min-w-0">
         <div class="text-[10px] uppercase tracking-widest text-white/60">Wash Depot</div>
-        <div class="text-sm font-bold truncate" x-text="customer ? (customer.firstName + ' ' + customer.lastName).trim() || 'Welcome' : 'Welcome'"></div>
+        <div class="text-sm font-bold truncate" x-text="(customer?.firstName + ' ' + customer?.lastName).trim()"></div>
       </div>
       <span class="tier-badge" :class="tier" x-text="tierLabel(tier)"></span>
     </div>
   </header>
 
-  <!-- Body -->
   <main class="flex-1 overflow-y-auto pb-20">
 
     <!-- HOME -->
     <section x-show="tab==='home'" class="p-4 space-y-4">
-      <!-- Loyalty card -->
       <div class="rounded-2xl p-5 text-white" style="background:linear-gradient(135deg,#0f172a,#1e3a8a);">
         <div class="text-[11px] uppercase tracking-widest text-white/70 mb-1">Loyalty progress</div>
         <div class="text-4xl font-black" x-text="loyalty.count + ' / ' + loyalty.target"></div>
@@ -60,52 +178,45 @@
         <div class="text-xs text-white/80" x-text="loyalty.remaining + ' more to your next free wash 🎁'"></div>
       </div>
 
-      <!-- Live wait -->
       <button @click="tab='line'" class="w-full text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <div class="flex items-center justify-between mb-1">
           <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold">Live wait time</div>
           <span class="scan-dot"></span>
         </div>
         <div class="text-4xl font-black mt-1">
-          <span x-show="queueWait.cars > 0" x-text="'~' + queueWait.mins + ' min'"></span>
-          <span x-show="queueWait.cars === 0" class="text-emerald-600">No wait</span>
+          <span x-show="queue.cars > 0" x-text="'~' + queue.mins + ' min'"></span>
+          <span x-show="queue.cars === 0" class="text-emerald-600">No wait</span>
         </div>
-        <div class="text-xs text-slate-500" x-text="queueWait.cars + ' cars currently in line'"></div>
+        <div class="text-xs text-slate-500" x-text="queue.cars + ' cars currently in line'"></div>
         <div class="text-xs text-blue-600 font-semibold mt-2">Tap to set an alert →</div>
       </button>
 
-      <!-- Active gifts/promos -->
       <div x-show="activeGifts.length">
         <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mb-2">Your offers</div>
         <template x-for="g in activeGifts" :key="g.id">
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-2">
-            <div class="font-bold text-sm text-amber-900" x-text="g.name"></div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-2 cursor-pointer" @click="tab='promos'">
+            <div class="font-bold text-sm text-amber-900" x-text="promoName(g.promoId)"></div>
             <div class="text-xs text-amber-800 mt-0.5">Code <span class="font-mono font-bold" x-text="g.code"></span> · expires <span x-text="formatDate(g.expiresAt)"></span></div>
           </div>
         </template>
       </div>
 
-      <!-- Quick links -->
       <div class="grid grid-cols-2 gap-2">
-        <button @click="tab='vehicles'" class="bg-white border border-slate-200 rounded-xl p-3 text-left active:bg-slate-50">
-          <div class="text-2xl mb-1">🚗</div>
-          <div class="text-xs font-bold">My Vehicle</div>
+        <button @click="tab='vehicles'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+          <div class="text-2xl mb-1">🚗</div><div class="text-xs font-bold">My Vehicle</div>
           <div class="text-[10px] text-slate-500" x-text="(customer?.vehicleMake || '—') + ' ' + (customer?.vehicleModel || '')"></div>
         </button>
-        <button @click="tab='visits'" class="bg-white border border-slate-200 rounded-xl p-3 text-left active:bg-slate-50">
-          <div class="text-2xl mb-1">📋</div>
-          <div class="text-xs font-bold">Visit history</div>
+        <button @click="tab='visits'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+          <div class="text-2xl mb-1">📋</div><div class="text-xs font-bold">Visit history</div>
           <div class="text-[10px] text-slate-500" x-text="visits.length + ' visits'"></div>
         </button>
-        <button @click="tab='promos'" class="bg-white border border-slate-200 rounded-xl p-3 text-left active:bg-slate-50">
-          <div class="text-2xl mb-1">🎁</div>
-          <div class="text-xs font-bold">Promos &amp; rewards</div>
+        <button @click="tab='promos'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+          <div class="text-2xl mb-1">🎁</div><div class="text-xs font-bold">Promos &amp; rewards</div>
           <div class="text-[10px] text-slate-500" x-text="activeGifts.length + ' active'"></div>
         </button>
-        <button @click="tab='line'" class="bg-white border border-slate-200 rounded-xl p-3 text-left active:bg-slate-50">
-          <div class="text-2xl mb-1">📷</div>
-          <div class="text-xs font-bold">Live line feed</div>
-          <div class="text-[10px] text-slate-500" x-text="queueWait.cars + ' in line'"></div>
+        <button @click="tab='line'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+          <div class="text-2xl mb-1">📷</div><div class="text-xs font-bold">Live line</div>
+          <div class="text-[10px] text-slate-500" x-text="queue.cars + ' in line'"></div>
         </button>
       </div>
     </section>
@@ -115,7 +226,7 @@
       <div class="text-lg font-black mb-3">My vehicle</div>
       <div class="bg-white border border-slate-200 rounded-2xl p-5">
         <div class="text-3xl mb-2">🚗</div>
-        <div class="font-black text-xl" x-text="(customer?.vehicleMake || '') + ' ' + (customer?.vehicleModel || '')"></div>
+        <div class="font-black text-xl" x-text="(customer?.vehicleYear || '') + ' ' + (customer?.vehicleMake || '') + ' ' + (customer?.vehicleModel || '')"></div>
         <div class="text-sm text-slate-500" x-text="customer?.vehicleColor || ''"></div>
         <div class="font-mono font-bold text-base bg-slate-100 inline-block px-3 py-1 rounded mt-3" x-text="customer?.plate || '—'"></div>
 
@@ -130,6 +241,8 @@
           <div class="text-xs text-blue-800 mt-1">$35/mo for unlimited Premium washes. Pays for itself after 2 visits.</div>
           <button class="mt-3 bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg w-full">Join Unlimited</button>
         </div>
+
+        <button @click="tab='account'" class="mt-4 text-xs text-slate-500 underline">Edit vehicle info →</button>
       </div>
     </section>
 
@@ -143,13 +256,13 @@
       </div>
       <template x-for="g in activeGifts" :key="g.id">
         <div class="bg-gradient-to-br from-amber-100 to-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-4 mb-3">
-          <div class="font-black text-amber-900 text-base" x-text="g.name"></div>
-          <div class="text-xs text-amber-800 mt-1" x-text="g.description || ''"></div>
+          <div class="font-black text-amber-900 text-base" x-text="promoName(g.promoId)"></div>
           <div class="bg-white rounded-xl p-3 mt-3 text-center">
             <div class="text-[10px] uppercase tracking-widest text-slate-500">Show this code</div>
             <div class="font-mono font-black text-3xl my-1" x-text="g.code"></div>
             <div class="text-[10px] text-slate-500" x-text="'Expires ' + formatDate(g.expiresAt)"></div>
           </div>
+          <button @click="redeem(g.id)" class="mt-3 w-full bg-amber-600 text-white text-sm font-bold py-2 rounded-lg">Mark as used</button>
         </div>
       </template>
 
@@ -177,24 +290,24 @@
     <!-- LIVE LINE -->
     <section x-show="tab==='line'" class="p-4">
       <div class="text-lg font-black mb-1">Live line feed</div>
-      <div class="text-xs text-slate-500 mb-4 flex items-center gap-2"><span class="scan-dot"></span> Updated in real time</div>
+      <div class="text-xs text-slate-500 mb-4 flex items-center gap-2"><span class="scan-dot"></span> Live from the AI camera</div>
 
       <div class="rounded-2xl p-5 mb-3 text-white" style="background:linear-gradient(135deg,#0f172a,#1e293b);">
         <div class="text-[11px] uppercase tracking-widest text-white/60 mb-1">Estimated wait</div>
         <div class="text-5xl font-black">
-          <span x-show="queueWait.cars > 0" x-text="'~' + queueWait.mins + ' min'"></span>
-          <span x-show="queueWait.cars === 0" class="text-emerald-400">No wait!</span>
+          <span x-show="queue.cars > 0" x-text="'~' + queue.mins + ' min'"></span>
+          <span x-show="queue.cars === 0" class="text-emerald-400">No wait!</span>
         </div>
-        <div class="text-xs text-white/70 mt-1" x-text="queueWait.cars + ' cars currently in line'"></div>
+        <div class="text-xs text-white/70 mt-1" x-text="queue.cars + ' cars currently in line'"></div>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-3">
         <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mb-3">In line right now</div>
         <div class="flex items-end gap-1 mb-2" style="height:50px;">
-          <template x-for="(_, i) in queue" :key="i">
-            <div class="flex-1 bg-blue-500 rounded-t" :style="`opacity: ${1 - i*0.12};`"></div>
+          <template x-for="i in queue.cars" :key="i">
+            <div class="flex-1 bg-blue-500 rounded-t" :style="`opacity: ${1 - (i-1)*0.12};`"></div>
           </template>
-          <template x-if="!queue.length">
+          <template x-if="queue.cars===0">
             <div class="flex-1 text-center text-emerald-600 text-xs italic self-center">Lane is empty — come now!</div>
           </template>
         </div>
@@ -241,8 +354,67 @@
             <div class="text-sm font-bold" x-text="v.amount > 0 ? money(v.amount) : 'Member'"></div>
           </div>
         </template>
-        <div x-show="!visits.length" class="text-center py-12 text-slate-400 text-sm">No visits yet.</div>
+        <div x-show="!visits.length" class="text-center py-12 text-slate-400 text-sm">No visits yet — come see us!</div>
       </div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section x-show="tab==='account'" class="p-4">
+      <div class="text-lg font-black mb-3">Account</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4">
+        <div>
+          <label class="label-mob">First name</label>
+          <input class="input-mob" x-model="profile.firstName" />
+        </div>
+        <div>
+          <label class="label-mob">Last name</label>
+          <input class="input-mob" x-model="profile.lastName" />
+        </div>
+        <div>
+          <label class="label-mob">Phone</label>
+          <input class="input-mob" type="tel" x-model="profile.phone" />
+        </div>
+        <div>
+          <label class="label-mob">Email</label>
+          <input class="input-mob" type="email" x-model="profile.email" />
+        </div>
+        <button @click="saveProfile()" :disabled="profileSaving" class="btn-mob-primary" x-text="profileSaving ? 'Saving…' : 'Save profile'"></button>
+      </div>
+
+      <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mt-6 mb-2">Vehicle</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4">
+        <div>
+          <label class="label-mob">License plate</label>
+          <input class="input-mob font-mono uppercase" x-model="profile.plate" />
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label class="label-mob">Year</label><input class="input-mob" x-model="profile.vehicleYear" /></div>
+          <div class="col-span-2"><label class="label-mob">Make</label><input class="input-mob" x-model="profile.vehicleMake" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="label-mob">Model</label><input class="input-mob" x-model="profile.vehicleModel" /></div>
+          <div><label class="label-mob">Color</label><input class="input-mob" x-model="profile.vehicleColor" /></div>
+        </div>
+        <button @click="saveProfile()" :disabled="profileSaving" class="btn-mob-primary" x-text="profileSaving ? 'Saving…' : 'Save vehicle'"></button>
+      </div>
+
+      <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mt-6 mb-2">Notification preferences</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 text-sm">
+        <label class="flex items-center justify-between">
+          <span>Email notifications</span>
+          <input type="checkbox" class="w-5 h-5" x-model="profile.notificationPrefs.email" @change="saveProfile()" />
+        </label>
+        <label class="flex items-center justify-between">
+          <span>SMS / text alerts</span>
+          <input type="checkbox" class="w-5 h-5" x-model="profile.notificationPrefs.sms" @change="saveProfile()" />
+        </label>
+        <label class="flex items-center justify-between">
+          <span>Push notifications</span>
+          <input type="checkbox" class="w-5 h-5" x-model="profile.notificationPrefs.push" @change="saveProfile()" />
+        </label>
+      </div>
+
+      <button @click="signOut()" class="mt-6 w-full text-rose-600 text-sm font-bold py-3">Sign out</button>
     </section>
   </main>
 
@@ -253,130 +425,249 @@
       <button @click="tab='vehicles'" :class="tab==='vehicles'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-lg">🚗</span><span class="text-[10px] font-bold">Vehicle</span></button>
       <button @click="tab='line'"     :class="tab==='line'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-lg">📷</span><span class="text-[10px] font-bold">Line</span></button>
       <button @click="tab='promos'"   :class="tab==='promos'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-lg">🎁</span><span class="text-[10px] font-bold">Promos</span></button>
-      <button @click="tab='visits'"   :class="tab==='visits'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-lg">📋</span><span class="text-[10px] font-bold">Visits</span></button>
+      <button @click="tab='account'"  :class="tab==='account'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-lg">👤</span><span class="text-[10px] font-bold">Account</span></button>
     </div>
   </nav>
+</div>
+</template>
 
-  <!-- Install banner (browser-shown when PWA is installable) -->
-  <div x-show="showInstall" class="install-banner fixed bottom-20 inset-x-3 z-40 bg-slate-900 text-white rounded-xl p-3 shadow-2xl flex items-center gap-3" x-cloak>
-    <div class="text-2xl">📲</div>
-    <div class="flex-1 text-xs">
-      <div class="font-bold">Install Wash Depot</div>
-      <div class="text-white/70">Add to your home screen for quick access</div>
-    </div>
-    <button @click="installApp()" class="bg-cyan-500 text-white text-xs font-bold px-3 py-2 rounded">Install</button>
-    <button @click="showInstall=false" class="text-white/50 text-xl px-1">×</button>
+<!-- Install banner (when PWA is installable) -->
+<div x-show="showInstall" class="install-banner fixed bottom-20 inset-x-3 z-40 bg-slate-900 text-white rounded-xl p-3 shadow-2xl flex items-center gap-3" x-cloak>
+  <div class="text-2xl">📲</div>
+  <div class="flex-1 text-xs">
+    <div class="font-bold">Install Wash Depot</div>
+    <div class="text-white/70">Add to home screen for quick access</div>
   </div>
+  <button @click="installApp()" class="bg-cyan-500 text-white text-xs font-bold px-3 py-2 rounded">Install</button>
+  <button @click="showInstall=false" class="text-white/50 text-xl px-1">×</button>
+</div>
 
-  <!-- Toast -->
-  <div x-show="toast" class="fixed bottom-24 inset-x-3 z-50 bg-slate-900 text-white text-sm font-semibold p-3 rounded-xl text-center" x-cloak x-text="toast"></div>
+<!-- Toast -->
+<div x-show="toast" class="fixed bottom-24 inset-x-3 z-50 bg-slate-900 text-white text-sm font-semibold p-3 rounded-xl text-center" x-cloak x-text="toast"></div>
 
 <script>
-function customerApp() {
-  // DEMO data — in production this would fetch from /api/customer-data?phone=...
-  // For prototype, we accept ?cid=loyal | ?cid=member | ?cid=new
-  const PROMOS = {
-    promo_5off:    { id:'promo_5off',    name:'$5 off any wash',         description:'Apply at next visit',           code:'WD5' },
-    promo_upgrade: { id:'promo_upgrade', name:'Free Premium upgrade',    description:'Express → Premium free',        code:'UPGRADE' },
-    promo_member:  { id:'promo_member',  name:'1 month Unlimited free',  description:'Free month of membership',       code:'TRYUNL' },
-    promo_birthday:{ id:'promo_birthday',name:'Birthday wash on us',     description:'Free Premium during birthday month', code:'BDAY' }
-  };
-  const now = Date.now(), day = 86400000;
-  const DEMOS = {
-    loyal: {
-      firstName:'Tina', lastName:'Alvarez', plate:'GTC-9417',
-      vehicleMake:'Tesla', vehicleModel:'Model Y', vehicleColor:'Pearl White',
-      visitCount: 17, totalSpend: 286, membership: null, tags: [],
-      gifts: [
-        { id:'g1', promoId:'promo_5off', code:'WD5', expiresAt: now + 21*day, redeemed:false }
-      ],
-      visits: [
-        { id:'v1', at: now - 3*day, packageName:'Premium Wash', amount: 18 },
-        { id:'v2', at: now - 12*day, packageName:'Ultimate Wash', amount: 25 },
-        { id:'v3', at: now - 20*day, packageName:'Premium Wash', amount: 18 },
-        { id:'v4', at: now - 35*day, packageName:'Express Wash', amount: 12 }
-      ]
-    },
-    member: {
-      firstName:'Marcus', lastName:'Diallo', plate:'XKR-2204',
-      vehicleMake:'BMW', vehicleModel:'X5', vehicleColor:'Mineral White',
-      visitCount: 23, totalSpend: 105, membership: { type:'unlimited', expiresAt: now + 18*day }, tags:['membership'],
-      gifts: [
-        { id:'g2', promoId:'promo_birthday', code:'BDAY', expiresAt: now + 14*day, redeemed:false }
-      ],
-      visits: [
-        { id:'v1', at: now - 2*day, packageName:'Premium Wash', amount: 0 },
-        { id:'v2', at: now - 6*day, packageName:'Premium Wash', amount: 0 },
-        { id:'v3', at: now - 11*day, packageName:'Ultimate Wash', amount: 25 }
-      ]
-    },
-    new: {
-      firstName:'', lastName:'', plate:'',
-      vehicleMake:'', vehicleModel:'', vehicleColor:'',
-      visitCount: 0, totalSpend: 0, membership: null, tags:['first-time'],
-      gifts: [
-        { id:'g3', promoId:'promo_upgrade', code:'UPGRADE', expiresAt: now + 30*day, redeemed:false }
-      ],
-      visits: []
-    }
-  };
+const PROMOS = {
+  promo_app_welcome: { name:'$5 off your first wash' },
+  promo_5off:        { name:'$5 off any wash' },
+  promo_upgrade:     { name:'Free Premium upgrade' },
+  promo_20pct:       { name:'20% off any detail' },
+  promo_buy2:        { name:'Buy 2 washes, get 1 free' },
+  promo_member:      { name:'1 month Unlimited free' },
+  promo_birthday:    { name:'Birthday wash on us' }
+};
 
+function customerApp() {
   return {
+    auth: {
+      signedIn: false,
+      step: 'welcome', // welcome | signin | signup
+      signupStep: 1,
+      busy: false,
+      error: '',
+      contact: { phone:'', email:'' },
+      signup: {
+        firstName:'', lastName:'', phone:'', email:'',
+        plate:'', vehicleYear:'', vehicleMake:'', vehicleModel:'', vehicleColor:''
+      }
+    },
+    customer: null,
+    visits: [],
+    queue: { cars: 0, mins: 0 },
     tab: 'home',
     toast: '',
     showInstall: false,
     deferredPrompt: null,
-    customer: null,
-    queue: [],
     alert: { enabled:false, threshold:3, channel:'sms' },
+    profile: { notificationPrefs: { sms:true, push:true, email:true } },
+    profileSaving: false,
+    refreshTimer: null,
 
-    init() {
-      // pick demo from query param
-      const params = new URLSearchParams(window.location.search);
-      const cid = params.get('cid') || 'loyal';
-      this.customer = DEMOS[cid] || DEMOS.loyal;
-      // Random initial queue (cars in lane), 0-7
-      this.queue = Array.from({length: Math.floor(Math.random()*7)+1});
-
-      // simulate queue changes
-      setInterval(()=>{
-        const r = Math.random();
-        if (r < 0.3 && this.queue.length > 0) this.queue.pop(); // car finishes
-        else if (r < 0.55) this.queue.push({});                 // new car arrives
-        // trigger alert if active
-        if (this.alert.enabled && this.queue.length <= this.alert.threshold) {
-          this.showToast(`🔔 Line is short — ${this.queue.length} cars. Come on in!`);
-          this.alert.enabled = false;
-        }
-      }, 6000);
-
+    async init() {
       // PWA install prompt
       window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        this.deferredPrompt = e;
-        this.showInstall = true;
+        e.preventDefault(); this.deferredPrompt = e; this.showInstall = true;
       });
-
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(()=>{});
-      }
-
-      // Restore state from localStorage
+      // Service worker
+      if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+      // Restore alert prefs
       try {
         const saved = JSON.parse(localStorage.getItem('wd_customer_state') || '{}');
         if (saved.alert) this.alert = saved.alert;
         if (saved.tab)   this.tab = saved.tab;
       } catch {}
-      this.$watch('alert', () => this.saveState(), { deep: true });
-      this.$watch('tab',   () => this.saveState());
+      this.$watch('alert', () => this.saveLocal(), { deep: true });
+      this.$watch('tab',   () => this.saveLocal());
+
+      // Restore signed-in customer
+      const cid = localStorage.getItem('wd_customer_cid');
+      if (cid) {
+        await this.loadMe(cid);
+      }
+      // Always start polling queue (works pre-signin too)
+      this.fetchQueue();
+      this.refreshTimer = setInterval(()=>{ this.fetchQueue(); if (this.auth.signedIn) this.loadMe(this.customer.id, true); }, 12000);
     },
 
-    saveState(){
+    saveLocal(){
       try { localStorage.setItem('wd_customer_state', JSON.stringify({ alert: this.alert, tab: this.tab })); } catch {}
     },
 
-    async installApp(){
+    showToast(msg){ this.toast = msg; setTimeout(()=>this.toast='', 3500); },
+
+    /* ===== Auth ===== */
+    async signIn() {
+      this.auth.error = '';
+      const { phone, email } = this.auth.contact;
+      if (!phone && !email) { this.auth.error = 'Enter phone or email'; return; }
+      this.auth.busy = true;
+      try {
+        const res = await fetch('/api/customer/lookup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ phone, email }) });
+        if (!res.ok) throw new Error(await res.text());
+        const j = await res.json();
+        if (!j.found) {
+          this.auth.error = "We couldn't find that account. Want to sign up?";
+          return;
+        }
+        await this.completeSignIn(j.customer);
+      } catch (e) {
+        this.auth.error = 'Sign-in failed. ' + e.message;
+      } finally {
+        this.auth.busy = false;
+      }
+    },
+
+    signupNext(){
+      if (!this.auth.signup.firstName || !this.auth.signup.phone) { this.auth.error = 'Name and phone are required'; return; }
+      this.auth.error = '';
+      this.auth.signupStep = 2;
+    },
+
+    async signUp() {
+      this.auth.error = '';
+      this.auth.busy = true;
+      try {
+        const res = await fetch('/api/customer/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(this.auth.signup) });
+        if (!res.ok) throw new Error(await res.text());
+        const j = await res.json();
+        await this.completeSignIn(j.customer);
+        if (j.created) this.showToast('🎉 Welcome to Wash Depot!');
+        else this.showToast('Found your existing account!');
+      } catch (e) {
+        this.auth.error = 'Signup failed. ' + e.message;
+      } finally {
+        this.auth.busy = false;
+      }
+    },
+
+    async completeSignIn(c) {
+      localStorage.setItem('wd_customer_cid', c.id);
+      this.customer = c;
+      this.auth.signedIn = true;
+      this.auth.step = 'welcome';
+      this.populateProfile();
+      await this.loadMe(c.id);
+    },
+
+    signOut() {
+      if (!confirm('Sign out of Wash Depot?')) return;
+      localStorage.removeItem('wd_customer_cid');
+      this.customer = null;
+      this.visits = [];
+      this.auth.signedIn = false;
+      this.auth.step = 'welcome';
+      this.auth.contact = { phone:'', email:'' };
+      this.auth.signup = { firstName:'', lastName:'', phone:'', email:'', plate:'', vehicleYear:'', vehicleMake:'', vehicleModel:'', vehicleColor:'' };
+      this.tab = 'home';
+    },
+
+    /* ===== Data ===== */
+    async loadMe(cid, silent = false) {
+      try {
+        const res = await fetch('/api/customer/me?cid=' + encodeURIComponent(cid));
+        if (res.status === 404) {
+          // Customer was deleted on the backend — sign out
+          if (!silent) this.showToast('Account not found — please sign in again.');
+          this.signOut();
+          return;
+        }
+        if (!res.ok) throw new Error(await res.text());
+        const j = await res.json();
+        this.customer = j.customer;
+        this.visits = j.visits || [];
+        this.auth.signedIn = true;
+        this.populateProfile();
+      } catch (e) {
+        if (!silent) this.showToast('Could not load your account.');
+        console.warn(e);
+      }
+    },
+
+    populateProfile() {
+      if (!this.customer) return;
+      this.profile = {
+        firstName: this.customer.firstName || '',
+        lastName: this.customer.lastName || '',
+        phone: this.customer.phone || '',
+        email: this.customer.email || '',
+        plate: this.customer.plate || '',
+        vehicleYear: this.customer.vehicleYear || '',
+        vehicleMake: this.customer.vehicleMake || '',
+        vehicleModel: this.customer.vehicleModel || '',
+        vehicleColor: this.customer.vehicleColor || '',
+        notificationPrefs: this.customer.notificationPrefs || { sms:true, push:true, email:true }
+      };
+    },
+
+    async saveProfile() {
+      this.profileSaving = true;
+      try {
+        const res = await fetch('/api/customer/me?cid=' + encodeURIComponent(this.customer.id), {
+          method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(this.profile)
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const j = await res.json();
+        this.customer = j.customer;
+        this.showToast('✓ Profile saved');
+      } catch (e) {
+        this.showToast('Save failed: ' + e.message);
+      } finally {
+        this.profileSaving = false;
+      }
+    },
+
+    async fetchQueue() {
+      try {
+        const res = await fetch('/api/customer/queue');
+        if (!res.ok) return;
+        const j = await res.json();
+        const prevCars = this.queue.cars;
+        this.queue = { cars: j.cars || 0, mins: j.mins || 0 };
+        if (this.alert.enabled && this.queue.cars <= this.alert.threshold && prevCars > this.alert.threshold) {
+          this.showToast(`🔔 Line is short — ${this.queue.cars} cars. Come on in!`);
+          if (this.alert.channel === 'push' && 'Notification' in window && Notification.permission === 'granted') {
+            new Notification('Wash Depot — line is short!', { body: `${this.queue.cars} cars in line. Come on in!`, icon:'/icon-192.svg' });
+          }
+          this.alert.enabled = false;
+        }
+      } catch {}
+    },
+
+    async redeem(giftId) {
+      if (!confirm('Mark this offer as used?')) return;
+      try {
+        const res = await fetch('/api/customer/redeem', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ cid: this.customer.id, giftId })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        await this.loadMe(this.customer.id, true);
+        this.showToast('✓ Offer marked as used');
+      } catch (e) {
+        this.showToast('Redeem failed: ' + e.message);
+      }
+    },
+
+    /* ===== UI helpers ===== */
+    async installApp() {
       if (!this.deferredPrompt) { this.showInstall = false; return; }
       this.deferredPrompt.prompt();
       await this.deferredPrompt.userChoice;
@@ -384,13 +675,10 @@ function customerApp() {
       this.showInstall = false;
     },
 
-    showToast(msg){ this.toast = msg; setTimeout(()=>this.toast='', 3500); },
-
-    toggleAlert(){
+    toggleAlert() {
       this.alert.enabled = !this.alert.enabled;
       if (this.alert.enabled) {
         this.showToast(`✓ We'll ${this.alert.channel==='sms' ? 'text' : 'push'} you when the line drops to ${this.alert.threshold} or fewer cars.`);
-        // Try to ask for notification permission for push
         if (this.alert.channel === 'push' && 'Notification' in window && Notification.permission === 'default') {
           Notification.requestPermission();
         }
@@ -402,13 +690,15 @@ function customerApp() {
     money(n){ return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n||0); },
     formatDate(t){ if(!t) return ''; return new Date(t).toLocaleDateString('en-US',{month:'short', day:'numeric'}); },
     tierLabel(t){ return ({ new:'First Time', regular:'Regular', loyal:'Loyal', vip:'VIP' })[t] || t; },
+    promoName(id){ return PROMOS[id]?.name || id; },
 
     get tier(){
-      if (!this.customer) return 'new';
-      if (this.customer.tags?.includes('vip') || this.customer.totalSpend > 500) return 'vip';
-      if (this.customer.visitCount === 0) return 'new';
-      const isMember = this.customer.membership && new Date(this.customer.membership.expiresAt) > Date.now();
-      if (this.customer.visitCount >= 10 || isMember) return 'loyal';
+      const c = this.customer;
+      if (!c) return 'new';
+      if ((c.tags || []).includes('vip') || c.totalSpend > 500) return 'vip';
+      if (c.visitCount === 0) return 'new';
+      const isMember = c.membership && new Date(c.membership.expiresAt) > Date.now();
+      if (c.visitCount >= 10 || isMember) return 'loyal';
       return 'regular';
     },
     get loyalty(){
@@ -417,18 +707,8 @@ function customerApp() {
       const count = (this.customer.visitCount || 0) % target;
       return { count, target, remaining: target - count };
     },
-    get visits(){ return this.customer?.visits || []; },
     get activeGifts(){
-      const list = this.customer?.gifts || [];
-      return list.filter(g => !g.redeemed && g.expiresAt > Date.now()).map(g => ({
-        ...g,
-        name: PROMOS[g.promoId]?.name || g.promoId,
-        description: PROMOS[g.promoId]?.description
-      }));
-    },
-    get queueWait(){
-      const cars = this.queue.length;
-      return { cars, mins: cars * 4 };
+      return (this.customer?.gifts || []).filter(g => !g.redeemed && g.expiresAt > Date.now());
     }
   };
 }
