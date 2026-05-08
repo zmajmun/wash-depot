@@ -66,29 +66,21 @@
   .ab-color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: border-color .12s; }
   .ab-color-swatch.selected { border-color: #111827; }
 
-  /* ===== Live Lane: pulsing tier glows ===== */
-  .lane-card { position: relative; background: #0a0a0a; color: #fff; border-radius: 16px; padding: 20px; border: 2px solid; transition: transform .2s; }
-  .lane-card:hover { transform: translateY(-2px); }
+  /* ===== Live Lane: white cards, glow only for first-time ===== */
+  .lane-card { position: relative; background: #ffffff; color: #0f172a; border-radius: 16px; padding: 20px; border: 1.5px solid #e5e7eb; transition: transform .15s, box-shadow .15s, border-color .15s; }
+  .lane-card.clickable { cursor: pointer; }
+  .lane-card.clickable:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(15,23,42,.18); border-color: #cbd5e1; }
   .lane-card .plate { font-family: 'Courier New', ui-monospace, monospace; font-weight: 900; font-size: 24px; letter-spacing: 2px; background: #fff; color: #000; display: inline-block; padding: 4px 10px; border-radius: 4px; border: 2px solid #1a1a1a; }
-  @keyframes pulse-new   { 0%,100% { box-shadow: 0 0 10px #06b6d4, 0 0 22px #06b6d4, 0 0 0 rgba(6,182,212,.0); } 50% { box-shadow: 0 0 26px #22d3ee, 0 0 56px #06b6d4, 0 0 0 8px rgba(6,182,212,.18); } }
-  @keyframes pulse-bronze{ 0%,100% { box-shadow: 0 0 8px #f59e0b, 0 0 16px #f59e0b; } 50% { box-shadow: 0 0 18px #fbbf24, 0 0 38px #f59e0b; } }
-  @keyframes pulse-silver{ 0%,100% { box-shadow: 0 0 8px #3b82f6, 0 0 16px #3b82f6; } 50% { box-shadow: 0 0 18px #60a5fa, 0 0 38px #3b82f6; } }
-  @keyframes pulse-gold  { 0%,100% { box-shadow: 0 0 10px #a855f7, 0 0 22px #a855f7; } 50% { box-shadow: 0 0 22px #c084fc, 0 0 50px #9333ea; } }
-  @keyframes pulse-member{ 0%,100% { box-shadow: 0 0 10px #84cc16, 0 0 22px #84cc16; } 50% { box-shadow: 0 0 22px #bef264, 0 0 48px #65a30d; } }
-  @keyframes pulse-vip   { 0%,100% { box-shadow: 0 0 12px #ec4899, 0 0 28px #ec4899; } 50% { box-shadow: 0 0 28px #f472b6, 0 0 64px #db2777; } }
-  .tier-new    { border-color: #06b6d4; animation: pulse-new    2.0s ease-in-out infinite; }
-  .tier-bronze { border-color: #f59e0b; animation: pulse-bronze 2.6s ease-in-out infinite; }
-  .tier-silver { border-color: #3b82f6; animation: pulse-silver 2.6s ease-in-out infinite; }
-  .tier-gold   { border-color: #a855f7; animation: pulse-gold   2.4s ease-in-out infinite; }
-  .tier-member { border-color: #84cc16; animation: pulse-member 2.6s ease-in-out infinite; }
-  .tier-vip    { border-color: #ec4899; animation: pulse-vip    2.0s ease-in-out infinite; }
+  @keyframes pulse-new { 0%,100% { box-shadow: 0 0 10px #06b6d4, 0 0 22px #06b6d4, 0 0 0 rgba(6,182,212,.0); } 50% { box-shadow: 0 0 26px #22d3ee, 0 0 56px #06b6d4, 0 0 0 8px rgba(6,182,212,.18); } }
+  .tier-new      { border-color: #06b6d4; border-width: 2px; animation: pulse-new 2.0s ease-in-out infinite; }
+  .tier-regular  { border-color: #e5e7eb; }
+  .tier-loyal    { border-color: #a855f7; border-left: 4px solid #a855f7; }
+  .tier-vip      { border-color: #ec4899; border-left: 4px solid #ec4899; }
   .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
-  .tier-badge.new    { background: #06b6d4; color: #fff; }
-  .tier-badge.bronze { background: #f59e0b; color: #fff; }
-  .tier-badge.silver { background: #3b82f6; color: #fff; }
-  .tier-badge.gold   { background: #a855f7; color: #fff; }
-  .tier-badge.member { background: #65a30d; color: #fff; }
-  .tier-badge.vip    { background: #db2777; color: #fff; }
+  .tier-badge.new     { background: #06b6d4; color: #fff; }
+  .tier-badge.regular { background: #e2e8f0; color: #334155; }
+  .tier-badge.loyal   { background: #a855f7; color: #fff; }
+  .tier-badge.vip     { background: #db2777; color: #fff; }
   .scan-dot { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; animation: pulse-scan 1.2s ease-in-out infinite; display: inline-block; }
   @keyframes pulse-scan { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.7); } 70% { box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
   .sparkle::before { content: "✨"; }
@@ -295,6 +287,7 @@
           <a @click.prevent="view='lane'" :class="{'active': view==='lane'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📷 Live Lane</a>
           <a @click.prevent="view='wash'" :class="{'active': view==='wash'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💧 Wash Line</a>
           <a @click.prevent="view='customers'" :class="{'active': view==='customers'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">👥 Customers (CRM)</a>
+          <a @click.prevent="view='customer-app'" :class="{'active': view==='customer-app'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📱 Customer App</a>
           <a @click.prevent="view='retail'" :class="{'active': view==='retail'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🛒 Retail Products</a>
 
           <div class="text-[10px] uppercase tracking-wider text-white/40 font-bold px-3 pt-3 pb-1">Other</div>
@@ -1258,35 +1251,35 @@
           <!-- Tier legend -->
           <div class="card p-3 mb-5 text-xs flex flex-wrap gap-3 items-center">
             <span class="font-bold text-slate-700">Tier signals:</span>
-            <span class="tier-badge new">✨ New</span>
-            <span class="tier-badge bronze">Returning</span>
-            <span class="tier-badge silver">Regular</span>
-            <span class="tier-badge gold">Loyal</span>
-            <span class="tier-badge member">Member</span>
+            <span class="tier-badge new">✨ First Time</span>
+            <span class="tier-badge regular">Regular</span>
+            <span class="tier-badge loyal">Loyal</span>
             <span class="tier-badge vip">VIP</span>
+            <span class="ml-auto text-slate-500 italic">Click any card with a customer to open their CRM record.</span>
           </div>
 
           <!-- Live cards grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <template x-for="l in liveLane" :key="l.id">
-              <div class="lane-card" :class="'tier-' + (l.customerId ? customerTier(customerById(l.customerId)) : 'new')">
+              <div class="lane-card" :class="('tier-' + (l.customerId ? customerTier(customerById(l.customerId)) : 'new')) + (l.customerId ? ' clickable' : '')"
+                   @click="if (l.customerId) openCustomer(l.customerId)">
                 <!-- Header: plate + tier badge -->
                 <div class="flex items-start justify-between mb-3">
                   <div>
                     <div class="plate" x-text="l.plate"></div>
-                    <div class="text-[10px] mt-1 uppercase tracking-widest text-slate-400" x-text="'Detected ' + relativeTime(l.detectedAt)"></div>
+                    <div class="text-[10px] mt-1 uppercase tracking-widest text-slate-500" x-text="'Detected ' + relativeTime(l.detectedAt)"></div>
                   </div>
-                  <span class="tier-badge" :class="(l.customerId ? customerTier(customerById(l.customerId)) : 'new')" x-text="(l.customerId ? customerTier(customerById(l.customerId)) : 'new').toUpperCase()"></span>
+                  <span class="tier-badge" :class="(l.customerId ? customerTier(customerById(l.customerId)) : 'new')" x-text="tierLabel(l.customerId ? customerTier(customerById(l.customerId)) : 'new')"></span>
                 </div>
 
                 <!-- New customer state -->
                 <template x-if="!l.customerId">
                   <div>
-                    <div class="text-2xl font-black text-cyan-300 mb-1">✨ First-time customer</div>
-                    <div class="text-xs text-slate-400 mb-3">Plate not in CRM — let's make a great first impression.</div>
-                    <div class="bg-cyan-950/50 border border-cyan-700 rounded-lg p-3 text-xs">
-                      <div class="font-bold text-cyan-300 mb-1">💡 Suggestion</div>
-                      <div class="text-slate-200">Greet warmly, recommend Premium Wash. Offer $5 off if they sign up for the Unlimited Membership.</div>
+                    <div class="text-xl font-black text-cyan-700 mb-1">✨ First-time customer</div>
+                    <div class="text-xs text-slate-500 mb-3">Plate not in CRM yet — capture their info and earn the visit.</div>
+                    <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-3 text-xs mb-3">
+                      <div class="font-bold text-cyan-800 mb-1">💡 Play</div>
+                      <div class="text-slate-700">Greet warmly, recommend Premium Wash. Offer $5 off if they join Unlimited Membership.</div>
                     </div>
                   </div>
                 </template>
@@ -1294,44 +1287,45 @@
                 <!-- Existing customer state -->
                 <template x-if="l.customerId">
                   <div>
-                    <div class="text-xl font-black mb-0.5" x-text="customerName(customerById(l.customerId))"></div>
-                    <div class="text-xs text-slate-400 mb-3" x-text="customerById(l.customerId).vehicleYear + ' ' + customerById(l.customerId).vehicleMake + ' ' + customerById(l.customerId).vehicleModel + ' · ' + customerById(l.customerId).vehicleColor"></div>
-                    <div class="grid grid-cols-3 gap-2 mb-3 text-[11px]">
-                      <div class="bg-white/5 rounded p-2">
-                        <div class="text-slate-400 uppercase tracking-wider">Visits</div>
+                    <div class="text-lg font-black mb-0.5" x-text="customerName(customerById(l.customerId))"></div>
+                    <div class="text-xs text-slate-500 mb-3" x-text="customerById(l.customerId).vehicleMake + ' ' + customerById(l.customerId).vehicleModel + (customerById(l.customerId).vehicleColor ? ' · ' + customerById(l.customerId).vehicleColor : '')"></div>
+                    <div class="grid gap-2 mb-3 text-[11px]" :class="canSeePrices ? 'grid-cols-3' : 'grid-cols-2'">
+                      <div class="bg-slate-50 rounded p-2 border border-slate-100">
+                        <div class="text-slate-500 uppercase tracking-wider">Visits</div>
                         <div class="font-black text-base" x-text="customerById(l.customerId).visitCount"></div>
                       </div>
-                      <div class="bg-white/5 rounded p-2" x-show="canSeePrices">
-                        <div class="text-slate-400 uppercase tracking-wider">Total spend</div>
+                      <div class="bg-slate-50 rounded p-2 border border-slate-100" x-show="canSeePrices">
+                        <div class="text-slate-500 uppercase tracking-wider">Spend</div>
                         <div class="font-black text-base" x-text="money(customerById(l.customerId).totalSpend)"></div>
                       </div>
-                      <div class="bg-white/5 rounded p-2">
-                        <div class="text-slate-400 uppercase tracking-wider">Last seen</div>
+                      <div class="bg-slate-50 rounded p-2 border border-slate-100">
+                        <div class="text-slate-500 uppercase tracking-wider">Last seen</div>
                         <div class="font-black text-base" x-text="relativeTime(customerById(l.customerId).lastSeenAt)"></div>
                       </div>
                     </div>
-                    <div class="bg-amber-950/40 border border-amber-700/50 rounded-lg p-3 text-xs mb-3">
-                      <div class="font-bold text-amber-300 mb-1">💡 Upsell</div>
-                      <div class="text-slate-200" x-text="suggestUpsell(customerById(l.customerId))"></div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs mb-3">
+                      <div class="font-bold text-amber-800 mb-1">💡 Upsell</div>
+                      <div class="text-slate-700" x-text="suggestUpsell(customerById(l.customerId))"></div>
                     </div>
-                    <div x-show="customerById(l.customerId).notes?.length" class="text-[11px] text-slate-300 italic mb-3 line-clamp-2" x-text="'📝 &quot;' + (customerById(l.customerId).notes[0]?.text || '') + '&quot;'"></div>
+                    <div x-show="customerById(l.customerId).notes?.length" class="text-[11px] text-slate-600 italic mb-3 line-clamp-2" x-text="'📝 &quot;' + (customerById(l.customerId).notes[0]?.text || '') + '&quot;'"></div>
+                    <div class="text-[10px] text-slate-400 uppercase tracking-wider">Tap to open profile →</div>
                   </div>
                 </template>
 
                 <!-- Status pill + actions -->
-                <div class="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-white/10">
+                <div class="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100" @click.stop>
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
-                        :class="l.status==='detected' ? 'bg-slate-700 text-slate-200' : (l.status==='in-bay' ? 'bg-blue-700 text-blue-100' : 'bg-emerald-700 text-emerald-100')"
+                        :class="l.status==='detected' ? 'bg-slate-100 text-slate-700' : (l.status==='in-bay' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800')"
                         x-text="l.status === 'in-bay' ? 'In bay' : l.status">
                   </span>
                   <div class="flex gap-1">
-                    <select class="text-[11px] bg-white/10 text-white rounded px-1.5 py-1 border border-white/20" @change="setLanePackage(l.id, $event.target.value)">
+                    <select class="text-[11px] bg-slate-50 rounded px-1.5 py-1 border border-slate-200" @change="setLanePackage(l.id, $event.target.value)">
                       <option value="" :selected="!l.assignedPackageId">— Pkg —</option>
                       <template x-for="p in washPackages" :key="p.id"><option :value="p.id" :selected="l.assignedPackageId===p.id" x-text="p.name"></option></template>
                     </select>
-                    <button @click="advanceLane(l.id)" class="text-[11px] bg-teal-600 hover:bg-teal-500 px-2 py-1 rounded font-bold">→</button>
-                    <button x-show="l.customerId" @click="openCustomer(l.customerId)" class="text-[11px] bg-white/10 hover:bg-white/20 px-2 py-1 rounded">CRM</button>
-                    <button @click="removeFromLane(l.id)" class="text-[11px] text-rose-400 hover:text-rose-300 px-1">×</button>
+                    <button @click="advanceLane(l.id)" class="text-[11px] bg-teal-600 hover:bg-teal-700 text-white px-2 py-1 rounded font-bold">→</button>
+                    <button x-show="!l.customerId" @click="openGiftModal(null, l.plate)" class="text-[11px] bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-1 rounded font-bold">🎁 Gift</button>
+                    <button @click="removeFromLane(l.id)" class="text-[11px] text-rose-600 hover:text-rose-700 px-1">×</button>
                   </div>
                 </div>
               </div>
@@ -1358,13 +1352,12 @@
           </div>
 
           <!-- KPI strip -->
-          <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-5">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
             <div class="card p-3"><div class="text-[10px] uppercase font-bold text-slate-500">Total</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.total"></div></div>
-            <div class="card p-3 border-l-4 border-l-cyan-500"><div class="text-[10px] uppercase font-bold text-slate-500">New</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.new"></div></div>
-            <div class="card p-3 border-l-4 border-l-amber-500"><div class="text-[10px] uppercase font-bold text-slate-500">Returning</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.bronze"></div></div>
-            <div class="card p-3 border-l-4 border-l-blue-500"><div class="text-[10px] uppercase font-bold text-slate-500">Regular</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.silver"></div></div>
-            <div class="card p-3 border-l-4 border-l-purple-500"><div class="text-[10px] uppercase font-bold text-slate-500">Loyal</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.gold"></div></div>
-            <div class="card p-3 border-l-4 border-l-pink-500"><div class="text-[10px] uppercase font-bold text-slate-500">VIP / Member</div><div class="text-2xl font-black mt-0.5" x-text="(crmStats.tierCount.vip + crmStats.tierCount.member)"></div></div>
+            <div class="card p-3 border-l-4 border-l-cyan-500"><div class="text-[10px] uppercase font-bold text-slate-500">First Time</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.new"></div></div>
+            <div class="card p-3 border-l-4 border-l-slate-400"><div class="text-[10px] uppercase font-bold text-slate-500">Regular</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.regular"></div></div>
+            <div class="card p-3 border-l-4 border-l-purple-500"><div class="text-[10px] uppercase font-bold text-slate-500">Loyal</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.loyal"></div></div>
+            <div class="card p-3 border-l-4 border-l-pink-500"><div class="text-[10px] uppercase font-bold text-slate-500">VIP</div><div class="text-2xl font-black mt-0.5" x-text="crmStats.tierCount.vip"></div></div>
           </div>
 
           <!-- Filters -->
@@ -1372,11 +1365,9 @@
             <input class="input flex-1 max-w-md" placeholder="Search name, plate, vehicle, email…" x-model="customerSearch" />
             <select class="select max-w-xs" x-model="customerTierFilter">
               <option value="">All tiers</option>
-              <option value="new">New</option>
-              <option value="bronze">Returning</option>
-              <option value="silver">Regular</option>
-              <option value="gold">Loyal</option>
-              <option value="member">Member</option>
+              <option value="new">First Time</option>
+              <option value="regular">Regular</option>
+              <option value="loyal">Loyal</option>
               <option value="vip">VIP</option>
             </select>
             <span class="text-xs text-slate-500" x-text="filteredCustomers.length + ' shown'"></span>
@@ -1414,6 +1405,307 @@
               </tbody>
             </table>
             <div x-show="!filteredCustomers.length" class="p-8 text-center text-sm text-slate-400">No customers match.</div>
+          </div>
+        </div>
+      </template>
+
+      <!-- ============================================ STAFF: CUSTOMER APP PREVIEW ============================================ -->
+      <template x-if="session.role==='staff' && view==='customer-app'">
+        <div>
+          <div class="flex items-end justify-between mb-5">
+            <div>
+              <h1 class="text-2xl font-black tracking-tight">📱 Customer Mobile App</h1>
+              <p class="text-sm text-slate-500">Preview of what customers see in the Wash Depot app. Install as a PWA on iOS/Android — no app store needed.</p>
+            </div>
+            <div class="flex gap-2 items-center">
+              <span class="text-xs text-slate-500">Preview as:</span>
+              <select class="select text-sm" x-model="customerApp.selectedCustomerId">
+                <option value="">— Auto pick (Loyal customer) —</option>
+                <template x-for="c in customers.slice(0,20)" :key="c.id">
+                  <option :value="c.id" x-text="customerName(c) + ' (' + tierLabel(customerTier(c)) + ')'"></option>
+                </template>
+              </select>
+              <a :href="'/customer-app?customerId=' + (appCustomer?.id || '')" target="_blank" class="btn btn-outline text-sm">Open standalone →</a>
+            </div>
+          </div>
+
+          <div class="flex gap-6 items-start">
+            <!-- Phone frame -->
+            <div class="mx-auto" style="width: 380px; flex-shrink: 0;">
+              <div style="background:#000; border-radius: 36px; padding: 12px; box-shadow: 0 30px 60px -15px rgba(0,0,0,.5);">
+                <div style="background:#f8fafc; border-radius: 26px; overflow: hidden; height: 720px; display:flex; flex-direction:column;">
+                  <!-- Status bar -->
+                  <div style="background:#000; color:#fff; padding: 8px 16px; display:flex; justify-content:space-between; font-size: 11px; font-weight: 600;">
+                    <span>9:41</span>
+                    <span>•••• 5G ▮</span>
+                  </div>
+
+                  <!-- App header -->
+                  <div style="background:#000; color:#fff; padding: 16px;">
+                    <div class="flex items-center gap-2">
+                      <div class="wd-logo-wrap w-8 h-8 rounded bg-black flex-shrink-0">
+                        <img class="wd-logo-img" src="wash-depot-logo.png" onerror="this.classList.add('failed')" />
+                        <svg class="wd-logo-svg" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
+                      </div>
+                      <div class="flex-1">
+                        <div class="text-[10px] uppercase tracking-widest text-white/60">Wash Depot</div>
+                        <div class="text-sm font-bold" x-text="appCustomer ? customerName(appCustomer) : 'Welcome'"></div>
+                      </div>
+                      <span class="tier-badge" :class="appCustomer ? customerTier(appCustomer) : 'new'" x-text="tierLabel(appCustomer ? customerTier(appCustomer) : 'new')"></span>
+                    </div>
+                  </div>
+
+                  <!-- Body (scrollable) -->
+                  <div style="flex:1; overflow-y:auto; padding: 16px;">
+
+                    <!-- HOME -->
+                    <div x-show="customerApp.tab==='home'">
+                      <!-- Loyalty card -->
+                      <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); color:#fff; border-radius: 16px; padding: 16px; margin-bottom: 14px;">
+                        <div class="text-[11px] uppercase tracking-widest text-white/70 mb-1">Loyalty progress</div>
+                        <div class="text-3xl font-black" x-text="appLoyaltyProgress.count + ' / ' + appLoyaltyProgress.target"></div>
+                        <div class="text-xs text-white/70 mb-3">washes toward your free Premium</div>
+                        <!-- Punch dots -->
+                        <div class="flex gap-1.5 mb-2">
+                          <template x-for="i in appLoyaltyProgress.target" :key="i">
+                            <div class="flex-1 h-2 rounded-full" :style="i <= appLoyaltyProgress.count ? 'background:#22d3ee' : 'background:rgba(255,255,255,.18)'"></div>
+                          </template>
+                        </div>
+                        <div class="text-xs text-white/80" x-text="appLoyaltyProgress.remaining + ' more to your next free wash 🎁'"></div>
+                      </div>
+
+                      <!-- Wait time / Live lane preview -->
+                      <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-3" style="box-shadow: 0 4px 12px -6px rgba(15,23,42,.08);">
+                        <div class="flex items-center justify-between mb-1">
+                          <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold">Live wait time</div>
+                          <span class="scan-dot"></span>
+                        </div>
+                        <div class="text-3xl font-black mt-1">
+                          <span x-show="appQueueWait.cars > 0" x-text="'~' + appQueueWait.mins + ' min'"></span>
+                          <span x-show="appQueueWait.cars === 0" class="text-emerald-600">No wait</span>
+                        </div>
+                        <div class="text-xs text-slate-500" x-text="appQueueWait.cars + ' cars in line'"></div>
+                        <button @click="customerApp.tab='line'" class="mt-3 w-full bg-slate-900 text-white text-sm font-semibold py-2 rounded-lg">View live line →</button>
+                      </div>
+
+                      <!-- Active gifts/promos -->
+                      <div x-show="appActiveGifts.length" class="mb-3">
+                        <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mb-2">Your offers</div>
+                        <template x-for="g in appActiveGifts" :key="g.id">
+                          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-2">
+                            <div class="font-bold text-sm text-amber-900" x-text="promotionById(g.promoId)?.name"></div>
+                            <div class="text-xs text-amber-800 mt-0.5">Code <span class="font-mono font-bold" x-text="g.code"></span> · expires <span x-text="formatDate(g.expiresAt)"></span></div>
+                          </div>
+                        </template>
+                      </div>
+
+                      <!-- Quick actions -->
+                      <div class="grid grid-cols-2 gap-2">
+                        <button @click="customerApp.tab='vehicles'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+                          <div class="text-2xl mb-1">🚗</div>
+                          <div class="text-xs font-bold">My Vehicles</div>
+                          <div class="text-[10px] text-slate-500" x-text="(appCustomer?.vehicleMake || '') + ' ' + (appCustomer?.vehicleModel || '')"></div>
+                        </button>
+                        <button @click="customerApp.tab='visits'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+                          <div class="text-2xl mb-1">📋</div>
+                          <div class="text-xs font-bold">Visit history</div>
+                          <div class="text-[10px] text-slate-500" x-text="appCustomerVisits.length + ' visits'"></div>
+                        </button>
+                        <button @click="customerApp.tab='promos'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+                          <div class="text-2xl mb-1">🎁</div>
+                          <div class="text-xs font-bold">Promos &amp; rewards</div>
+                          <div class="text-[10px] text-slate-500" x-text="appActiveGifts.length + ' active'"></div>
+                        </button>
+                        <button @click="customerApp.tab='line'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
+                          <div class="text-2xl mb-1">📷</div>
+                          <div class="text-xs font-bold">Live line feed</div>
+                          <div class="text-[10px] text-slate-500" x-text="appQueueWait.cars + ' in line'"></div>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- VEHICLES -->
+                    <div x-show="customerApp.tab==='vehicles'">
+                      <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
+                      <div class="text-lg font-black mb-3">My vehicles</div>
+                      <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                        <div class="text-2xl mb-2">🚗</div>
+                        <div class="font-black text-base" x-text="(appCustomer?.vehicleMake || '') + ' ' + (appCustomer?.vehicleModel || '')"></div>
+                        <div class="text-xs text-slate-500" x-text="appCustomer?.vehicleColor || '—'"></div>
+                        <div class="font-mono font-bold text-sm bg-slate-100 inline-block px-2 py-1 rounded mt-2" x-text="appCustomer?.plate"></div>
+
+                        <div x-show="appCustomer?.membership" class="mt-4 bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                          <div class="text-[10px] uppercase tracking-widest text-emerald-700 font-bold">Active package</div>
+                          <div class="font-bold text-emerald-900">Unlimited Membership</div>
+                          <div class="text-xs text-emerald-700">Unlimited Premium washes · Renews <span x-text="appCustomer?.membership ? formatDate(appCustomer.membership.expiresAt) : ''"></span></div>
+                        </div>
+
+                        <div x-show="!appCustomer?.membership" class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                          <div class="font-bold text-blue-900 text-sm">💡 Save with Unlimited</div>
+                          <div class="text-xs text-blue-700 mt-1">$35/mo for unlimited Premium washes. Pays for itself after 2 visits.</div>
+                          <button class="mt-2 bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded">Join Unlimited</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- PROMOS -->
+                    <div x-show="customerApp.tab==='promos'">
+                      <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
+                      <div class="text-lg font-black mb-3">Promotions &amp; rewards</div>
+
+                      <div x-show="!appActiveGifts.length" class="text-center py-8 text-slate-400 text-sm">
+                        <div class="text-4xl mb-2">🎁</div>
+                        <div>No active offers right now.</div>
+                        <div class="text-xs mt-1">Keep washing to unlock rewards!</div>
+                      </div>
+
+                      <template x-for="g in appActiveGifts" :key="g.id">
+                        <div class="bg-gradient-to-br from-amber-100 to-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-4 mb-3">
+                          <div class="font-black text-amber-900" x-text="promotionById(g.promoId)?.name"></div>
+                          <div class="text-xs text-amber-800 mt-1" x-text="promotionById(g.promoId)?.description"></div>
+                          <div class="bg-white rounded-lg p-3 mt-3 text-center">
+                            <div class="text-[10px] uppercase tracking-widest text-slate-500">Code</div>
+                            <div class="font-mono font-black text-2xl" x-text="g.code"></div>
+                            <div class="text-[10px] text-slate-500" x-text="'Expires ' + formatDate(g.expiresAt)"></div>
+                          </div>
+                          <div x-show="g.message" class="text-xs italic text-amber-800 mt-2" x-text="'&quot;' + g.message + '&quot;'"></div>
+                        </div>
+                      </template>
+
+                      <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mt-5 mb-2">Standard rewards</div>
+                      <div class="space-y-2">
+                        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+                          <div class="font-bold">10 washes = 1 free Premium</div>
+                          <div class="text-slate-500" x-text="appLoyaltyProgress.count + '/' + appLoyaltyProgress.target + ' visits this round'"></div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+                          <div class="font-bold">🎂 Birthday wash</div>
+                          <div class="text-slate-500">Free Premium during your birthday month</div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+                          <div class="font-bold">👋 Refer a friend</div>
+                          <div class="text-slate-500">$5 off for both of you when they visit</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- VISITS -->
+                    <div x-show="customerApp.tab==='visits'">
+                      <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
+                      <div class="text-lg font-black mb-3" x-text="appCustomerVisits.length + ' total visits'"></div>
+                      <div class="space-y-2">
+                        <template x-for="v in appCustomerVisits.slice(0,20)" :key="v.id">
+                          <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm">💧</div>
+                            <div class="flex-1">
+                              <div class="font-bold text-sm" x-text="washPackageById(v.packageId)?.name || 'Wash'"></div>
+                              <div class="text-[11px] text-slate-500" x-text="formatDate(v.at,'long')"></div>
+                            </div>
+                            <div class="text-sm font-bold" x-text="v.amount > 0 ? money(v.amount) : 'Member'"></div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+
+                    <!-- LIVE LINE -->
+                    <div x-show="customerApp.tab==='line'">
+                      <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
+                      <div class="text-lg font-black mb-1">Live line feed</div>
+                      <div class="text-xs text-slate-500 mb-4 flex items-center gap-2"><span class="scan-dot"></span> Updated in real time from the AI camera</div>
+
+                      <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color:#fff; border-radius: 16px; padding: 18px; margin-bottom: 14px;">
+                        <div class="text-[11px] uppercase tracking-widest text-white/60 mb-1">Estimated wait</div>
+                        <div class="text-4xl font-black">
+                          <span x-show="appQueueWait.cars > 0" x-text="'~' + appQueueWait.mins + ' min'"></span>
+                          <span x-show="appQueueWait.cars === 0" class="text-emerald-400">No wait!</span>
+                        </div>
+                        <div class="text-xs text-white/70 mt-1" x-text="appQueueWait.cars + ' cars currently in line'"></div>
+                      </div>
+
+                      <!-- Visual line -->
+                      <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-3">
+                        <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mb-3">In line right now</div>
+                        <div class="flex items-end gap-1 mb-2" style="height: 50px;">
+                          <template x-for="(_, i) in liveLane" :key="i">
+                            <div class="flex-1 bg-blue-500 rounded-t" :style="`opacity: ${1 - i*0.12};`" title="🚗"></div>
+                          </template>
+                          <template x-if="!liveLane.length">
+                            <div class="flex-1 text-center text-emerald-600 text-xs italic">Lane is empty — come now!</div>
+                          </template>
+                        </div>
+                        <div class="text-[10px] text-slate-500">⬅ Front of line · End ➡</div>
+                      </div>
+
+                      <!-- Alert setup -->
+                      <div class="bg-cyan-50 border border-cyan-200 rounded-2xl p-4">
+                        <div class="font-bold text-cyan-900 mb-1">🔔 Get notified when it's quiet</div>
+                        <div class="text-xs text-cyan-800 mb-3">We'll alert you the moment the line drops below your threshold.</div>
+
+                        <label class="text-xs font-semibold block mb-1">Alert me when ≤</label>
+                        <select class="w-full p-2 rounded-lg border border-cyan-300 bg-white text-sm mb-2" x-model.number="customerApp.alertThreshold">
+                          <option value="0">No cars in line</option>
+                          <option value="2">2 cars</option>
+                          <option value="3">3 cars</option>
+                          <option value="5">5 cars</option>
+                        </select>
+
+                        <label class="text-xs font-semibold block mb-1">Send via</label>
+                        <div class="flex gap-2 mb-3">
+                          <label class="flex-1 flex items-center gap-2 bg-white border border-cyan-300 rounded-lg p-2 cursor-pointer text-xs" :class="{'bg-cyan-100': customerApp.alertChannel==='sms'}">
+                            <input type="radio" value="sms" x-model="customerApp.alertChannel" /> 📱 SMS
+                          </label>
+                          <label class="flex-1 flex items-center gap-2 bg-white border border-cyan-300 rounded-lg p-2 cursor-pointer text-xs" :class="{'bg-cyan-100': customerApp.alertChannel==='push'}">
+                            <input type="radio" value="push" x-model="customerApp.alertChannel" /> 🔔 Push
+                          </label>
+                        </div>
+
+                        <button @click="toggleAppAlert()" class="w-full font-bold text-sm py-2.5 rounded-lg" :class="customerApp.alertEnabled ? 'bg-rose-600 text-white' : 'bg-cyan-600 text-white'" x-text="customerApp.alertEnabled ? '✓ Alert active — tap to cancel' : 'Set alert'"></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom tab bar -->
+                  <div style="background:#fff; border-top: 1px solid #e2e8f0; padding: 8px 4px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;">
+                    <button @click="customerApp.tab='home'"     :class="customerApp.tab==='home'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🏠</span><span class="text-[9px] font-bold">Home</span></button>
+                    <button @click="customerApp.tab='vehicles'" :class="customerApp.tab==='vehicles'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🚗</span><span class="text-[9px] font-bold">Vehicles</span></button>
+                    <button @click="customerApp.tab='line'"     :class="customerApp.tab==='line'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">📷</span><span class="text-[9px] font-bold">Line</span></button>
+                    <button @click="customerApp.tab='promos'"   :class="customerApp.tab==='promos'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🎁</span><span class="text-[9px] font-bold">Promos</span></button>
+                    <button @click="customerApp.tab='visits'"   :class="customerApp.tab==='visits'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">📋</span><span class="text-[9px] font-bold">Visits</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Side info panel -->
+            <div class="flex-1 space-y-4">
+              <div class="card p-5">
+                <h3 class="font-bold mb-2 flex items-center gap-2">📲 Progressive Web App</h3>
+                <p class="text-sm text-slate-600 mb-3">Customers don't need the App Store. They open <span class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">wash-depot-app.vercel.app/customer-app</span> on their phone, and the browser will prompt them to add it to their home screen — works just like a native app.</p>
+                <div class="text-xs space-y-1 text-slate-600">
+                  <div>✓ Works offline (cached recent visits + active promos)</div>
+                  <div>✓ Push notifications for line alerts</div>
+                  <div>✓ App icon on home screen</div>
+                  <div>✓ Full-screen, no browser chrome</div>
+                </div>
+              </div>
+
+              <div class="card p-5">
+                <h3 class="font-bold mb-2">🎁 Loyalty system</h3>
+                <ul class="text-sm space-y-1.5 text-slate-700 list-disc list-inside">
+                  <li><b>Punch card:</b> 10 paid washes = 1 free Premium</li>
+                  <li><b>Birthday wash:</b> Free Premium during birthday month</li>
+                  <li><b>Referral:</b> $5 credit each side</li>
+                  <li><b>Tier perks:</b> VIPs get priority + complimentary upgrade once a quarter</li>
+                  <li><b>Membership:</b> Unlimited Premium for $35/mo</li>
+                </ul>
+              </div>
+
+              <div class="card p-5">
+                <h3 class="font-bold mb-2">📷 Live line + alerts</h3>
+                <p class="text-sm text-slate-600 mb-2">The mobile app shows a live wait estimate based on AI camera detections. Customers can set an alert ("Notify me when ≤3 cars") and get an SMS or push notification when traffic dies down — driving impulse visits during slow periods.</p>
+                <p class="text-xs text-slate-500">Real notifications need a Twilio + Web Push integration (next milestone). The toggle in the preview simulates the flow.</p>
+              </div>
+            </div>
           </div>
         </div>
       </template>
@@ -3090,7 +3382,10 @@
           <!-- Footer actions -->
           <div class="px-6 py-3 border-t border-slate-100 flex items-center justify-between flex-shrink-0 bg-white">
             <button @click="if(confirm('Delete this customer? This will not delete their visit history.')){ customers = customers.filter(c=>c.id!==activeCustomer.id); activeCustomerId=null; persist(); toast('Customer removed'); }" class="ab-btn ab-btn-danger">Delete</button>
-            <button @click="activeCustomerId=null" class="ab-btn ab-btn-primary">Done</button>
+            <div class="flex gap-2 ml-auto">
+              <button @click="openGiftModal(activeCustomer.id)" class="ab-btn ab-btn-ghost">🎁 Send gift</button>
+              <button @click="activeCustomerId=null" class="ab-btn ab-btn-primary">Done</button>
+            </div>
           </div>
         </div>
       </template>
@@ -3281,6 +3576,67 @@
         </div>
       </div>
     </template>
+  </div>
+</template>
+
+<!-- ============================================ GIFT / PROMO MODAL ============================================ -->
+<template x-if="giftModal.open">
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-6" @keydown.escape.window="giftModal.open=false">
+    <div class="absolute inset-0 bg-slate-900/60" @click="giftModal.open=false"></div>
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full relative">
+      <div class="p-5 border-b border-slate-200 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl">🎁</div>
+        <div class="flex-1">
+          <h3 class="font-black">Send a gift / promotion</h3>
+          <p class="text-xs text-slate-500" x-text="giftModal.customerId ? customerName(customerById(giftModal.customerId)) : ('First-time customer · ' + giftModal.plate)"></p>
+        </div>
+        <button @click="giftModal.open=false" class="text-slate-400 hover:text-slate-700 text-2xl">×</button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <label class="ab-label">Promotion</label>
+          <div class="space-y-2">
+            <template x-for="p in promotions" :key="p.id">
+              <label class="flex items-start gap-3 border border-slate-200 rounded-lg p-3 cursor-pointer hover:bg-slate-50" :class="{'bg-cyan-50 border-cyan-300': giftModal.promoId === p.id}">
+                <input type="radio" name="promo" :value="p.id" x-model="giftModal.promoId" class="mt-1" />
+                <div class="flex-1">
+                  <div class="font-semibold text-sm" x-text="p.name"></div>
+                  <div class="text-xs text-slate-500" x-text="p.description + ' · code ' + p.code + ' · expires in ' + p.expiresInDays + 'd'"></div>
+                </div>
+              </label>
+            </template>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="ab-label">Channel</label>
+            <select class="ab-input" x-model="giftModal.channel">
+              <option value="email">Email</option>
+              <option value="sms">SMS / Text</option>
+            </select>
+          </div>
+          <div x-show="giftModal.channel==='email'">
+            <label class="ab-label">Email</label>
+            <input class="ab-input" type="email" x-model="giftModal.email" placeholder="customer@example.com" />
+          </div>
+          <div x-show="giftModal.channel==='sms'">
+            <label class="ab-label">Phone</label>
+            <input class="ab-input" x-model="giftModal.phone" placeholder="(555) 123-4567" />
+          </div>
+        </div>
+
+        <div>
+          <label class="ab-label">Personal note (optional)</label>
+          <textarea class="ab-input" rows="2" x-model="giftModal.message" placeholder="Thanks for stopping by — looking forward to seeing you again!"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button @click="giftModal.open=false" class="btn btn-outline">Cancel</button>
+          <button @click="sendGift()" class="btn btn-primary">🎁 Send gift</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -3599,6 +3955,16 @@ function app() {
     customerTierFilter: '',
     autoScan: false,
     autoScanTimer: null,
+    giftModal: { open:false, customerId:null, plate:'', email:'', phone:'', promoId:'promo_5off', channel:'email', message:'' },
+    promotions: [
+      { id:'promo_5off',     name:'$5 off any wash',           description:'Apply at next visit',          code:'WD5',     value:5,  type:'amount',  expiresInDays:30 },
+      { id:'promo_upgrade',  name:'Free Premium upgrade',      description:'Upgrade Express → Premium free', code:'UPGRADE', value:6,  type:'upgrade', expiresInDays:30 },
+      { id:'promo_20pct',    name:'20% off any detail',        description:'One-time use on a detail',      code:'DETAIL20',value:20, type:'percent', expiresInDays:60 },
+      { id:'promo_buy2',     name:'Buy 2 washes, get 1 free',  description:'On Premium or Ultimate',         code:'B2G1',    value:0,  type:'punch',   expiresInDays:90 },
+      { id:'promo_member',   name:'1 month Unlimited free',    description:'Free month of membership',       code:'TRYUNL',  value:35, type:'membership',expiresInDays:14 },
+      { id:'promo_birthday', name:'Birthday wash on us',        description:'Free Premium during birthday month', code:'BDAY',value:18, type:'comp',    expiresInDays:31 }
+    ],
+    customerApp: { tab:'home', alertEnabled:false, alertThreshold:3, alertChannel:'sms', selectedCustomerId:null },
     booking: { dealershipId:'', year:'', make:'', model:'', color:'', stockNumber:'', vin:'', services:[], date:'', timeSlot:'morning', deliveryMethod:'pickup', notes:'' },
     reportPeriod: 'thisMonth',
     reportStream: 'all',
@@ -4773,14 +5139,13 @@ function app() {
     customerTier(c){
       if (!c) return 'new';
       if (c.tags?.includes('vip') || (c.totalSpend||0) > 500) return 'vip';
-      if (c.membership && new Date(c.membership.expiresAt) > Date.now()) return 'member';
       const v = c.visitCount || 0;
       if (v === 0) return 'new';
-      if (v >= 10) return 'gold';
-      if (v >= 4) return 'silver';
-      return 'bronze';
+      const isMember = c.membership && new Date(c.membership.expiresAt) > Date.now();
+      if (v >= 10 || isMember) return 'loyal';
+      return 'regular';
     },
-    tierLabel(t){ return ({ new:'New customer', bronze:'Returning', silver:'Regular', gold:'Loyal', member:'Member', vip:'VIP' })[t] || t; },
+    tierLabel(t){ return ({ new:'First Time', regular:'Regular', loyal:'Loyal', vip:'VIP' })[t] || t; },
     customerVisits(customerId){ return this.visits.filter(v=>v.customerId===customerId).sort((a,b)=>b.at-a.at); },
     suggestUpsell(c){
       if (!c) return 'Welcome them with a $5 off Premium offer';
@@ -4804,7 +5169,7 @@ function app() {
     },
     get crmStats(){
       const total = this.customers.length;
-      const tierCount = { new:0, bronze:0, silver:0, gold:0, member:0, vip:0 };
+      const tierCount = { new:0, regular:0, loyal:0, vip:0 };
       this.customers.forEach(c=>{ tierCount[this.customerTier(c)]++; });
       const totalSpend = this.customers.reduce((s,c)=>s+(c.totalSpend||0),0);
       const totalVisits = this.customers.reduce((s,c)=>s+(c.visitCount||0),0);
@@ -4926,6 +5291,118 @@ function app() {
       } else {
         clearInterval(this.autoScanTimer);
         this.toast('Auto-scan OFF');
+      }
+    },
+
+    /* ========= Gift / Promotions ========= */
+    promotionById(id){ return this.promotions.find(p=>p.id===id); },
+    openGiftModal(customerId, plate){
+      const c = customerId ? this.customerById(customerId) : null;
+      this.giftModal = {
+        open: true,
+        customerId,
+        plate: plate || c?.plate || '',
+        email: c?.email || '',
+        phone: c?.phone || '',
+        promoId: 'promo_5off',
+        channel: c?.email ? 'email' : 'sms',
+        message: ''
+      };
+    },
+    sendGift(){
+      const g = this.giftModal;
+      const promo = this.promotionById(g.promoId);
+      if (!promo) { this.toast('Pick a promotion','warning'); return; }
+      if (g.channel === 'email' && !g.email) { this.toast('Email required for email channel','warning'); return; }
+      if (g.channel === 'sms' && !g.phone) { this.toast('Phone required for SMS channel','warning'); return; }
+
+      // Resolve / create customer
+      let customer = g.customerId ? this.customerById(g.customerId) : null;
+      if (!customer) {
+        customer = {
+          id: 'cust_'+Math.random().toString(36).slice(2,9),
+          plate: g.plate || '',
+          vehicleMake:'', vehicleModel:'', vehicleColor:'',
+          firstName:'', lastName:'',
+          email: g.email, phone: g.phone,
+          firstSeenAt: Date.now(), lastSeenAt: Date.now(), visitCount:0, totalSpend:0,
+          membership:null, tags:['first-time','received-gift'], notes:[], favoritePackageId:null,
+          gifts:[]
+        };
+        this.customers.push(customer);
+      } else {
+        if (g.email) customer.email = g.email;
+        if (g.phone) customer.phone = g.phone;
+      }
+      customer.gifts = customer.gifts || [];
+      customer.gifts.unshift({
+        id: 'gift_'+Math.random().toString(36).slice(2,9),
+        promoId: promo.id,
+        code: promo.code,
+        sentAt: Date.now(),
+        sentVia: g.channel,
+        expiresAt: Date.now() + promo.expiresInDays*86400000,
+        redeemed: false,
+        message: g.message
+      });
+      // Append a note for the team
+      customer.notes = customer.notes || [];
+      customer.notes.unshift({ at: Date.now(), by: this.session?.name || 'Staff', text: `Sent gift "${promo.name}" via ${g.channel.toUpperCase()} (code ${promo.code})` });
+
+      // Notification record (audit)
+      this.notifications.push({
+        id:'n_'+Math.random().toString(36).slice(2,9),
+        dealershipId: '',
+        channel: g.channel,
+        to: g.channel === 'email' ? g.email : g.phone,
+        subject: `🎁 ${promo.name} — Wash Depot`,
+        body: `Hi${customer.firstName ? ' ' + customer.firstName : ''}, thanks for being part of the Wash Depot family! ${promo.name} — show this code at your next visit: ${promo.code}. ${g.message || ''} Expires ${new Date(Date.now() + promo.expiresInDays*86400000).toLocaleDateString()}.`,
+        sentAt: Date.now(), delivered: true, readByDealer: false, internal: false
+      });
+
+      this.giftModal = { open:false, customerId:null, plate:'', email:'', phone:'', promoId:'promo_5off', channel:'email', message:'' };
+      this.persist();
+      this.toast(`🎁 Sent "${promo.name}" via ${g.channel}`);
+    },
+    redeemGift(customerId, giftId){
+      const c = this.customerById(customerId); if (!c) return;
+      const g = c.gifts?.find(x=>x.id===giftId); if (!g) return;
+      g.redeemed = true; g.redeemedAt = Date.now();
+      this.persist();
+      this.toast('Gift redeemed');
+    },
+
+    /* ========= Customer-facing mobile app helpers ========= */
+    get appCustomer(){
+      if (this.customerApp.selectedCustomerId) return this.customerById(this.customerApp.selectedCustomerId);
+      // default to a Loyal-tier customer for demo
+      return this.customers.find(c => this.customerTier(c) === 'loyal') || this.customers[0];
+    },
+    get appCustomerVisits(){ return this.appCustomer ? this.customerVisits(this.appCustomer.id) : []; },
+    get appLoyaltyProgress(){
+      const c = this.appCustomer;
+      if (!c) return { count:0, target:10, percent:0, remaining:10 };
+      const target = 10;
+      const count = (c.visitCount||0) % target;
+      const completedCycles = Math.floor((c.visitCount||0) / target);
+      return { count, target, percent: (count/target)*100, remaining: target - count, completedCycles };
+    },
+    get appActiveGifts(){
+      const c = this.appCustomer;
+      if (!c?.gifts) return [];
+      return c.gifts.filter(g => !g.redeemed && g.expiresAt > Date.now());
+    },
+    get appQueueWait(){
+      const cars = this.liveLane.length;
+      const avgPerCar = 4; // minutes per car
+      return { cars, mins: cars * avgPerCar };
+    },
+    toggleAppAlert(){
+      this.customerApp.alertEnabled = !this.customerApp.alertEnabled;
+      if (this.customerApp.alertEnabled) {
+        this.toast(`✓ Alert set — we'll ${this.customerApp.alertChannel==='sms' ? 'text' : 'push notify'} you when wait drops to ${this.customerApp.alertThreshold} cars or fewer`);
+      } else {
+        this.toast('Alert turned off');
       }
     },
 

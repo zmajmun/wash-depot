@@ -12,3 +12,4 @@ setup-and-deploy.sh
 update-owner-emails.sh
 push-to-github.sh
 fix-and-push.sh
+add-supabase.sh

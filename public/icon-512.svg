@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="192" height="192">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5fc3ee"/>
+      <stop offset="100%" stop-color="#0d4d7a"/>
+    </linearGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="44" fill="#000"/>
+  <circle cx="100" cy="100" r="80" fill="#0a0a0a" stroke="#262626" stroke-width="2"/>
+  <g transform="translate(100,72)">
+    <path d="M-46,4 C-32,-12 -14,-10 0,-2 C14,-10 32,-12 46,4 C32,16 14,14 0,11 C-14,14 -32,16 -46,4 Z" fill="url(#w)"/>
+    <path d="M-20,2 Q-16,-12 -4,-12 L12,-12 Q22,-12 24,2 Z" fill="#0a1729"/>
+    <circle cx="-12" cy="6" r="3" fill="#000"/>
+    <circle cx="12" cy="6" r="3" fill="#000"/>
+  </g>
+  <text x="100" y="118" text-anchor="middle" fill="#fff" font-size="28" font-weight="900" font-style="italic" font-family="Georgia,serif">Wash</text>
+  <text x="100" y="146" text-anchor="middle" fill="url(#r)" font-size="22" font-weight="900" font-family="Impact,Arial Black,sans-serif" letter-spacing="2">DEPOT</text>
+</svg>
