@@ -6061,6 +6061,8 @@ function app() {
 
     submitIntake(){
       if (!this.intake.dealershipId || !this.intake.make || !this.intake.model) { this.toast('Missing required fields','warning'); return; }
+      const now = Date.now();
+      const promisedAt = this.intake.promisedTime ? new Date(this.intake.promisedTime).getTime() : now + 4*3600*1000;
       const v = {
         id: 'veh_'+Math.random().toString(36).slice(2,9),
         dealershipId: this.intake.dealershipId,
@@ -6068,22 +6070,22 @@ function app() {
         vin: this.intake.vin?.toUpperCase(), plate: this.intake.plate?.toUpperCase(),
         stockNumber: this.intake.stockNumber || ('WD-'+Math.floor(Math.random()*9000+1000)),
         services: this.intake.services || [],
-        status: 'dropped', priority: this.intake.priority || 'standard',
+        status: 'scheduled', priority: this.intake.priority || 'standard',
         deliveryMethod: this.intake.deliveryMethod || 'pickup',
         notes: this.intake.notes || '',
-        dropOffTime: Date.now(), promisedTime: this.intake.promisedTime ? new Date(this.intake.promisedTime).getTime() : Date.now()+4*3600*1000,
-        statusHistory: [{ status:'dropped', at: Date.now(), note:'Checked in' }]
+        dropOffTime: promisedAt - 4*3600*1000 < now ? now : promisedAt - 4*3600*1000,
+        promisedTime: promisedAt,
+        statusHistory: [{ status:'scheduled', at: now, note:'Manually scheduled by ' + (this.session?.name || 'Staff') }]
       };
       this.vehicles.push(v);
       this.persist();
-      this.toast('Vehicle checked in');
+      this.toast('Vehicle scheduled — drop on the Active Jobs board to advance the status');
       this.resetIntake();
-      this.view='board';
-      this.openVehicle(v.id);
+      this.view = 'bookings';
       // notify dealer
       const dealer = this.dealershipById(v.dealershipId);
       if (dealer.notificationPrefs.email) {
-        this.notifications.push({ id:'n_'+Math.random().toString(36).slice(2,9), dealershipId: dealer.id, vehicleId: v.id, channel:'email', to: dealer.contacts[0].email, subject:`Checked in: ${v.year} ${v.make} ${v.model}`, body:`Stock #${v.stockNumber} arrived at Wash Depot. Track live in your portal.`, sentAt: Date.now(), delivered:true, readByDealer:false });
+        this.notifications.push({ id:'n_'+Math.random().toString(36).slice(2,9), dealershipId: dealer.id, vehicleId: v.id, channel:'email', to: dealer.contacts[0].email, subject:`Scheduled: ${v.year} ${v.make} ${v.model}`, body:`Stock #${v.stockNumber} has been scheduled at Wash Depot. We'll notify you when it's checked in.`, sentAt: Date.now(), delivered:true, readByDealer:false });
       }
       this.persist();
     },
