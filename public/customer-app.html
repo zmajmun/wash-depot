@@ -118,15 +118,18 @@
            z-index: 50;
            overflow: hidden;
          ">
-      <!-- Splash image fills entire viewport -->
+      <!-- Splash image — pushed below status bar/notch so logo always has breathing room at top -->
       <img src="/splash.jpg" alt="Wash Depot" class="fade-in-1"
            style="
              position: absolute;
-             inset: 0;
+             top: calc(env(safe-area-inset-top) + 28px);
+             left: 0;
+             right: 0;
+             bottom: 0;
              width: 100%;
-             height: 100%;
+             height: calc(100% - env(safe-area-inset-top) - 28px);
              object-fit: cover;
-             object-position: center;
+             object-position: center top;
            " />
 
       <!-- Subtle gradient at bottom for button legibility — lets image show through -->
