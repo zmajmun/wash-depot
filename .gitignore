@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env
+.env.local
+.env*.local
+.vercel
+*.log
+.DS_Store
+*.tsbuildinfo
+# helper scripts may contain secrets — never commit
+setup-and-deploy.sh
+update-owner-emails.sh
+push-to-github.sh
+fix-and-push.sh
