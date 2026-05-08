@@ -1426,7 +1426,7 @@
               <h1 class="text-2xl font-black tracking-tight">Wash Line</h1>
               <p class="text-sm text-slate-500">Express, Premium, Ultimate, and Membership washes — synced from Square.</p>
             </div>
-            <div class="text-xs text-slate-500" x-text="squareConfig.connected ? ('Last sync: ' + relativeTime(squareConfig.lastSyncAt)) : 'Showing demo data'"></div>
+            <div class="text-xs text-slate-500" x-text="squareConfig.connected ? ('Square synced ' + relativeTime(squareConfig.lastSyncAt)) : 'Square not connected — connect in Settings → Integrations'"></div>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
@@ -1509,7 +1509,7 @@
               <h1 class="text-2xl font-black tracking-tight">Retail Products</h1>
               <p class="text-sm text-slate-500">Drinks, air fresheners, essentials, OTC. (Vending candy &amp; snacks not tracked here.)</p>
             </div>
-            <div class="text-xs text-slate-500" x-text="squareConfig.connected ? ('Last sync: ' + relativeTime(squareConfig.lastSyncAt)) : 'Showing demo data'"></div>
+            <div class="text-xs text-slate-500" x-text="squareConfig.connected ? ('Square synced ' + relativeTime(squareConfig.lastSyncAt)) : 'Square not connected — connect in Settings → Integrations'"></div>
           </div>
 
           <!-- Tabs -->
