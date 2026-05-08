@@ -32,6 +32,80 @@
   .btn-mob-primary:disabled { opacity: .4; }
   .btn-mob-ghost { width: 100%; padding: 14px; background: transparent; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 12px; font-weight: 600; font-size: 15px; }
   .label-mob { display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+
+  /* ===== Welcome / hero animations ===== */
+  .hero-bg {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 65%, rgba(34,211,238,.18), transparent 70%),
+      radial-gradient(ellipse 80% 50% at 50% 50%, rgba(15,118,110,.12), transparent 70%),
+      linear-gradient(180deg, #000 0%, #0a0a0a 40%, #050505 100%);
+  }
+  .hero-grid::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(34,211,238,.06) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(34,211,238,.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 60% 40% at 50% 70%, #000 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 40% at 50% 70%, #000 0%, transparent 80%);
+    pointer-events: none;
+  }
+  /* Speed lines streaking behind the car */
+  .speed-line {
+    position: absolute; height: 2px; background: linear-gradient(90deg, transparent, rgba(34,211,238,.7), transparent);
+    border-radius: 999px;
+    animation: streak 1.6s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes streak {
+    0%   { transform: translateX(-30%); opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateX(140%); opacity: 0; }
+  }
+  /* Car bob */
+  .car-float { animation: bob 3.4s ease-in-out infinite; transform-origin: center; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-0.4deg); }
+    50%      { transform: translateY(-6px) rotate(0.4deg); }
+  }
+  /* Wheel spin (visual only — abstract motion suggestion) */
+  .wheel-spin { animation: spin 0.5s linear infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  /* Headlight beam */
+  .beam { animation: beam 2.6s ease-in-out infinite; }
+  @keyframes beam {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+  }
+  /* Water droplets / steam puff */
+  .steam {
+    position: absolute; bottom: 12%; left: 38%;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    filter: blur(4px);
+    animation: steamUp 2.5s ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes steamUp {
+    0%   { opacity: 0; transform: translate(0,0) scale(0.6); }
+    20%  { opacity: 0.7; }
+    100% { opacity: 0; transform: translate(20px,-40px) scale(1.6); }
+  }
+  /* Road shimmer underline */
+  .road-line {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(34,211,238,.8), rgba(255,255,255,.4), rgba(34,211,238,.8), transparent);
+    animation: roadShine 3s linear infinite;
+  }
+  @keyframes roadShine {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+  .ambient-pulse { animation: ambientPulse 4s ease-in-out infinite; }
+  @keyframes ambientPulse {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1; }
+  }
 </style>
 </head>
 <body x-data="customerApp()" x-init="init()" x-cloak class="min-h-screen flex flex-col bg-slate-50">
@@ -40,16 +114,175 @@
 <template x-if="!auth.signedIn">
   <div class="flex-1 flex flex-col" style="padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);">
 
-    <!-- WELCOME -->
-    <div x-show="auth.step==='welcome'" class="flex-1 flex flex-col bg-black text-white">
-      <div class="flex-1 flex flex-col items-center justify-center p-8 text-center">
-        <div class="w-24 h-24 rounded-3xl bg-white text-black flex items-center justify-center font-black text-3xl mb-6">WD</div>
-        <h1 class="text-3xl font-black mb-2">Wash Depot</h1>
-        <p class="text-white/70 text-sm max-w-xs">Track your washes, earn free ones, and skip the line.</p>
+    <!-- WELCOME — animated hero with sticky CTAs -->
+    <div x-show="auth.step==='welcome'" class="hero-bg hero-grid relative text-white overflow-hidden" style="height: 100dvh; min-height: 100vh; display: flex; flex-direction: column;">
+      <!-- Speed lines (decorative) -->
+      <div class="speed-line" style="top: 32%; left: -10%; width: 40%; animation-delay: 0s;"></div>
+      <div class="speed-line" style="top: 46%; left: -10%; width: 25%; animation-delay: .4s;"></div>
+      <div class="speed-line" style="top: 58%; left: -10%; width: 35%; animation-delay: .9s;"></div>
+      <div class="speed-line" style="top: 70%; left: -10%; width: 20%; animation-delay: 1.2s;"></div>
+
+      <!-- Top brand strip -->
+      <div class="relative z-10 flex items-center gap-2 px-5 pt-6" style="padding-top: max(env(safe-area-inset-top), 24px);">
+        <div class="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-black text-sm">WD</div>
+        <div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-white/60">Wash Depot</div>
+          <div class="text-xs text-white/80">Hand Car Wash</div>
+        </div>
       </div>
-      <div class="p-6 space-y-3 bg-black">
-        <button @click="auth.step='signup'" class="btn-mob-primary" style="background:#22d3ee; color:#000;">Create account</button>
-        <button @click="auth.step='signin'" class="btn-mob-ghost" style="background:transparent; color:#fff; border-color:rgba(255,255,255,.25);">I already have an account</button>
+
+      <!-- Hero car area -->
+      <div class="relative flex-1 flex items-center justify-center overflow-hidden" style="min-height: 0;">
+        <!-- Glow under car -->
+        <div class="absolute" style="bottom: 14%; left: 50%; transform: translateX(-50%); width: 75%; height: 80px; background: radial-gradient(ellipse at center, rgba(34,211,238,.45), transparent 65%); filter: blur(20px);"></div>
+
+        <!-- Steam / water vapor -->
+        <div class="steam" style="left: 28%; animation-delay: 0s;"></div>
+        <div class="steam" style="left: 33%; animation-delay: .8s;"></div>
+        <div class="steam" style="left: 64%; animation-delay: 1.6s;"></div>
+
+        <!-- The car SVG: stylized supercar profile (Aventador-inspired) -->
+        <svg viewBox="0 0 600 260" class="car-float relative" style="width: 92%; max-width: 520px; height: auto; filter: drop-shadow(0 30px 30px rgba(0,0,0,.7)) drop-shadow(0 0 24px rgba(34,211,238,.18));" aria-label="Black sports car">
+          <defs>
+            <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#1f2937"/>
+              <stop offset="35%" stop-color="#0f0f0f"/>
+              <stop offset="100%" stop-color="#000"/>
+            </linearGradient>
+            <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#374151"/>
+              <stop offset="100%" stop-color="#0a0a0a"/>
+            </linearGradient>
+            <linearGradient id="windshield" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"  stop-color="rgba(34,211,238,.55)"/>
+              <stop offset="60%" stop-color="rgba(15,23,42,.9)"/>
+              <stop offset="100%" stop-color="rgba(0,0,0,.95)"/>
+            </linearGradient>
+            <radialGradient id="headlight" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#fef3c7"/>
+              <stop offset="40%" stop-color="#fde68a"/>
+              <stop offset="100%" stop-color="rgba(253,230,138,0)"/>
+            </radialGradient>
+            <radialGradient id="taillight" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#fca5a5"/>
+              <stop offset="40%" stop-color="#dc2626"/>
+              <stop offset="100%" stop-color="rgba(220,38,38,0)"/>
+            </radialGradient>
+            <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"  stop-color="#9ca3af"/>
+              <stop offset="100%" stop-color="#1f2937"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Headlight beam (cone projecting forward) -->
+          <path class="beam" d="M 510,140 L 600,110 L 600,170 Z" fill="url(#headlight)" opacity="0.5"/>
+
+          <!-- Lower aerodynamic shadow / splitter -->
+          <path d="M 70,205 Q 130,210 200,210 L 380,210 Q 470,210 540,205 L 540,212 Q 300,222 70,212 Z" fill="#000"/>
+
+          <!-- Side aero skirt -->
+          <path d="M 95,180 Q 120,176 160,178 L 420,178 Q 470,176 510,180 L 510,200 L 95,200 Z" fill="#0a0a0a"/>
+
+          <!-- Main body (low, wedge-shaped) -->
+          <path d="M 80,180
+                   C 90,165 105,152 130,148
+                   L 195,142
+                   Q 220,138 250,128
+                   L 320,108
+                   Q 360,100 400,108
+                   L 460,128
+                   Q 490,138 510,150
+                   L 540,168
+                   Q 555,176 560,190
+                   L 540,195
+                   L 95,195 Z"
+                fill="url(#bodyGrad)" stroke="#000" stroke-width="0.5"/>
+
+          <!-- Roof / cabin (low, swept) -->
+          <path d="M 230,128
+                   Q 250,90 290,82
+                   L 380,82
+                   Q 420,90 440,128
+                   L 230,128 Z"
+                fill="url(#topGrad)"/>
+
+          <!-- Windshield + windows -->
+          <path d="M 245,124
+                   Q 262,96 295,90
+                   L 375,90
+                   Q 408,96 425,124
+                   L 245,124 Z"
+                fill="url(#windshield)" opacity="0.95"/>
+
+          <!-- Window pillar reflection highlight -->
+          <path d="M 248,122 Q 264,98 295,93 L 295,98 Q 268,103 252,122 Z" fill="rgba(255,255,255,0.06)"/>
+
+          <!-- Hood / front body crease -->
+          <path d="M 320,108 L 460,128 L 470,135 L 325,118 Z" fill="#0a0a0a" opacity="0.7"/>
+
+          <!-- Side air intake -->
+          <path d="M 380,148 Q 410,148 425,160 L 410,168 Q 395,162 378,160 Z" fill="#000"/>
+          <path d="M 386,152 Q 408,152 418,160 L 408,164 Q 398,158 386,156 Z" fill="#1f2937"/>
+
+          <!-- Front lower vent -->
+          <rect x="495" y="170" width="40" height="10" rx="2" fill="#000"/>
+          <rect x="498" y="172" width="34" height="3" rx="1" fill="#1f2937"/>
+
+          <!-- Door line -->
+          <path d="M 280,148 L 295,180" stroke="#000" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+          <!-- Headlight (front, at right since car faces right) -->
+          <ellipse cx="513" cy="140" rx="14" ry="6" fill="url(#headlight)"/>
+          <ellipse cx="513" cy="140" rx="6" ry="3" fill="#fffbeb"/>
+
+          <!-- Taillight (rear, left side) -->
+          <ellipse cx="86" cy="160" rx="10" ry="5" fill="url(#taillight)"/>
+
+          <!-- Wheel arches -->
+          <path d="M 130,195 Q 135,165 175,160 Q 215,160 220,195 Z" fill="#000"/>
+          <path d="M 380,195 Q 385,162 425,158 Q 465,158 470,195 Z" fill="#000"/>
+
+          <!-- Front wheel -->
+          <g class="wheel-spin" style="transform-origin: 425px 188px;">
+            <circle cx="425" cy="188" r="26" fill="#0a0a0a" stroke="#000" stroke-width="2"/>
+            <circle cx="425" cy="188" r="20" fill="url(#rim)"/>
+            <circle cx="425" cy="188" r="6"  fill="#0f172a"/>
+            <!-- spokes -->
+            <rect x="423" y="170" width="4" height="36" fill="#9ca3af" rx="1"/>
+            <rect x="423" y="170" width="4" height="36" fill="#9ca3af" rx="1" transform="rotate(60 425 188)"/>
+            <rect x="423" y="170" width="4" height="36" fill="#9ca3af" rx="1" transform="rotate(120 425 188)"/>
+          </g>
+
+          <!-- Rear wheel -->
+          <g class="wheel-spin" style="transform-origin: 175px 188px;">
+            <circle cx="175" cy="188" r="26" fill="#0a0a0a" stroke="#000" stroke-width="2"/>
+            <circle cx="175" cy="188" r="20" fill="url(#rim)"/>
+            <circle cx="175" cy="188" r="6"  fill="#0f172a"/>
+            <rect x="173" y="170" width="4" height="36" fill="#9ca3af" rx="1"/>
+            <rect x="173" y="170" width="4" height="36" fill="#9ca3af" rx="1" transform="rotate(60 175 188)"/>
+            <rect x="173" y="170" width="4" height="36" fill="#9ca3af" rx="1" transform="rotate(120 175 188)"/>
+          </g>
+
+          <!-- Subtle paint highlight (wet shine) -->
+          <path d="M 240,118 Q 320,100 410,118 L 408,124 Q 320,108 244,124 Z" fill="rgba(255,255,255,0.05)"/>
+          <path d="M 130,162 Q 220,156 380,156 Q 460,156 510,162 L 510,166 Q 320,160 130,166 Z" fill="rgba(34,211,238,0.05)"/>
+        </svg>
+
+        <!-- Animated road line under car -->
+        <div class="road-line ambient-pulse" style="bottom: 18%; background-size: 200% 100%;"></div>
+        <div class="road-line" style="bottom: 16%; opacity: 0.4;"></div>
+
+        <!-- Tagline overlay -->
+        <div class="absolute" style="bottom: 4%; left: 0; right: 0; text-align: center; padding: 0 24px;">
+          <h1 class="text-3xl font-black tracking-tight">Wash Depot</h1>
+          <p class="text-white/70 text-sm mt-1">Track your washes. Skip the line. Earn rewards.</p>
+        </div>
+      </div>
+
+      <!-- Sticky CTAs at bottom -->
+      <div class="relative z-10 px-5 pt-3 pb-5 space-y-2 bg-gradient-to-t from-black via-black/95 to-transparent" style="padding-bottom: max(env(safe-area-inset-bottom), 20px);">
+        <button @click="auth.step='signup'" class="btn-mob-primary" style="background:linear-gradient(135deg,#22d3ee,#06b6d4); color:#000; box-shadow: 0 8px 24px -6px rgba(34,211,238,.5);">Create account</button>
+        <button @click="auth.step='signin'" class="btn-mob-ghost" style="background:transparent; color:#fff; border-color:rgba(255,255,255,.2);">I already have an account</button>
       </div>
     </div>
 
