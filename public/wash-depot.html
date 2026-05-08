@@ -854,52 +854,242 @@
 
       <!-- ============================================ STAFF: REPORTS ============================================ -->
       <template x-if="session.role==='staff' && view==='reports'">
-        <div>
-          <h1 class="text-2xl font-black tracking-tight mb-5">Reports</h1>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="card p-4">
-              <h3 class="font-bold mb-3" x-text="canSeePrices ? 'Revenue last 7 days' : 'Vehicles completed last 7 days'"></h3>
-              <div class="flex items-end gap-1 h-40">
-                <template x-for="d in last7Days" :key="d.date">
-                  <div class="flex-1 flex flex-col items-center gap-1">
-                    <div class="text-[10px] text-slate-500" x-text="canSeePrices ? money(d.revenue) : d.count"></div>
-                    <div class="w-full bg-teal-600 rounded-t" :style="`height: ${canSeePrices ? d.pct : d.countPct}%`"></div>
-                    <div class="text-[10px] text-slate-500" x-text="d.label"></div>
-                  </div>
-                </template>
+        <div x-data="{ get range(){ return $root.periodRange($root.reportPeriod); }, get curr(){ return $root.summarize($root.reportStream, this.range.start, this.range.end); }, get prev(){ return $root.summarize($root.reportStream, this.range.prevStart, this.range.prevEnd); } }">
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <h1 class="text-2xl font-black tracking-tight">Reports</h1>
+              <p class="text-sm text-slate-500" x-text="range.label + (reportCompare ? ' · vs ' + range.prevLabel : '')"></p>
+            </div>
+          </div>
+
+          <!-- Period selector -->
+          <div class="card p-3 mb-4 flex items-center gap-2 flex-wrap">
+            <span class="text-xs uppercase tracking-wider font-bold text-slate-500 mr-2">Period</span>
+            <template x-for="p in [
+              { id:'today', l:'Today' },
+              { id:'yesterday', l:'Yesterday' },
+              { id:'thisWeek', l:'This week' },
+              { id:'lastWeek', l:'Last week' },
+              { id:'thisMonth', l:'This month' },
+              { id:'lastMonth', l:'Last month' },
+              { id:'thisQuarter', l:'This quarter' },
+              { id:'lastQuarter', l:'Last quarter' },
+              { id:'thisYear', l:'YTD' },
+              { id:'lastYear', l:'Last year' },
+              { id:'custom', l:'Custom' }
+            ]" :key="p.id">
+              <button @click="reportPeriod = p.id" :class="reportPeriod === p.id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'" class="px-3 py-1.5 rounded-md text-xs font-semibold" x-text="p.l"></button>
+            </template>
+            <div class="ml-auto flex items-center gap-2">
+              <label class="text-xs flex items-center gap-1 cursor-pointer">
+                <input type="checkbox" x-model="reportCompare" />
+                <span>Compare to previous period</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Custom range pickers -->
+          <div x-show="reportPeriod==='custom'" class="card p-3 mb-4 flex gap-2 items-center">
+            <label class="text-xs font-bold text-slate-500">From</label>
+            <input type="date" class="input max-w-xs" x-model="reportCustomStart" />
+            <label class="text-xs font-bold text-slate-500 ml-3">To</label>
+            <input type="date" class="input max-w-xs" x-model="reportCustomEnd" />
+          </div>
+
+          <!-- Stream tabs -->
+          <div class="card p-2 mb-4 flex gap-1">
+            <button @click="reportStream='all'"       :class="reportStream==='all'       ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">All Streams</button>
+            <button @click="reportStream='detailing'" :class="reportStream==='detailing' ? 'bg-teal-600 text-white'  : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">🚗 Detailing</button>
+            <button @click="reportStream='wash'"      :class="reportStream==='wash'      ? 'bg-blue-600 text-white'  : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">💧 Wash Line</button>
+            <button @click="reportStream='retail'"    :class="reportStream==='retail'    ? 'bg-amber-600 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">🛒 Retail</button>
+          </div>
+
+          <!-- KPI cards with delta -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="card p-4" x-show="canSeePrices">
+              <div class="text-xs uppercase font-bold tracking-wider text-slate-500">Revenue</div>
+              <div class="text-2xl font-black mt-1" x-text="money(curr.revenue)"></div>
+              <div x-show="reportCompare" class="text-xs mt-1 flex items-center gap-1">
+                <span :class="delta(curr.revenue, prev.revenue).dir==='up' ? 'text-emerald-600' : delta(curr.revenue, prev.revenue).dir==='down' ? 'text-rose-600' : 'text-slate-500'" class="font-semibold">
+                  <span x-text="delta(curr.revenue, prev.revenue).dir==='up' ? '▲' : delta(curr.revenue, prev.revenue).dir==='down' ? '▼' : '–'"></span>
+                  <span x-text="(delta(curr.revenue, prev.revenue).pct >= 0 ? '+' : '') + delta(curr.revenue, prev.revenue).pct + '%'"></span>
+                </span>
+                <span class="text-slate-400" x-text="'vs ' + money(prev.revenue)"></span>
               </div>
-              <div class="text-xs text-slate-500 mt-3" x-text="canSeePrices ? ('Total: ' + money(last7Days.reduce((s,d)=>s+d.revenue,0))) : ('Total: ' + last7Days.reduce((s,d)=>s+d.count,0) + ' vehicles')"></div>
             </div>
             <div class="card p-4">
-              <h3 class="font-bold mb-3" x-text="canSeePrices ? 'Top dealerships by revenue (90d)' : 'Top dealerships by volume (90d)'"></h3>
-              <div class="space-y-2 text-xs">
-                <template x-for="row in topDealers" :key="row.id">
+              <div class="text-xs uppercase font-bold tracking-wider text-slate-500">Transactions</div>
+              <div class="text-2xl font-black mt-1" x-text="curr.count.toLocaleString()"></div>
+              <div x-show="reportCompare" class="text-xs mt-1 flex items-center gap-1">
+                <span :class="delta(curr.count, prev.count).dir==='up' ? 'text-emerald-600' : delta(curr.count, prev.count).dir==='down' ? 'text-rose-600' : 'text-slate-500'" class="font-semibold">
+                  <span x-text="delta(curr.count, prev.count).dir==='up' ? '▲' : delta(curr.count, prev.count).dir==='down' ? '▼' : '–'"></span>
+                  <span x-text="(delta(curr.count, prev.count).pct >= 0 ? '+' : '') + delta(curr.count, prev.count).pct + '%'"></span>
+                </span>
+                <span class="text-slate-400" x-text="'vs ' + prev.count.toLocaleString()"></span>
+              </div>
+            </div>
+            <div class="card p-4" x-show="canSeePrices">
+              <div class="text-xs uppercase font-bold tracking-wider text-slate-500">Avg ticket</div>
+              <div class="text-2xl font-black mt-1" x-text="money(curr.avg)"></div>
+              <div x-show="reportCompare" class="text-xs mt-1 flex items-center gap-1">
+                <span :class="delta(curr.avg, prev.avg).dir==='up' ? 'text-emerald-600' : delta(curr.avg, prev.avg).dir==='down' ? 'text-rose-600' : 'text-slate-500'" class="font-semibold">
+                  <span x-text="delta(curr.avg, prev.avg).dir==='up' ? '▲' : delta(curr.avg, prev.avg).dir==='down' ? '▼' : '–'"></span>
+                  <span x-text="(delta(curr.avg, prev.avg).pct >= 0 ? '+' : '') + delta(curr.avg, prev.avg).pct + '%'"></span>
+                </span>
+                <span class="text-slate-400" x-text="'vs ' + money(prev.avg)"></span>
+              </div>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs uppercase font-bold tracking-wider text-slate-500">Granularity</div>
+              <div class="text-2xl font-black mt-1 capitalize" x-text="range.granularity + 'ly'"></div>
+              <div class="text-xs text-slate-500 mt-1" x-text="bucketed(reportStream, range.start, range.end, range.granularity).length + ' data points'"></div>
+            </div>
+          </div>
+
+          <!-- Main chart -->
+          <div class="card p-5 mb-4">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold" x-text="canSeePrices ? 'Revenue over time' : 'Volume over time'"></h3>
+              <div class="flex gap-3 text-[11px]" x-show="reportStream==='all'">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-teal-600"></span>Detailing</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-blue-500"></span>Wash</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span>Retail</span>
+              </div>
+            </div>
+            <div class="flex items-end gap-1 h-56 overflow-x-auto">
+              <template x-for="b in bucketed(reportStream, range.start, range.end, range.granularity)" :key="b.ts">
+                <div class="flex-1 min-w-[20px] flex flex-col items-center gap-1">
+                  <div class="text-[9px] text-slate-400" x-show="bucketed(reportStream, range.start, range.end, range.granularity).length <= 14" x-text="canSeePrices ? money(b.revenue) : b.count"></div>
+                  <div class="w-full flex flex-col-reverse" :style="`height: ${Math.max(2, ((canSeePrices ? b.revenue : b.count) / Math.max(1, ...bucketed(reportStream, range.start, range.end, range.granularity).map(x => canSeePrices ? x.revenue : x.count))) * 100)}%`">
+                    <template x-if="reportStream==='all'">
+                      <div class="w-full flex flex-col-reverse h-full">
+                        <div class="bg-teal-600" :style="`flex:${b.byStream.detailing}`"></div>
+                        <div class="bg-blue-500" :style="`flex:${b.byStream.wash}`"></div>
+                        <div class="bg-amber-500" :style="`flex:${b.byStream.retail}`"></div>
+                      </div>
+                    </template>
+                    <template x-if="reportStream!=='all'">
+                      <div class="w-full h-full" :class="reportStream==='detailing' ? 'bg-teal-600' : reportStream==='wash' ? 'bg-blue-500' : 'bg-amber-500'"></div>
+                    </template>
+                  </div>
+                  <div class="text-[10px] text-slate-500 whitespace-nowrap" x-show="bucketed(reportStream, range.start, range.end, range.granularity).length <= 31" x-text="b.label"></div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Stream split (when 'all') -->
+          <div x-show="reportStream==='all' && canSeePrices" class="card p-5 mb-4">
+            <h3 class="font-bold mb-3">Revenue by stream</h3>
+            <div class="space-y-2">
+              <template x-for="s in [
+                { key:'detailing', label:'Detailing', color:'#0f766e' },
+                { key:'wash',      label:'Wash Line', color:'#3b82f6' },
+                { key:'retail',    label:'Retail',    color:'#f59e0b' }
+              ]" :key="s.key">
+                <div>
+                  <div class="flex justify-between text-sm">
+                    <span class="font-semibold flex items-center gap-2"><span class="w-2.5 h-2.5 rounded" :style="`background:${s.color}`"></span><span x-text="s.label"></span></span>
+                    <span x-text="money(curr.byStream[s.key]) + ' · ' + Math.round(curr.revenue ? (curr.byStream[s.key]/curr.revenue)*100 : 0) + '%'"></span>
+                  </div>
+                  <div class="h-2 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full" :style="`width:${curr.revenue ? (curr.byStream[s.key]/curr.revenue)*100 : 0}%; background:${s.color}`"></div>
+                  </div>
+                  <div x-show="reportCompare" class="text-[11px] text-slate-500 mt-0.5">
+                    <span :class="delta(curr.byStream[s.key], prev.byStream[s.key]).dir==='up' ? 'text-emerald-600' : delta(curr.byStream[s.key], prev.byStream[s.key]).dir==='down' ? 'text-rose-600' : ''" class="font-semibold">
+                      <span x-text="(delta(curr.byStream[s.key], prev.byStream[s.key]).pct >= 0 ? '+' : '') + delta(curr.byStream[s.key], prev.byStream[s.key]).pct + '%'"></span>
+                    </span>
+                    <span class="ml-1" x-text="'vs ' + money(prev.byStream[s.key])"></span>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-4 mb-4">
+            <!-- Top dealerships -->
+            <div class="card p-5" x-show="reportStream==='all' || reportStream==='detailing'">
+              <h3 class="font-bold mb-3">Top dealerships</h3>
+              <div class="space-y-2 text-sm" x-data="{ get rows(){ return $root.breakdownByDealership($root.periodRange($root.reportPeriod).start, $root.periodRange($root.reportPeriod).end); } }">
+                <template x-for="row in rows" :key="row.id">
+                  <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded flex items-center justify-center text-white font-bold text-[10px]" :style="`background:${row.brandColor}`" x-text="row.name.split(' ').map(w=>w[0]).slice(0,2).join('')"></div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex justify-between">
+                        <span class="font-semibold truncate" x-text="row.name"></span>
+                        <span class="text-xs"><b x-text="row.count"></b><span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
+                      </div>
+                      <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                        <div class="h-full" :style="`width:${(row.revenue/Math.max(1, ...rows.map(r=>r.revenue)))*100}%; background:${row.brandColor}`"></div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div x-show="!rows.length" class="text-xs text-slate-400 italic">No detailing in this period.</div>
+              </div>
+            </div>
+
+            <!-- Top wash packages -->
+            <div class="card p-5" x-show="reportStream==='all' || reportStream==='wash'">
+              <h3 class="font-bold mb-3">Wash package mix</h3>
+              <div class="space-y-2 text-sm" x-data="{ get rows(){ return $root.breakdownByWashPackage($root.periodRange($root.reportPeriod).start, $root.periodRange($root.reportPeriod).end); } }">
+                <template x-for="row in rows" :key="row.id">
                   <div>
                     <div class="flex justify-between">
                       <span class="font-semibold" x-text="row.name"></span>
-                      <span x-text="row.count + ' vehicles' + (canSeePrices ? ' · ' + money(row.revenue) : '')"></span>
+                      <span class="text-xs"><b x-text="row.count"></b><span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
                     </div>
-                    <div class="h-2 bg-slate-100 rounded-full mt-1 overflow-hidden">
-                      <div class="h-full" :style="`width:${canSeePrices ? row.pct : row.countPct}%; background:${row.brandColor}`"></div>
+                    <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                      <div class="h-full bg-blue-500" :style="`width:${(row.count/Math.max(1, ...rows.map(r=>r.count)))*100}%`"></div>
                     </div>
                   </div>
                 </template>
+                <div x-show="!rows.length" class="text-xs text-slate-400 italic">No wash sales in this period.</div>
               </div>
             </div>
-            <div class="card p-4">
-              <h3 class="font-bold mb-3">Avg turnaround time</h3>
-              <div class="text-4xl font-black" x-text="avgTurnaround.hours + 'h ' + avgTurnaround.mins + 'm'"></div>
-              <div class="text-xs text-slate-500 mt-1" x-text="'Across ' + avgTurnaround.count + ' completed jobs'"></div>
-            </div>
-            <div class="card p-4">
-              <h3 class="font-bold mb-3">Most-used services</h3>
-              <div class="space-y-2 text-xs">
-                <template x-for="row in topServices" :key="row.id">
-                  <div class="flex justify-between">
-                    <span x-text="row.name"></span>
-                    <span class="font-bold" x-text="row.count + (canSeePrices ? ' · ' + money(row.revenue) : ' completed')"></span>
+
+            <!-- Retail categories -->
+            <div class="card p-5" x-show="reportStream==='all' || reportStream==='retail'">
+              <h3 class="font-bold mb-3">Retail category mix</h3>
+              <div class="space-y-2 text-sm" x-data="{ get rows(){ return $root.breakdownByRetailCategory($root.periodRange($root.reportPeriod).start, $root.periodRange($root.reportPeriod).end); } }">
+                <template x-for="row in rows" :key="row.name">
+                  <div>
+                    <div class="flex justify-between">
+                      <span class="font-semibold" x-text="row.name"></span>
+                      <span class="text-xs"><b x-text="row.count"></b> units<span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
+                    </div>
+                    <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                      <div class="h-full bg-amber-500" :style="`width:${(row.revenue/Math.max(1, ...rows.map(r=>r.revenue)))*100}%`"></div>
+                    </div>
                   </div>
                 </template>
+                <div x-show="!rows.length" class="text-xs text-slate-400 italic">No retail sales in this period.</div>
+              </div>
+            </div>
+
+            <!-- Detailing services -->
+            <div class="card p-5" x-show="reportStream==='all' || reportStream==='detailing'">
+              <h3 class="font-bold mb-3">Detailing services</h3>
+              <div class="space-y-2 text-sm" x-data="{ get rows(){ return $root.breakdownByService($root.periodRange($root.reportPeriod).start, $root.periodRange($root.reportPeriod).end); } }">
+                <template x-for="row in rows" :key="row.id">
+                  <div class="flex justify-between text-sm py-1 border-b border-slate-100">
+                    <span x-text="row.name"></span>
+                    <span class="text-xs"><b x-text="row.count"></b><span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
+                  </div>
+                </template>
+                <div x-show="!rows.length" class="text-xs text-slate-400 italic">No detailing services in this period.</div>
+              </div>
+            </div>
+
+            <!-- Operations summary -->
+            <div class="card p-5">
+              <h3 class="font-bold mb-3">Operations</h3>
+              <div class="text-sm space-y-1.5">
+                <div class="flex justify-between"><span class="text-slate-500">Avg turnaround</span><span class="font-semibold" x-text="avgTurnaround.hours + 'h ' + avgTurnaround.mins + 'm'"></span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Active jobs</span><span class="font-semibold" x-text="kpis.inHouse"></span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Overdue</span><span class="font-semibold" :class="kpis.overdue ? 'text-rose-600' : ''" x-text="kpis.overdue"></span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Outstanding AR</span><span class="font-semibold" x-show="canSeePrices" x-text="money(billingTotals.outstanding)"></span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Avg DSO</span><span class="font-semibold" x-show="canSeePrices" x-text="billingTotals.avgDso + 'd'"></span></div>
               </div>
             </div>
           </div>
@@ -3146,6 +3336,11 @@ function app() {
     autoScan: false,
     autoScanTimer: null,
     booking: { dealershipId:'', year:'', make:'', model:'', color:'', stockNumber:'', vin:'', services:[], date:'', timeSlot:'morning', deliveryMethod:'pickup', notes:'' },
+    reportPeriod: 'thisMonth',
+    reportStream: 'all',
+    reportCompare: true,
+    reportCustomStart: '',
+    reportCustomEnd: '',
 
     intake: {},
     compose: { dealershipId:'', subject:'', body:'', email:true, sms:false, inApp:true },
@@ -3836,6 +4031,237 @@ function app() {
         });
       });
       return Object.values(map).sort((a,b)=>b.count-a.count).slice(0,6);
+    },
+
+    /* ========= Reporting helpers ========= */
+    periodRange(period){
+      const now = new Date();
+      const startOfDay = (d) => { const x = new Date(d); x.setHours(0,0,0,0); return x; };
+      const endOfDay   = (d) => { const x = new Date(d); x.setHours(23,59,59,999); return x; };
+      const addDays    = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+      const startOfWeek= (d) => { const x = startOfDay(d); x.setDate(x.getDate() - x.getDay()); return x; }; // Sun start
+      const startOfMonth=(d) => { const x = startOfDay(d); x.setDate(1); return x; };
+      const startOfQuarter=(d)=>{ const x = startOfMonth(d); x.setMonth(Math.floor(x.getMonth()/3)*3); return x; };
+      const startOfYear= (d) => { const x = startOfMonth(d); x.setMonth(0); return x; };
+
+      let start, end, label, prevStart, prevEnd, prevLabel, granularity;
+      switch(period){
+        case 'today': {
+          start = startOfDay(now); end = endOfDay(now);
+          prevStart = addDays(start,-1); prevEnd = addDays(end,-1);
+          label = 'Today'; prevLabel = 'Yesterday'; granularity = 'hour';
+          break;
+        }
+        case 'yesterday': {
+          end = endOfDay(addDays(now,-1)); start = startOfDay(addDays(now,-1));
+          prevStart = addDays(start,-1); prevEnd = addDays(end,-1);
+          label = 'Yesterday'; prevLabel = '2 days ago'; granularity = 'hour';
+          break;
+        }
+        case 'thisWeek': {
+          start = startOfWeek(now); end = endOfDay(now);
+          prevStart = addDays(start,-7); prevEnd = addDays(start,-1); prevEnd = endOfDay(prevEnd);
+          label = 'This week'; prevLabel = 'Last week'; granularity = 'day';
+          break;
+        }
+        case 'lastWeek': {
+          end = endOfDay(addDays(startOfWeek(now), -1));
+          start = addDays(end, -6); start = startOfDay(start);
+          prevStart = addDays(start,-7); prevEnd = addDays(end,-7);
+          label = 'Last week'; prevLabel = '2 weeks ago'; granularity = 'day';
+          break;
+        }
+        case 'thisMonth': {
+          start = startOfMonth(now); end = endOfDay(now);
+          prevStart = startOfMonth(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1));
+          label = now.toLocaleString('en-US',{month:'long', year:'numeric'}); prevLabel = 'Previous month'; granularity = 'day';
+          break;
+        }
+        case 'lastMonth': {
+          const lastMonthEnd = addDays(startOfMonth(now), -1);
+          start = startOfMonth(lastMonthEnd); end = endOfDay(lastMonthEnd);
+          prevStart = startOfMonth(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1));
+          label = start.toLocaleString('en-US',{month:'long', year:'numeric'}); prevLabel = '2 months ago'; granularity = 'day';
+          break;
+        }
+        case 'thisQuarter': {
+          start = startOfQuarter(now); end = endOfDay(now);
+          const prevQEnd = addDays(start,-1); prevStart = startOfQuarter(prevQEnd); prevEnd = endOfDay(prevQEnd);
+          const q = Math.floor(now.getMonth()/3)+1;
+          label = `Q${q} ${now.getFullYear()}`; prevLabel = 'Previous quarter'; granularity = 'week';
+          break;
+        }
+        case 'lastQuarter': {
+          end = endOfDay(addDays(startOfQuarter(now),-1)); start = startOfQuarter(end);
+          prevStart = startOfQuarter(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1));
+          const q = Math.floor(start.getMonth()/3)+1;
+          label = `Q${q} ${start.getFullYear()}`; prevLabel = '2 quarters ago'; granularity = 'week';
+          break;
+        }
+        case 'thisYear': {
+          start = startOfYear(now); end = endOfDay(now);
+          prevStart = startOfYear(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1));
+          label = `${now.getFullYear()}`; prevLabel = `${now.getFullYear()-1}`; granularity = 'month';
+          break;
+        }
+        case 'lastYear': {
+          end = endOfDay(addDays(startOfYear(now),-1)); start = startOfYear(end);
+          prevStart = startOfYear(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1));
+          label = `${start.getFullYear()}`; prevLabel = `${start.getFullYear()-1}`; granularity = 'month';
+          break;
+        }
+        case 'custom': {
+          start = this.reportCustomStart ? startOfDay(new Date(this.reportCustomStart)) : addDays(now, -29);
+          end   = this.reportCustomEnd   ? endOfDay(new Date(this.reportCustomEnd))     : endOfDay(now);
+          if (start > end) { const tmp = start; start = end; end = tmp; }
+          const days = Math.ceil((end-start)/86400000);
+          prevEnd = addDays(start,-1); prevEnd = endOfDay(prevEnd);
+          prevStart = addDays(prevEnd,-(days-1)); prevStart = startOfDay(prevStart);
+          label = `${start.toLocaleDateString()} – ${end.toLocaleDateString()}`; prevLabel = 'Previous period';
+          granularity = days <= 2 ? 'hour' : days <= 45 ? 'day' : days <= 120 ? 'week' : 'month';
+          break;
+        }
+        default: { start = startOfMonth(now); end = endOfDay(now); prevStart = startOfMonth(addDays(start,-1)); prevEnd = endOfDay(addDays(start,-1)); label='This month'; prevLabel='Last month'; granularity='day'; }
+      }
+      return { start: start.getTime(), end: end.getTime(), label, prevStart: prevStart.getTime(), prevEnd: prevEnd.getTime(), prevLabel, granularity };
+    },
+
+    streamSales(stream, start, end){
+      const out = [];
+      if (stream === 'all' || stream === 'wash') {
+        this.washSales.forEach(s => { if (s.at >= start && s.at <= end) out.push({ stream:'wash', at: s.at, amount: s.amount, count: 1, packageId: s.packageId }); });
+      }
+      if (stream === 'all' || stream === 'retail') {
+        this.retailSales.forEach(s => { if (s.at >= start && s.at <= end) out.push({ stream:'retail', at: s.at, amount: s.total, count: 1, items: s.items }); });
+      }
+      if (stream === 'all' || stream === 'detailing') {
+        this.vehicles.forEach(v => {
+          if (v.status !== 'completed') return;
+          const completedEvent = v.statusHistory?.find(h=>h.status==='completed');
+          const at = completedEvent ? new Date(completedEvent.at).getTime() : new Date(v.dropOffTime).getTime();
+          if (at >= start && at <= end) out.push({ stream:'detailing', at, amount: this.vehicleTotal(v), count: 1, dealershipId: v.dealershipId, services: v.services });
+        });
+      }
+      return out;
+    },
+
+    bucketKey(at, granularity){
+      const d = new Date(at);
+      if (granularity === 'hour') { d.setMinutes(0,0,0); return d.getTime(); }
+      if (granularity === 'day')  { d.setHours(0,0,0,0); return d.getTime(); }
+      if (granularity === 'week') { d.setHours(0,0,0,0); d.setDate(d.getDate() - d.getDay()); return d.getTime(); }
+      if (granularity === 'month'){ d.setHours(0,0,0,0); d.setDate(1); return d.getTime(); }
+      return d.getTime();
+    },
+    bucketLabel(ts, granularity){
+      const d = new Date(ts);
+      if (granularity === 'hour') return d.getHours() + ':00';
+      if (granularity === 'day')  return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+      if (granularity === 'week') return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+      if (granularity === 'month')return d.toLocaleString('en-US',{month:'short', year:'2-digit'});
+      return '';
+    },
+    bucketsBetween(start, end, granularity){
+      const out = [];
+      let cursor = this.bucketKey(start, granularity);
+      const last = this.bucketKey(end, granularity);
+      while (cursor <= last) {
+        out.push(cursor);
+        const d = new Date(cursor);
+        if (granularity === 'hour') d.setHours(d.getHours()+1);
+        else if (granularity === 'day') d.setDate(d.getDate()+1);
+        else if (granularity === 'week') d.setDate(d.getDate()+7);
+        else if (granularity === 'month') d.setMonth(d.getMonth()+1);
+        cursor = d.getTime();
+        if (out.length > 366) break; // safety
+      }
+      return out;
+    },
+    bucketed(stream, start, end, granularity){
+      const sales = this.streamSales(stream, start, end);
+      const buckets = {};
+      this.bucketsBetween(start, end, granularity).forEach(b => {
+        buckets[b] = { ts:b, label: this.bucketLabel(b, granularity), count:0, revenue:0, byStream: { detailing:0, wash:0, retail:0 } };
+      });
+      sales.forEach(s => {
+        const k = this.bucketKey(s.at, granularity);
+        if (!buckets[k]) buckets[k] = { ts:k, label:this.bucketLabel(k,granularity), count:0, revenue:0, byStream:{detailing:0,wash:0,retail:0} };
+        buckets[k].count += s.count;
+        buckets[k].revenue += s.amount;
+        buckets[k].byStream[s.stream] += s.amount;
+      });
+      return Object.values(buckets).sort((a,b)=>a.ts-b.ts);
+    },
+    summarize(stream, start, end){
+      const sales = this.streamSales(stream, start, end);
+      const revenue = sales.reduce((s,x)=>s+x.amount,0);
+      const count = sales.length;
+      const byStream = { detailing:0, wash:0, retail:0 };
+      sales.forEach(s => byStream[s.stream] += s.amount);
+      return { revenue, count, avg: count ? revenue/count : 0, byStream };
+    },
+    delta(curr, prev){
+      if (!prev) return { pct: curr ? 100 : 0, dir: curr > 0 ? 'up' : 'flat', diff: curr - prev };
+      const pct = ((curr - prev) / prev) * 100;
+      return { pct: Math.round(pct*10)/10, dir: pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat', diff: curr - prev };
+    },
+
+    breakdownByDealership(start, end){
+      const map = {};
+      this.vehicles.filter(v=>{
+        if (v.status !== 'completed') return false;
+        const ev = v.statusHistory?.find(h=>h.status==='completed');
+        const at = ev ? new Date(ev.at).getTime() : new Date(v.dropOffTime).getTime();
+        return at >= start && at <= end;
+      }).forEach(v=>{
+        const d = this.dealershipById(v.dealershipId);
+        if (!d) return;
+        map[d.id] = map[d.id] || { id:d.id, name:d.name, brandColor:d.brandColor, count:0, revenue:0 };
+        map[d.id].count++;
+        map[d.id].revenue += this.vehicleTotal(v);
+      });
+      return Object.values(map).sort((a,b)=>b.revenue-a.revenue);
+    },
+    breakdownByWashPackage(start, end){
+      const map = {};
+      this.washPackages.forEach(p=>{ map[p.id] = { id:p.id, name:p.name, count:0, revenue:0 }; });
+      this.washSales.filter(s=>s.at>=start && s.at<=end).forEach(s=>{
+        if (!map[s.packageId]) map[s.packageId] = { id:s.packageId, name:s.packageId, count:0, revenue:0 };
+        map[s.packageId].count++; map[s.packageId].revenue += s.amount;
+      });
+      return Object.values(map).filter(r=>r.count>0).sort((a,b)=>b.revenue-a.revenue);
+    },
+    breakdownByRetailCategory(start, end){
+      const map = {};
+      this.retailSales.filter(s=>s.at>=start && s.at<=end).forEach(s=>{
+        s.items.forEach(it=>{
+          const p = this.retailProductById(it.productId);
+          if (!p) return;
+          map[p.category] = map[p.category] || { name:p.category, count:0, revenue:0 };
+          map[p.category].count += it.qty;
+          map[p.category].revenue += it.lineTotal;
+        });
+      });
+      return Object.values(map).sort((a,b)=>b.revenue-a.revenue);
+    },
+    breakdownByService(start, end){
+      const map = {};
+      this.vehicles.filter(v=>{
+        if (v.status !== 'completed') return false;
+        const ev = v.statusHistory?.find(h=>h.status==='completed');
+        const at = ev ? new Date(ev.at).getTime() : new Date(v.dropOffTime).getTime();
+        return at >= start && at <= end;
+      }).forEach(v=>{
+        const sheet = this.rateSheetFor(v.dealershipId);
+        v.services.forEach(sid=>{
+          const r = sheet.find(x=>x.serviceId===sid);
+          const name = r?.custom ? r.name : (this.serviceById(sid)?.name || sid);
+          map[sid] = map[sid] || { id:sid, name, count:0, revenue:0 };
+          map[sid].count++;
+          map[sid].revenue += (r?.price||0);
+        });
+      });
+      return Object.values(map).sort((a,b)=>b.revenue-a.revenue);
     },
 
     /* ========= Bookings ========= */
