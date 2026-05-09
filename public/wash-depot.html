@@ -455,12 +455,76 @@
       <!-- ============================================ STAFF: BOOKINGS (calendar) ============================================ -->
       <template x-if="session.role==='staff' && view==='bookings'">
         <div>
-          <div class="flex items-end justify-between mb-5">
+          <div class="flex items-end justify-between mb-4">
             <div>
               <h1 class="text-2xl font-black tracking-tight">Bookings</h1>
-              <p class="text-sm text-slate-500" x-text="upcomingBookings.length + ' upcoming · scheduled by dealerships'"></p>
+              <p class="text-sm text-slate-500">
+                <span x-text="filteredBookings.length"></span> of <span x-text="upcomingBookings.length"></span> upcoming
+                <span x-show="bookingsFilterActive">· <button @click="resetBookingsFilter()" class="text-teal-700 hover:underline">Clear filters</button></span>
+              </p>
             </div>
             <button @click="view='intake'" class="btn btn-primary">+ Manual Intake</button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="card p-3 mb-5">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-2 items-end">
+              <div class="md:col-span-2">
+                <label class="label text-[10px]">Search</label>
+                <input class="input text-sm" x-model="bookingsFilter.search" placeholder="Stock #, plate, make/model, dealer…" />
+              </div>
+              <div>
+                <label class="label text-[10px]">Dealership</label>
+                <select class="select text-sm" x-model="bookingsFilter.dealershipId">
+                  <option value="">All dealerships</option>
+                  <template x-for="d in dealerships" :key="d.id"><option :value="d.id" x-text="d.name"></option></template>
+                </select>
+              </div>
+              <div>
+                <label class="label text-[10px]">Date</label>
+                <select class="select text-sm" x-model="bookingsFilter.date">
+                  <option value="all">Any date</option>
+                  <option value="today">Today</option>
+                  <option value="tomorrow">Tomorrow</option>
+                  <option value="week">Next 7 days</option>
+                  <option value="month">Next 30 days</option>
+                </select>
+              </div>
+              <div>
+                <label class="label text-[10px]">Status</label>
+                <select class="select text-sm" x-model="bookingsFilter.confirm">
+                  <option value="all">All</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+              <div>
+                <label class="label text-[10px]">Logistics</label>
+                <select class="select text-sm" x-model="bookingsFilter.logistics">
+                  <option value="all">All</option>
+                  <option value="pickup">Dealer drops off</option>
+                  <option value="delivery">WD picks up</option>
+                </select>
+              </div>
+              <div>
+                <label class="label text-[10px]">Time slot</label>
+                <select class="select text-sm" x-model="bookingsFilter.timeSlot">
+                  <option value="all">All slots</option>
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="anytime">Anytime</option>
+                </select>
+              </div>
+              <div>
+                <label class="label text-[10px]">Priority</label>
+                <select class="select text-sm" x-model="bookingsFilter.priority">
+                  <option value="all">All</option>
+                  <option value="standard">Standard</option>
+                  <option value="rush">Rush</option>
+                  <option value="vip">VIP</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="space-y-5">
@@ -503,8 +567,9 @@
 
             <div x-show="!bookingsByDay.length" class="card p-12 text-center text-slate-400">
               <div class="text-5xl mb-3">📅</div>
-              <div class="font-bold mb-1">No upcoming bookings</div>
-              <div class="text-sm">Dealers can schedule services from their portal.</div>
+              <div class="font-bold mb-1" x-text="bookingsFilterActive ? 'No bookings match your filters' : 'No upcoming bookings'"></div>
+              <div class="text-sm" x-show="!bookingsFilterActive">Dealers can schedule services from their portal.</div>
+              <button x-show="bookingsFilterActive" @click="resetBookingsFilter()" class="text-sm text-teal-700 hover:underline mt-2">Clear filters →</button>
             </div>
           </div>
         </div>
@@ -659,7 +724,11 @@
                       </div>
                       <div class="text-sm font-bold" x-text="v.year + ' ' + v.make + ' ' + v.model"></div>
                       <div class="text-[11px] text-slate-500" x-text="'#' + v.stockNumber + ' · ' + v.color"></div>
-                      <div class="text-[10px] text-slate-400 mt-1" x-text="'Promised ' + relativeTime(v.promisedTime)"></div>
+                      <div class="flex items-center gap-1 mt-1">
+                        <span class="text-[10px] text-slate-400" x-text="'Promised ' + relativeTime(v.promisedTime)"></span>
+                        <span x-show="v.arrivalMethod==='dropoff'" class="ml-auto text-[10px]" title="Dealer dropped off">📥</span>
+                        <span x-show="v.arrivalMethod==='pickup'" class="ml-auto text-[10px]" title="WD picked up">🚚</span>
+                      </div>
                     </button>
                   </template>
                   <div x-show="boardVehicles(s.code).length===0" class="text-[11px] text-slate-400 italic text-center py-3">empty</div>
@@ -674,15 +743,75 @@
       <template x-if="session.role==='staff' && view==='vehicles'">
         <div>
           <div class="flex items-end justify-between mb-5">
-            <h1 class="text-2xl font-black tracking-tight">All vehicles</h1>
+            <div>
+              <h1 class="text-2xl font-black tracking-tight">All Vehicles</h1>
+              <p class="text-sm text-slate-500" x-text="vehicles.length + ' total · click any status box to drill in'"></p>
+            </div>
             <div class="flex gap-2 items-center">
               <input class="input max-w-xs" x-model="vehicleSearch" placeholder="Search VIN, make, stock…" />
-              <select class="select" x-model="vehicleStatusFilter">
+              <select class="select" x-show="vehicleStatusFilter" x-model="vehicleStatusFilter">
                 <option value="">All statuses</option>
                 <template x-for="s in STATUSES" :key="s.code"><option :value="s.code" x-text="s.label"></option></template>
               </select>
+              <button x-show="vehicleStatusFilter" @click="vehicleStatusFilter=''" class="btn btn-outline text-sm">← All</button>
             </div>
           </div>
+
+          <!-- Status overview boxes — only when no specific status is filtered -->
+          <div x-show="!vehicleStatusFilter" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-5">
+            <template x-for="s in STATUSES" :key="s.code">
+              <button @click="vehicleStatusFilter = s.code" class="card p-4 text-left hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1" :style="`background:${s.fg}`"></div>
+                <div class="flex items-center gap-2 mt-1 mb-2">
+                  <span class="dot" :style="`background:${s.fg}; width:.5rem; height:.5rem`"></span>
+                  <span class="text-xs uppercase font-bold tracking-wider text-slate-500" x-text="s.label"></span>
+                </div>
+                <div class="text-3xl font-black mt-1" x-text="vehiclesByStatus(s.code).length"></div>
+                <div class="text-[11px] text-slate-500 mt-1" x-show="canSeePrices && s.code !== 'completed'" x-text="money(vehiclesByStatus(s.code).reduce((sum, v) => sum + vehicleTotal(v), 0)) + ' value'"></div>
+                <div class="text-[11px] mt-2 space-y-0.5">
+                  <template x-if="s.code === 'scheduled'">
+                    <div class="text-slate-500">
+                      <span x-text="vehiclesByStatus(s.code).filter(v => { const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() && d.getTime() < today.getTime() + 86400000 }).length"></span> today
+                      · <span x-text="vehiclesByStatus(s.code).filter(v => { const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() + 86400000 && d.getTime() < today.getTime() + 7*86400000 }).length"></span> this week
+                    </div>
+                  </template>
+                  <template x-if="s.code === 'dropped' || s.code === 'queue' || s.code === 'service' || s.code === 'qc'">
+                    <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
+                      <span x-text="vehiclesByStatus(s.code).filter(v=>isOverdue(v)).length"></span> overdue
+                      <span x-show="vehiclesByStatus(s.code).filter(v=>v.priority==='rush' || v.priority==='vip').length">
+                        · <span x-text="vehiclesByStatus(s.code).filter(v=>v.priority==='rush' || v.priority==='vip').length"></span> rush/VIP
+                      </span>
+                    </div>
+                  </template>
+                  <template x-if="s.code === 'ready'">
+                    <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
+                      <span x-text="vehiclesByStatus(s.code).filter(v => v.deliveryMethod === 'delivery').length"></span> to deliver
+                      · <span x-text="vehiclesByStatus(s.code).filter(v => v.deliveryMethod === 'pickup').length"></span> pickup
+                    </div>
+                  </template>
+                  <template x-if="s.code === 'completed'">
+                    <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
+                      <span x-text="vehiclesByStatus(s.code).filter(v=>{ const today = new Date(); today.setHours(0,0,0,0); return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= today.getTime()) }).length"></span> today
+                      · <span x-text="vehiclesByStatus(s.code).filter(v=>{ const week = Date.now()-7*86400000; return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= week) }).length"></span> this week
+                    </div>
+                  </template>
+                </div>
+                <div class="text-[10px] text-slate-400 uppercase tracking-wider mt-3 group-hover:text-teal-700">View list →</div>
+              </button>
+            </template>
+          </div>
+
+          <!-- Filtered list — shown when a status is selected, OR all when search active -->
+          <div x-show="vehicleStatusFilter || vehicleSearch">
+            <div x-show="vehicleStatusFilter" class="flex items-center gap-2 mb-3">
+              <span class="text-xs uppercase font-bold tracking-wider text-slate-500">Showing</span>
+              <span class="status-chip" :style="`background:${statusMeta(vehicleStatusFilter).bg};color:${statusMeta(vehicleStatusFilter).fg}`">
+                <span class="dot" :style="`background:${statusMeta(vehicleStatusFilter).fg}`"></span>
+                <span x-text="statusMeta(vehicleStatusFilter).label"></span>
+              </span>
+              <span class="text-sm text-slate-500" x-text="'· ' + filteredVehicles.length + ' vehicles'"></span>
+            </div>
+
           <div class="card overflow-hidden">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
@@ -691,7 +820,7 @@
                   <th class="text-left p-3">Dealership</th>
                   <th class="text-left p-3">Stock #</th>
                   <th class="text-left p-3">Status</th>
-                  <th class="text-left p-3">Dropped Off</th>
+                  <th class="text-left p-3">Arrival</th>
                   <th class="text-left p-3">Promised</th>
                   <th class="text-right p-3" x-show="canSeePrices">Total</th>
                 </tr>
@@ -708,7 +837,11 @@
                         <span x-text="statusMeta(v.status).label"></span>
                       </span>
                     </td>
-                    <td class="p-3 text-xs text-slate-500" x-text="formatDate(v.dropOffTime)"></td>
+                    <td class="p-3 text-xs text-slate-500">
+                      <span x-show="v.arrivalMethod==='dropoff'">📥 Dropped off</span>
+                      <span x-show="v.arrivalMethod==='pickup'">🚚 We picked up</span>
+                      <span x-show="!v.arrivalMethod" x-text="formatDate(v.dropOffTime)"></span>
+                    </td>
                     <td class="p-3 text-xs" :class="isOverdue(v) ? 'text-rose-600 font-semibold' : 'text-slate-500'" x-text="formatDate(v.promisedTime)"></td>
                     <td class="p-3 text-right font-semibold" x-show="canSeePrices" x-text="money(vehicleTotal(v))"></td>
                   </tr>
@@ -716,6 +849,7 @@
               </tbody>
             </table>
             <div x-show="filteredVehicles.length===0" class="p-8 text-center text-sm text-slate-400">No vehicles match.</div>
+          </div>
           </div>
         </div>
       </template>
@@ -3235,10 +3369,15 @@
                   </button>
                 </template>
               </div>
-              <div class="mt-3 flex gap-2">
+              <div class="mt-3 flex flex-wrap gap-2">
                 <select class="select max-w-xs text-sm" x-model="activeVehicle.assignedDetailer" @change="persist()">
                   <option value="">Unassigned detailer</option>
                   <template x-for="d in detailers" :key="d.id"><option :value="d.id" x-text="d.name"></option></template>
+                </select>
+                <select class="select max-w-xs text-sm" x-model="activeVehicle.arrivalMethod" @change="persist()" title="How did the vehicle arrive at Wash Depot?">
+                  <option value="">— Arrival method —</option>
+                  <option value="dropoff">📥 Dealer dropped off</option>
+                  <option value="pickup">🚚 Wash Depot picked up</option>
                 </select>
                 <button @click="sendCustomUpdate(activeVehicle.id)" class="btn btn-outline text-sm">📨 Send update</button>
                 <button @click="generateInvoiceForVehicle(activeVehicle.id)" class="btn btn-outline text-sm" x-show="canSeePrices && !activeVehicle.invoiceId">💵 Generate invoice</button>
@@ -4090,6 +4229,7 @@ function app() {
     customerApp: { tab:'home', alertEnabled:false, alertThreshold:3, alertChannel:'sms', selectedCustomerId:null },
     newCustomerDrawer: null,
     booking: { dealershipId:'', year:'', make:'', model:'', color:'', stockNumber:'', vin:'', services:[], date:'', timeSlot:'morning', deliveryMethod:'pickup', notes:'' },
+    bookingsFilter: { dealershipId:'', confirm:'all', logistics:'all', timeSlot:'all', priority:'all', date:'all', search:'' },
     reportPeriod: 'thisMonth',
     reportStream: 'all',
     reportCompare: true,
@@ -4108,7 +4248,7 @@ function app() {
 
     STATUSES: [
       { code:'scheduled',  label:'Scheduled',     bg:'#e2e8f0', fg:'#475569' },
-      { code:'dropped',    label:'Dropped Off',   bg:'#dbeafe', fg:'#1d4ed8' },
+      { code:'dropped',    label:'Pickup/Drop Off', bg:'#dbeafe', fg:'#1d4ed8' },
       { code:'queue',      label:'In Queue',      bg:'#fef3c7', fg:'#b45309' },
       { code:'service',    label:'In Service',    bg:'#fce7f3', fg:'#9f1239' },
       { code:'qc',         label:'Quality Check', bg:'#ede9fe', fg:'#6d28d9' },
@@ -5155,9 +5295,43 @@ function app() {
         .filter(v => v.status === 'scheduled' && v.dropOffTime && v.dropOffTime >= now - 24*3600000)
         .sort((a,b)=>a.dropOffTime - b.dropOffTime);
     },
+    get filteredBookings(){
+      const f = this.bookingsFilter;
+      const q = (f.search || '').toLowerCase().trim();
+      const now = new Date(); now.setHours(0,0,0,0);
+      const todayStart = now.getTime();
+      const tomorrowStart = todayStart + 86400000;
+      const weekEnd = todayStart + 7*86400000;
+      const monthEnd = todayStart + 30*86400000;
+      return this.upcomingBookings.filter(v => {
+        if (f.dealershipId && v.dealershipId !== f.dealershipId) return false;
+        if (f.confirm === 'confirmed' && !v.confirmed) return false;
+        if (f.confirm === 'pending' && v.confirmed) return false;
+        if (f.logistics !== 'all' && (v.deliveryMethod || 'pickup') !== f.logistics) return false;
+        if (f.timeSlot !== 'all' && v.timeSlot !== f.timeSlot) return false;
+        if (f.priority !== 'all' && (v.priority || 'standard') !== f.priority) return false;
+        if (f.date === 'today'    && (v.dropOffTime < todayStart || v.dropOffTime >= tomorrowStart)) return false;
+        if (f.date === 'tomorrow' && (v.dropOffTime < tomorrowStart || v.dropOffTime >= tomorrowStart + 86400000)) return false;
+        if (f.date === 'week'     && (v.dropOffTime < todayStart || v.dropOffTime >= weekEnd)) return false;
+        if (f.date === 'month'    && (v.dropOffTime < todayStart || v.dropOffTime >= monthEnd)) return false;
+        if (q) {
+          const blob = [
+            v.year, v.make, v.model, v.color, v.stockNumber, v.vin, v.notes,
+            this.dealershipById(v.dealershipId)?.name
+          ].filter(Boolean).join(' ').toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+    },
+    resetBookingsFilter(){ this.bookingsFilter = { dealershipId:'', confirm:'all', logistics:'all', timeSlot:'all', priority:'all', date:'all', search:'' }; },
+    get bookingsFilterActive(){
+      const f = this.bookingsFilter;
+      return !!(f.dealershipId || f.confirm!=='all' || f.logistics!=='all' || f.timeSlot!=='all' || f.priority!=='all' || f.date!=='all' || f.search);
+    },
     get bookingsByDay(){
       const map = {};
-      this.upcomingBookings.forEach(v=>{
+      this.filteredBookings.forEach(v=>{
         const d = new Date(v.dropOffTime); d.setHours(0,0,0,0);
         const key = d.getTime();
         if (!map[key]) map[key] = { date: key, label: d.toLocaleDateString('en-US',{weekday:'long', month:'short', day:'numeric'}), bookings: [] };
