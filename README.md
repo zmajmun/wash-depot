@@ -1,20 +1,29 @@
 # Wash Depot
 
-Next.js + Clerk auth. The existing Alpine.js dashboard is served behind Clerk auth via an API route.
+Operations + customer platform for Wash Depot, a hand car wash. Built on Next.js 15 + Clerk + Supabase + Twilio, deployed on Vercel.
 
-## Local dev
+**Live:** https://wash-depot-app.vercel.app
+**Customer PWA:** https://wash-depot-app.vercel.app/customer-app
+
+## For Claude / AI agents
+
+Read **[`CLAUDE.md`](./CLAUDE.md)** first — it has the full architecture, conventions, and pending work.
+
+## Quick start
 
 ```bash
 npm install
 cp .env.local.example .env.local
-# fill in your Clerk keys
+# fill in Clerk, Supabase, Twilio keys
 npm run dev
 ```
 
-## Roles
+Push to `main` auto-deploys to Vercel.
 
-Owner is matched by exact email (`NEXT_PUBLIC_OWNER_EMAIL`, default `washdepot1@outlook.com`). Anyone else lands on the dashboard in demo mode and can pick a persona.
+## Architecture in 30 seconds
 
-## Deploy
-
-Push to GitHub or use the Vercel CLI. Set the Clerk env vars in the Vercel dashboard.
+- **Admin** at `/dashboard` (Clerk-protected) — iframes `public/wash-depot.html` (Alpine.js single-file app, ~130KB)
+- **Customer PWA** at `/customer-app` — public, installable, separate Alpine.js app at `public/customer-app.html`
+- **Data**: single Supabase JSONB row, server-mediated via `/api/state` (admin) and `/api/customer/*` (PWA)
+- **Auth**: Clerk for staff, phone/email lookup for customers (no OTP yet)
+- **SMS**: Twilio (pending A2P 10DLC carrier registration)
