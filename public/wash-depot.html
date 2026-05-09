@@ -254,46 +254,75 @@
 <div class="flex h-screen overflow-hidden">
 
   <!-- SIDEBAR -->
-  <aside class="w-60 brand-grad text-white flex-shrink-0 flex flex-col border-r border-white/5">
-    <div class="p-3 flex items-center gap-3 border-b border-white/10">
-      <div class="wd-logo-wrap w-11 h-11 rounded-lg overflow-hidden bg-black flex-shrink-0">
-        <img class="wd-logo-img" src="wash-depot-logo.png" onerror="this.classList.add('failed')" alt="Wash Depot" />
-        <svg class="wd-logo-svg" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
+  <aside class="w-60 flex-shrink-0 flex flex-col" style="background:#000; color:#fff;">
+    <div class="px-4 pt-5 pb-4 flex flex-col items-center text-center" style="background:#000;">
+      <div class="wd-logo-wrap w-24 h-24 rounded-full overflow-hidden flex-shrink-0" style="background:#000;">
+        <img class="wd-logo-img w-full h-full object-contain" src="wash-depot-logo.png" onerror="this.classList.add('failed')" alt="Wash Depot" />
+        <svg class="wd-logo-svg w-full h-full" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
       </div>
-      <div class="min-w-0">
-        <div class="font-black text-sm leading-tight tracking-tight">Wash Depot</div>
-        <div class="text-[10px] uppercase tracking-wider text-white/60" x-text="session.role === 'staff' ? 'Operations' : 'Dealer Portal'"></div>
-      </div>
+      <div class="text-[10px] uppercase tracking-[0.18em] text-white/60 mt-2 font-bold" x-text="session.role === 'staff' ? 'Operations' : 'Dealer Portal'"></div>
     </div>
 
     <nav class="flex-1 overflow-y-auto p-2 text-sm space-y-0.5">
       <!-- Staff nav -->
       <template x-if="session.role === 'staff'">
-        <div>
-          <div x-show="isOwner" class="text-[10px] uppercase tracking-wider text-white/40 font-bold px-3 pt-2 pb-1">Overview</div>
-          <a x-show="isOwner" @click.prevent="view='total'" :class="{'active': view==='total'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏠 Business Overview</a>
-          <a x-show="isOwner" @click.prevent="view='insights'" :class="{'active': view==='insights'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">✨ AI Insights</a>
+        <div class="space-y-1">
+          <!-- OVERVIEW (Owner only) -->
+          <div x-show="isOwner">
+            <button @click="toggleNavSection('overview')" class="w-full flex items-center justify-between px-3 pt-2 pb-1 hover:bg-white/5 rounded-md group">
+              <span class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Overview</span>
+              <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.overview ? '' : '-rotate-90'">▾</span>
+            </button>
+            <div x-show="navOpen.overview" class="space-y-0.5">
+              <a @click.prevent="view='total'" :class="{'active': view==='total'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏠 Business Overview</a>
+              <a @click.prevent="view='insights'" :class="{'active': view==='insights'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">✨ AI Insights</a>
+            </div>
+          </div>
 
-          <div class="text-[10px] uppercase tracking-wider text-white/40 font-bold px-3 pt-3 pb-1">Detailing</div>
-          <a @click.prevent="view='dashboard'" :class="{'active': view==='dashboard'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📊 Dashboard</a>
-          <a @click.prevent="view='bookings'" :class="{'active': view==='bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📅 Bookings <span x-show="upcomingBookings.length>0" class="ml-auto bg-cyan-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="upcomingBookings.length"></span></a>
-          <a @click.prevent="view='intake'" :class="{'active': view==='intake'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">➕ New Intake</a>
-          <a @click.prevent="view='board'" :class="{'active': view==='board'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🚗 Active Jobs</a>
-          <a @click.prevent="view='vehicles'" :class="{'active': view==='vehicles'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🗂 All Vehicles</a>
-          <a @click.prevent="view='dealerships'" :class="{'active': view==='dealerships'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏢 Dealerships</a>
-          <a x-show="isOwner" @click.prevent="view='billing'" :class="{'active': view==='billing'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💵 Billing</a>
+          <!-- DETAILING -->
+          <div>
+            <button @click="toggleNavSection('detailing')" class="w-full flex items-center justify-between px-3 pt-3 pb-1 hover:bg-white/5 rounded-md group">
+              <span class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Detailing</span>
+              <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.detailing ? '' : '-rotate-90'">▾</span>
+            </button>
+            <div x-show="navOpen.detailing" class="space-y-0.5">
+              <a @click.prevent="view='dashboard'" :class="{'active': view==='dashboard'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📊 Dashboard</a>
+              <a @click.prevent="view='bookings'" :class="{'active': view==='bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📅 Bookings <span x-show="upcomingBookings.length>0" class="ml-auto bg-cyan-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="upcomingBookings.length"></span></a>
+              <a @click.prevent="view='intake'" :class="{'active': view==='intake'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">➕ New Intake</a>
+              <a @click.prevent="view='board'" :class="{'active': view==='board'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🚗 Active Jobs</a>
+              <a @click.prevent="view='vehicles'" :class="{'active': view==='vehicles'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🗂 All Vehicles</a>
+              <a @click.prevent="view='dealerships'" :class="{'active': view==='dealerships'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏢 Dealerships</a>
+              <a x-show="isOwner" @click.prevent="view='billing'" :class="{'active': view==='billing'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💵 Billing</a>
+            </div>
+          </div>
 
-          <div class="text-[10px] uppercase tracking-wider text-white/40 font-bold px-3 pt-3 pb-1">Wash &amp; Retail</div>
-          <a @click.prevent="view='lane'" :class="{'active': view==='lane'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📷 Live Lane</a>
-          <a @click.prevent="view='wash'" :class="{'active': view==='wash'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💧 Wash Line</a>
-          <a @click.prevent="view='customers'" :class="{'active': view==='customers'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">👥 Customers (CRM)</a>
-          <a @click.prevent="view='customer-app'" :class="{'active': view==='customer-app'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📱 Customer App</a>
-          <a @click.prevent="view='retail'" :class="{'active': view==='retail'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🛒 Retail Products</a>
+          <!-- WASH & RETAIL -->
+          <div>
+            <button @click="toggleNavSection('washretail')" class="w-full flex items-center justify-between px-3 pt-3 pb-1 hover:bg-white/5 rounded-md group">
+              <span class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Wash &amp; Retail</span>
+              <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.washretail ? '' : '-rotate-90'">▾</span>
+            </button>
+            <div x-show="navOpen.washretail" class="space-y-0.5">
+              <a @click.prevent="view='lane'" :class="{'active': view==='lane'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📷 Live Lane</a>
+              <a @click.prevent="view='wash'" :class="{'active': view==='wash'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💧 Wash Line</a>
+              <a @click.prevent="view='customers'" :class="{'active': view==='customers'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">👥 Customers (CRM)</a>
+              <a @click.prevent="view='customer-app'" :class="{'active': view==='customer-app'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📱 Customer App</a>
+              <a @click.prevent="view='retail'" :class="{'active': view==='retail'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🛒 Retail Products</a>
+            </div>
+          </div>
 
-          <div class="text-[10px] uppercase tracking-wider text-white/40 font-bold px-3 pt-3 pb-1">Other</div>
-          <a @click.prevent="view='notifications'" :class="{'active': view==='notifications'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🔔 Notifications <span x-show="unreadStaffCount>0" class="ml-auto bg-amber-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="unreadStaffCount"></span></a>
-          <a @click.prevent="view='reports'" :class="{'active': view==='reports'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📈 Reports</a>
-          <a @click.prevent="view='settings'" :class="{'active': view==='settings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">⚙️ Settings</a>
+          <!-- OTHER -->
+          <div>
+            <button @click="toggleNavSection('other')" class="w-full flex items-center justify-between px-3 pt-3 pb-1 hover:bg-white/5 rounded-md group">
+              <span class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Other</span>
+              <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.other ? '' : '-rotate-90'">▾</span>
+            </button>
+            <div x-show="navOpen.other" class="space-y-0.5">
+              <a @click.prevent="view='notifications'" :class="{'active': view==='notifications'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🔔 Notifications <span x-show="unreadStaffCount>0" class="ml-auto bg-amber-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="unreadStaffCount"></span></a>
+              <a @click.prevent="view='reports'" :class="{'active': view==='reports'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📈 Reports</a>
+              <a @click.prevent="view='settings'" :class="{'active': view==='settings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">⚙️ Settings</a>
+            </div>
+          </div>
         </div>
       </template>
       <!-- Dealer nav -->
@@ -2542,12 +2571,51 @@
               </div>
             </div>
 
+            <!-- Twilio SMS card -->
+            <div class="card p-5 mb-4" x-init="checkTwilioStatus()">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-black flex-shrink-0">📱</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-base">Twilio SMS</h3>
+                    <span x-show="twilioStatus.configured" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-wider">● Connected</span>
+                    <span x-show="!twilioStatus.configured" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider">Not connected</span>
+                  </div>
+                  <p class="text-sm text-slate-500 mt-1">Sends real text messages for status updates, line alerts, gift codes, and manual updates. Triggered automatically when a dealer or customer has SMS enabled.</p>
+
+                  <div x-show="twilioStatus.configured" class="mt-3 text-sm space-y-1">
+                    <div class="flex justify-between"><span class="text-slate-500">Twilio number</span><span class="font-mono text-xs" x-text="twilioStatus.fromMasked"></span></div>
+                    <div class="text-xs text-slate-500 mt-2">Send a test message:</div>
+                    <div class="flex gap-2 mt-1">
+                      <input class="input flex-1 text-sm" x-model="twilioTestForm.to" placeholder="Phone number — (555) 123-4567 or +15551234567" />
+                      <button @click="testSms()" :disabled="twilioTestForm.busy" class="btn btn-primary text-sm" x-text="twilioTestForm.busy ? 'Sending…' : 'Send test'"></button>
+                    </div>
+                    <textarea class="textarea text-sm mt-2" rows="2" x-model="twilioTestForm.body"></textarea>
+                    <div x-show="twilioTestForm.lastResult" class="text-xs mt-2 p-2 rounded bg-slate-50 text-slate-700 font-mono" x-text="twilioTestForm.lastResult"></div>
+                  </div>
+
+                  <div x-show="!twilioStatus.configured" class="mt-3">
+                    <p class="text-xs text-slate-500 mb-2">To enable, add three env vars to Vercel (Settings → Environment Variables):</p>
+                    <div class="bg-slate-900 text-slate-100 font-mono text-xs p-3 rounded-lg space-y-1">
+                      <div>TWILIO_ACCOUNT_SID=AC…</div>
+                      <div>TWILIO_AUTH_TOKEN=…</div>
+                      <div>TWILIO_FROM=+15551234567</div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-2">
+                      Get these at <a href="https://console.twilio.com/" target="_blank" class="text-teal-700 underline">console.twilio.com</a>. After saving, redeploy and refresh this page.
+                    </p>
+                    <button @click="checkTwilioStatus()" class="btn btn-outline text-xs mt-2">↻ Recheck</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="card p-5 opacity-60">
               <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-lg bg-slate-200 flex items-center justify-center text-slate-500 font-black flex-shrink-0">+</div>
                 <div class="flex-1">
                   <h3 class="font-bold text-base">More integrations coming</h3>
-                  <p class="text-sm text-slate-500 mt-1">QuickBooks, Stripe, Twilio (SMS), SendGrid (email), Google Calendar.</p>
+                  <p class="text-sm text-slate-500 mt-1">QuickBooks, Stripe, SendGrid (email), Google Calendar.</p>
                 </div>
               </div>
             </div>
@@ -4175,6 +4243,7 @@ function app() {
     session: null,
     clerkPendingAccess: false,
     view: 'dashboard',
+    navOpen: { overview: true, detailing: true, washretail: true, other: false },
     now: new Date(),
     toasts: [],
     commandOpen: false,
@@ -4192,6 +4261,8 @@ function app() {
     payModal: { open:false, invoiceId:null, step:'choose', method:null, note:'' },
     squareModal: false,
     squareForm: { accessToken:'', locationName:'' },
+    twilioStatus: { configured: false, fromMasked: null },
+    twilioTestForm: { to:'', body:'Test from Wash Depot — your SMS notifications are wired up correctly.', busy:false, lastResult:'' },
     inviteForm: { email:'', role:'fleet', dealershipId:'' },
     inviteSending: false,
     activeUsers: [],
@@ -4268,6 +4339,11 @@ function app() {
       if (typeof window !== 'undefined' && window.__CLERK_USER__) {
         this.autoLoginFromClerk(window.__CLERK_USER__);
       }
+      // Auto-open the sidebar section that contains the active view
+      this.$watch('view', (v) => {
+        const s = this.viewToSection(v);
+        if (s && this.navOpen && !this.navOpen[s]) this.navOpen[s] = true;
+      });
     },
     autoLoginFromClerk(u) {
       if (!u) return;
@@ -6186,6 +6262,29 @@ function app() {
       return r.slice(0,12);
     },
 
+    /* ========= sidebar nav (collapsible sections) ========= */
+    viewToSection(v){
+      const map = {
+        total:'overview', insights:'overview',
+        dashboard:'detailing', bookings:'detailing', intake:'detailing', board:'detailing', vehicles:'detailing', dealerships:'detailing', billing:'detailing',
+        lane:'washretail', wash:'washretail', customers:'washretail', 'customer-app':'washretail', retail:'washretail',
+        notifications:'other', reports:'other', settings:'other'
+      };
+      return map[v];
+    },
+    toggleNavSection(name){
+      this.navOpen[name] = !this.navOpen[name];
+      try { localStorage.setItem('washdepot_nav', JSON.stringify(this.navOpen)); } catch {}
+    },
+    loadNavState(){
+      try {
+        const raw = localStorage.getItem('washdepot_nav');
+        if (raw) this.navOpen = { ...this.navOpen, ...JSON.parse(raw) };
+      } catch {}
+      const s = this.viewToSection(this.view);
+      if (s && !this.navOpen[s]) this.navOpen[s] = true;
+    },
+
     /* ========= actions ========= */
     login(s){
       this.session = s;
@@ -6193,6 +6292,7 @@ function app() {
       else if (s.staffRole==='owner') this.view = 'total';
       else this.view = 'dashboard';
       this.settingsTab = (s.role==='staff' && s.staffRole==='fleet') ? 'catalog' : 'pricing';
+      this.loadNavState();
       this.resetIntake();
     },
     logout(){ this.session = null; this.view='dashboard'; this.activeVehicleId=null; },
@@ -6202,6 +6302,50 @@ function app() {
     },
 
     openVehicle(id){ this.activeVehicleId = id; if (this.session.role==='dealer'){ const n = this.notifications.find(x=>x.vehicleId===id && !x.readByDealer); if (n){ n.readByDealer=true; this.persist(); } } },
+
+    /* ========= Real SMS sending (Twilio) ========= */
+    async sendSms(to, body){
+      if (!to) return { ok:false, reason:'no-phone' };
+      try {
+        const res = await fetch('/api/notifications/sms', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ to, body })
+        });
+        if (res.status === 503) {
+          const j = await res.json().catch(()=>({}));
+          return { ok:false, reason:'not-configured', detail: j };
+        }
+        if (!res.ok) {
+          const txt = await res.text();
+          return { ok:false, reason:'twilio-error', detail: txt };
+        }
+        const data = await res.json();
+        return { ok:true, sid: data.sid, status: data.status };
+      } catch (e) {
+        return { ok:false, reason:'network', detail: e.message };
+      }
+    },
+    async testSms(){
+      if (!this.twilioTestForm.to || !this.twilioTestForm.body) { this.toast('Phone and message required','warning'); return; }
+      this.twilioTestForm.busy = true;
+      const res = await this.sendSms(this.twilioTestForm.to, this.twilioTestForm.body);
+      this.twilioTestForm.busy = false;
+      if (res.ok) {
+        this.toast('✓ SMS sent (sid: ' + res.sid + ')');
+        this.twilioTestForm.lastResult = 'Sent: ' + res.sid;
+      } else {
+        const msg = res.reason === 'not-configured' ? 'Twilio not configured. Add TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM to Vercel env vars.' : ('SMS failed: ' + (res.detail || res.reason));
+        this.toast(msg, 'warning');
+        this.twilioTestForm.lastResult = msg;
+      }
+    },
+    async checkTwilioStatus(){
+      try {
+        const res = await fetch('/api/notifications/sms');
+        const j = await res.json();
+        this.twilioStatus = j;
+      } catch { this.twilioStatus = { configured: false }; }
+    },
 
     setStatus(vehicleId, code){
       const v = this.vehicles.find(x=>x.id===vehicleId); if (!v) return;
@@ -6215,15 +6359,25 @@ function app() {
       if (dealer.notificationPrefs.email) channels.push('email');
       if (dealer.notificationPrefs.sms && (code==='ready' || code==='completed')) channels.push('sms');
       if (dealer.notificationPrefs.inApp) channels.push('inApp');
+      const subject = `Status update: ${v.year} ${v.make} ${v.model} → ${meta.label}`;
+      const body = `${dealer.name}: Stock #${v.stockNumber} is now ${meta.label}.${code==='ready' ? ' Ready for ' + (v.deliveryMethod==='delivery'?'delivery':'pickup') + '.':''}`;
       channels.forEach(ch=>{
-        this.notifications.push({
+        const to = ch==='sms'? dealer.contacts[0].phone : ch==='email'? dealer.contacts[0].email : 'In-app';
+        const note = {
           id: 'n_'+Math.random().toString(36).slice(2,9),
           dealershipId: dealer.id, vehicleId: v.id, channel: ch,
-          to: ch==='sms'? dealer.contacts[0].phone : ch==='email'? dealer.contacts[0].email : 'In-app',
-          subject: `Status update: ${v.year} ${v.make} ${v.model} → ${meta.label}`,
-          body: `${dealer.name}: Stock #${v.stockNumber} is now ${meta.label}.${code==='ready' ? ' Ready for ' + (v.deliveryMethod==='delivery'?'delivery':'pickup') + '.':''}`,
-          sentAt: Date.now(), delivered: true, readByDealer: false
-        });
+          to, subject, body,
+          sentAt: Date.now(), delivered: ch !== 'sms', readByDealer: false
+        };
+        this.notifications.push(note);
+        // Real SMS dispatch (fire-and-forget)
+        if (ch === 'sms' && to) {
+          this.sendSms(to, `Wash Depot: ${body}`).then(r => {
+            note.delivered = !!r.ok;
+            if (r.ok) note.twilioSid = r.sid; else note.smsError = r.reason;
+            this.persist();
+          });
+        }
       });
       // Auto-invoice on completed
       if (code==='completed' && !v.invoiceId) {
@@ -6462,11 +6616,20 @@ function app() {
       if (this.compose.inApp) channels.push('inApp');
       if (!channels.length) { this.toast('Pick at least one channel','warning'); return; }
       channels.forEach(ch=>{
-        this.notifications.push({
+        const to = ch==='email'? d.contacts[0].email : ch==='sms'? d.contacts[0].phone : 'In-app';
+        const note = {
           id: 'n_'+Math.random().toString(36).slice(2,9), dealershipId: d.id, vehicleId: this.compose.vehicleId, channel: ch,
-          to: ch==='email'? d.contacts[0].email : ch==='sms'? d.contacts[0].phone : 'In-app',
-          subject: this.compose.subject, body: this.compose.body, sentAt: Date.now(), delivered: true, readByDealer: false
-        });
+          to, subject: this.compose.subject, body: this.compose.body,
+          sentAt: Date.now(), delivered: ch !== 'sms', readByDealer: false
+        };
+        this.notifications.push(note);
+        if (ch === 'sms' && to) {
+          this.sendSms(to, `Wash Depot — ${this.compose.subject}\n\n${this.compose.body}`).then(r => {
+            note.delivered = !!r.ok;
+            if (r.ok) note.twilioSid = r.sid; else note.smsError = r.reason;
+            this.persist();
+          });
+        }
       });
       this.persist();
       this.composeOpen = false;

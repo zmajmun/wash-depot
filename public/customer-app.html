@@ -745,9 +745,16 @@ function customerApp() {
         const prevCars = this.queue.cars;
         this.queue = { cars: j.cars || 0, mins: j.mins || 0 };
         if (this.alert.enabled && this.queue.cars <= this.alert.threshold && prevCars > this.alert.threshold) {
-          this.showToast(`🔔 Line is short — ${this.queue.cars} cars. Come on in!`);
+          const msg = `Wash Depot — line is short! ${this.queue.cars} cars in line, ~${this.queue.mins} min wait. Come on in!`;
+          this.showToast(`🔔 ${msg}`);
           if (this.alert.channel === 'push' && 'Notification' in window && Notification.permission === 'granted') {
             new Notification('Wash Depot — line is short!', { body: `${this.queue.cars} cars in line. Come on in!`, icon:'/icon-192.svg' });
+          }
+          if (this.alert.channel === 'sms' && this.customer?.phone) {
+            fetch('/api/notifications/sms', {
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ to: this.customer.phone, body: msg })
+            }).catch(()=>{});
           }
           this.alert.enabled = false;
         }
