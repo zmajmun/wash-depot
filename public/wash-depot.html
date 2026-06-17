@@ -3526,10 +3526,6 @@
                 <h2 class="text-xl font-black" x-text="customerName(activeCustomer)"></h2>
                 <span class="tier-badge" :class="customerTier(activeCustomer)" x-text="tierLabel(customerTier(activeCustomer))"></span>
               </div>
-              <div class="text-xs text-slate-500 mt-0.5">
-                <span class="font-mono font-bold" x-text="activeCustomer.plate"></span>
-                · <span x-text="activeCustomer.vehicleMake + ' ' + activeCustomer.vehicleModel + (activeCustomer.vehicleColor ? ' · '+activeCustomer.vehicleColor : '')"></span>
-              </div>
               <div class="flex flex-wrap gap-1 mt-2">
                 <template x-for="tag in (activeCustomer.tags || [])" :key="tag">
                   <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold cursor-pointer hover:bg-rose-100 hover:text-rose-700" @click="toggleTag(activeCustomer.id, tag)" x-text="tag"></span>
@@ -3562,8 +3558,32 @@
             <!-- Vehicle -->
             <div class="px-6 py-5 border-b border-slate-100">
               <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Vehicle</h3>
+              <!-- Vehicle summary (moved out of the title) -->
+              <div class="mb-3">
+                <div class="font-black text-base leading-tight" x-text="[activeCustomer.vehicleYear, activeCustomer.vehicleMake, activeCustomer.vehicleModel].filter(Boolean).join(' ') || 'Vehicle on file'"></div>
+                <div class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                  <span class="w-3.5 h-3.5 rounded-full border border-slate-300 inline-block flex-shrink-0" :style="`background:${vehicleColorHex(activeCustomer.vehicleColor)}`"></span>
+                  <span x-text="activeCustomer.vehicleColor || '—'"></span>
+                  <span>·</span>
+                  <span class="font-mono font-bold text-slate-700" x-text="activeCustomer.plate || '—'"></span>
+                </div>
+              </div>
+              <!-- Vehicle details -->
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div><label class="ab-label">Year</label><input class="ab-input" x-model="activeCustomer.vehicleYear" @change="persist()" placeholder="—" /></div>
+                <div><label class="ab-label">Make</label><input class="ab-input" x-model="activeCustomer.vehicleMake" @change="persist()" /></div>
+                <div><label class="ab-label">Model</label><input class="ab-input" x-model="activeCustomer.vehicleModel" @change="persist()" /></div>
+                <div>
+                  <label class="ab-label">Color</label>
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full border border-slate-300 flex-shrink-0" :style="`background:${vehicleColorHex(activeCustomer.vehicleColor)}`"></span>
+                    <input class="ab-input flex-1" x-model="activeCustomer.vehicleColor" @change="persist()" />
+                  </div>
+                </div>
+                <div class="col-span-2"><label class="ab-label">License plate</label><input class="ab-input font-mono" x-model="activeCustomer.plate" @change="persist()" /></div>
+              </div>
               <!-- LPR intake capture -->
-              <div class="lpr-capture mb-4">
+              <div class="lpr-capture">
                 <template x-if="activeCustomer.photoUrl">
                   <img :src="activeCustomer.photoUrl" class="lpr-photo" alt="Vehicle intake capture" />
                 </template>
@@ -3585,20 +3605,6 @@
                 <span class="vf vf-tl"></span><span class="vf vf-tr"></span><span class="vf vf-bl"></span><span class="vf vf-br"></span>
                 <div class="lpr-top"><span class="lpr-dot"></span> LPR Capture <span class="lpr-time" x-show="activeCustomer.firstSeenAt" x-text="'· intake ' + formatDate(activeCustomer.firstSeenAt, 'long')"></span></div>
                 <div class="lpr-plate" x-text="activeCustomer.plate || '—'"></div>
-              </div>
-              <!-- Vehicle details -->
-              <div class="grid grid-cols-2 gap-3">
-                <div><label class="ab-label">Year</label><input class="ab-input" x-model="activeCustomer.vehicleYear" @change="persist()" placeholder="—" /></div>
-                <div><label class="ab-label">Make</label><input class="ab-input" x-model="activeCustomer.vehicleMake" @change="persist()" /></div>
-                <div><label class="ab-label">Model</label><input class="ab-input" x-model="activeCustomer.vehicleModel" @change="persist()" /></div>
-                <div>
-                  <label class="ab-label">Color</label>
-                  <div class="flex items-center gap-2">
-                    <span class="w-5 h-5 rounded-full border border-slate-300 flex-shrink-0" :style="`background:${vehicleColorHex(activeCustomer.vehicleColor)}`"></span>
-                    <input class="ab-input flex-1" x-model="activeCustomer.vehicleColor" @change="persist()" />
-                  </div>
-                </div>
-                <div class="col-span-2"><label class="ab-label">License plate</label><input class="ab-input font-mono" x-model="activeCustomer.plate" @change="persist()" /></div>
               </div>
             </div>
 
