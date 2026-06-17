@@ -2933,9 +2933,9 @@
           <!-- ============ DATA TAB ============ -->
           <div x-show="settingsTab==='data'">
             <div class="card p-5">
-              <h3 class="font-bold mb-1">Reset / data</h3>
-              <p class="text-xs text-slate-500 mb-4">Resets dealerships, vehicles, invoices, and notifications back to demo defaults.</p>
-              <button @click="if(confirm('Reset all data?')){ resetAll(); }" class="btn btn-danger">Reset all data</button>
+              <h3 class="font-bold mb-1">Load full demo data</h3>
+              <p class="text-xs text-slate-500 mb-4">Fills every page with a fresh, realistic dataset — 14 days of wash &amp; retail sales (revenue, charts), vehicles across all job statuses, dealerships, invoices, 30 CRM customers with visit history, and the live lane. Use this to see the whole app populated. You can wipe it later. Replaces current data in this browser.</p>
+              <button @click="if(confirm('Load a fresh full demo dataset? This replaces the current data in this browser.')){ resetAll(); }" class="btn btn-primary">Load full demo data</button>
             </div>
           </div>
         </div>
@@ -4397,9 +4397,11 @@ function app() {
         this.applyState(cloudData);
         // Mirror to localStorage so subsequent reads are instant
         localStorage.setItem('washdepot_v1', JSON.stringify(cloudData));
-        // Migration: seed wash/retail and CRM if missing
+        // Migration: seed wash/retail and CRM if missing. Also backfill sales —
+        // older cached states have packages/products but empty washSales/retailSales,
+        // which left dashboards + revenue showing $0. Regenerate sales when missing.
         let migrated = false;
-        if (!this.washPackages.length || !this.retailProducts.length) { this.seedWashAndRetail(); migrated = true; }
+        if (!this.washPackages.length || !this.retailProducts.length || !(this.washSales||[]).length || !(this.retailSales||[]).length) { this.seedWashAndRetail(); migrated = true; }
         if (!this.customers.length) { this.seedCRM(); migrated = true; }
         if (migrated) this.persist();
         return;
@@ -4411,7 +4413,7 @@ function app() {
         if (raw) {
           const data = JSON.parse(raw);
           this.applyState(data);
-          if (!this.washPackages.length || !this.retailProducts.length) this.seedWashAndRetail();
+          if (!this.washPackages.length || !this.retailProducts.length || !(this.washSales||[]).length || !(this.retailSales||[]).length) this.seedWashAndRetail();
           if (!this.customers.length) this.seedCRM();
           // migration: ensure each retail product has SKU, cost, etc.
           this.retailProducts.forEach((p, i) =>{
