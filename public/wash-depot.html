@@ -89,6 +89,21 @@
   details >summary::-webkit-details-marker { display: none; }
   .toast-enter { animation: slidein .25s ease-out; }
   @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  /* LPR intake capture (customer drawer vehicle section) */
+  .lpr-capture { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: radial-gradient(120% 100% at 50% 0%, #1b2433 0%, #0b0f1a 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+  .lpr-illus { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .lpr-car { width: 76%; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.45)); transform: perspective(620px) rotateY(-16deg); }
+  .lpr-photo { width: 100%; height: 100%; object-fit: cover; }
+  .lpr-top { position: absolute; top: 8px; left: 11px; font-size: 10px; letter-spacing: 0.12em; font-weight: 700; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
+  .lpr-time { color: rgba(255,255,255,0.5); font-weight: 600; letter-spacing: 0.03em; text-transform: none; }
+  .lpr-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4444; animation: lprpulse 1.4s ease-in-out infinite; }
+  @keyframes lprpulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+  .lpr-plate { position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); background: #f8fafc; color: #0f172a; font-family: ui-monospace, Menlo, monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.16em; padding: 3px 12px; border-radius: 5px; box-shadow: 0 2px 7px rgba(0,0,0,0.45); border: 2px solid #1f2937; }
+  .vf { position: absolute; width: 15px; height: 15px; border: 0 solid rgba(255,255,255,0.5); }
+  .vf-tl { top: 8px; left: 8px; border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 4px; }
+  .vf-tr { top: 8px; right: 8px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 4px; }
+  .vf-bl { bottom: 8px; left: 8px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 4px; }
+  .vf-br { bottom: 8px; right: 8px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 4px; }
   /* Print friendly invoice */
   @media print {
     body * { visibility: hidden; }
@@ -3544,6 +3559,49 @@
               </div>
             </div>
 
+            <!-- Vehicle -->
+            <div class="px-6 py-5 border-b border-slate-100">
+              <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Vehicle</h3>
+              <!-- LPR intake capture -->
+              <div class="lpr-capture mb-4">
+                <template x-if="activeCustomer.photoUrl">
+                  <img :src="activeCustomer.photoUrl" class="lpr-photo" alt="Vehicle intake capture" />
+                </template>
+                <template x-if="!activeCustomer.photoUrl">
+                  <div class="lpr-illus" :style="`--car:${vehicleColorHex(activeCustomer.vehicleColor)}`">
+                    <svg viewBox="0 0 220 96" class="lpr-car" preserveAspectRatio="xMidYMid meet">
+                      <ellipse cx="110" cy="87" rx="90" ry="6" fill="rgba(0,0,0,0.35)"/>
+                      <path d="M18 66 Q16 52 30 50 L60 49 Q70 33 92 31 L132 31 Q150 32 162 50 L188 54 Q202 56 202 66 L202 72 Q202 76 196 76 L24 76 Q18 76 18 72 Z" fill="var(--car)"/>
+                      <path d="M64 49 Q73 35 92 33 L130 33 Q148 34 158 49 Z" fill="rgba(255,255,255,0.14)"/>
+                      <path d="M70 47 Q78 37 92 36 L107 36 L107 47 Z" fill="#0f172a" opacity="0.82"/>
+                      <path d="M113 36 L128 36 Q143 37 151 47 L113 47 Z" fill="#0f172a" opacity="0.82"/>
+                      <line x1="110" y1="48" x2="110" y2="72" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+                      <circle cx="195" cy="61" r="3.4" fill="#fde68a"/>
+                      <circle cx="62" cy="76" r="14" fill="#111827"/><circle cx="62" cy="76" r="6" fill="#374151"/>
+                      <circle cx="158" cy="76" r="14" fill="#111827"/><circle cx="158" cy="76" r="6" fill="#374151"/>
+                    </svg>
+                  </div>
+                </template>
+                <span class="vf vf-tl"></span><span class="vf vf-tr"></span><span class="vf vf-bl"></span><span class="vf vf-br"></span>
+                <div class="lpr-top"><span class="lpr-dot"></span> LPR Capture <span class="lpr-time" x-show="activeCustomer.firstSeenAt" x-text="'· intake ' + formatDate(activeCustomer.firstSeenAt, 'long')"></span></div>
+                <div class="lpr-plate" x-text="activeCustomer.plate || '—'"></div>
+              </div>
+              <!-- Vehicle details -->
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="ab-label">Year</label><input class="ab-input" x-model="activeCustomer.vehicleYear" @change="persist()" placeholder="—" /></div>
+                <div><label class="ab-label">Make</label><input class="ab-input" x-model="activeCustomer.vehicleMake" @change="persist()" /></div>
+                <div><label class="ab-label">Model</label><input class="ab-input" x-model="activeCustomer.vehicleModel" @change="persist()" /></div>
+                <div>
+                  <label class="ab-label">Color</label>
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full border border-slate-300 flex-shrink-0" :style="`background:${vehicleColorHex(activeCustomer.vehicleColor)}`"></span>
+                    <input class="ab-input flex-1" x-model="activeCustomer.vehicleColor" @change="persist()" />
+                  </div>
+                </div>
+                <div class="col-span-2"><label class="ab-label">License plate</label><input class="ab-input font-mono" x-model="activeCustomer.plate" @change="persist()" /></div>
+              </div>
+            </div>
+
             <!-- Upsell suggestion -->
             <div class="px-6 py-4 bg-amber-50 border-b border-amber-100">
               <div class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Suggested play</div>
@@ -4730,6 +4788,23 @@ function app() {
     },
 
     _mostCommon(arr){ const m={}; arr.forEach(x=>m[x]=(m[x]||0)+1); return Object.entries(m).sort((a,b)=>b[1]-a[1])[0]?.[0]; },
+
+    // Map a paint-color name (e.g. "Velocity Blue", "Pearl White") to a hex for
+    // the LPR capture illustration + color swatch. Specific names checked first.
+    vehicleColorHex(name){
+      const n = (name || '').toLowerCase();
+      const map = [
+        ['pearl','#eef1f5'],['quartz','#e0e4ea'],['glacier','#e4e8ed'],['mineral','#e0e4ea'],['alpine','#eceef1'],['summit white','#e9ebee'],['crystal','#dfe3e8'],['white','#e8eaed'],
+        ['onyx','#23272e'],['jet','#22262d'],['ebony','#22262d'],['solid black','#22262e'],['mythos','#23272e'],['black','#262a31'],
+        ['silver','#c4c9cf'],['atomic','#c7ccd1'],['iridium','#c8cdd2'],['steel','#7c8794'],['modern steel','#7c8794'],['magnetic','#6b7280'],['graphite','#4b5563'],['gun','#5b6470'],['brooklyn','#6b7280'],['sting','#5b6470'],['sonic','#6b7280'],['grey','#9aa1a9'],['gray','#9aa1a9'],
+        ['velocity','#2563eb'],['blue','#2563eb'],
+        ['ruby','#b91c1c'],['diamond red','#c0231f'],['soul red','#c0231f'],['red','#dc2626'],
+        ['cinnamon','#9a4a23'],['brown','#7c4a2a'],
+        ['green','#16a34a'],
+      ];
+      for (const [k,v] of map){ if (n.includes(k)) return v; }
+      return '#9aa1a9';
+    },
 
     seedWashAndRetail() {
       this.washPackages = [
