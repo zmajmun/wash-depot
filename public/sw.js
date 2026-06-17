@@ -1,11 +1,11 @@
 // Wash Depot — Customer PWA service worker
-const CACHE = 'wd-customer-v1';
+const CACHE = 'wd-customer-v2';
 const ASSETS = [
   '/customer-app',
   '/customer-app.html',
   '/manifest.webmanifest',
-  '/icon-192.svg',
-  '/icon-512.svg',
+  '/icon-192.png?v=2',
+  '/icon-512.png?v=2',
   'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js'
 ];
@@ -46,8 +46,8 @@ self.addEventListener('push', (e) => {
   e.waitUntil(
     self.registration.showNotification(data.title || 'Wash Depot', {
       body: data.body || 'The line just got shorter — come on in!',
-      icon: '/icon-192.svg',
-      badge: '/icon-192.svg',
+      icon: '/icon-192.png?v=2',
+      badge: '/icon-192.png?v=2',
       tag: data.tag || 'wd-line-alert',
       data: data
     })

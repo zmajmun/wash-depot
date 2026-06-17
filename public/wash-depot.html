@@ -72,21 +72,21 @@
   .lane-card.clickable:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(15,23,42,.18); border-color: #cbd5e1; }
   .lane-card .plate { font-family: 'Courier New', ui-monospace, monospace; font-weight: 900; font-size: 24px; letter-spacing: 2px; background: #fff; color: #000; display: inline-block; padding: 4px 10px; border-radius: 4px; border: 2px solid #1a1a1a; }
   @keyframes pulse-new { 0%,100% { box-shadow: 0 0 10px #06b6d4, 0 0 22px #06b6d4, 0 0 0 rgba(6,182,212,.0); } 50% { box-shadow: 0 0 26px #22d3ee, 0 0 56px #06b6d4, 0 0 0 8px rgba(6,182,212,.18); } }
-  .tier-new      { border-color: #06b6d4; border-width: 2px; animation: pulse-new 2.0s ease-in-out infinite; }
-  .tier-regular  { border-color: #e5e7eb; }
-  .tier-loyal    { border-color: #a855f7; border-left: 4px solid #a855f7; }
-  .tier-vip      { border-color: #ec4899; border-left: 4px solid #ec4899; }
+  .tier-new { border-color: #06b6d4; border-width: 2px; animation: pulse-new 2.0s ease-in-out infinite; }
+  .tier-regular { border-color: #e5e7eb; }
+  .tier-loyal { border-color: #a855f7; border-left: 4px solid #a855f7; }
+  .tier-vip { border-color: #ec4899; border-left: 4px solid #ec4899; }
   .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
-  .tier-badge.new     { background: #06b6d4; color: #fff; }
+  .tier-badge.new { background: #06b6d4; color: #fff; }
   .tier-badge.regular { background: #e2e8f0; color: #334155; }
-  .tier-badge.loyal   { background: #a855f7; color: #fff; }
-  .tier-badge.vip     { background: #db2777; color: #fff; }
+  .tier-badge.loyal { background: #a855f7; color: #fff; }
+  .tier-badge.vip { background: #db2777; color: #fff; }
   .scan-dot { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; animation: pulse-scan 1.2s ease-in-out infinite; display: inline-block; }
   @keyframes pulse-scan { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.7); } 70% { box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
-  .sparkle::before { content: "✨"; }
+  .sparkle::before { content: ""; }
   .timeline-line::before { content: ""; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
-  details > summary { list-style: none; cursor: pointer; }
-  details > summary::-webkit-details-marker { display: none; }
+  details >summary { list-style: none; cursor: pointer; }
+  details >summary::-webkit-details-marker { display: none; }
   .toast-enter { animation: slidein .25s ease-out; }
   @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   /* Print friendly invoice */
@@ -182,7 +182,7 @@
     <div class="card w-full max-w-md p-8 shadow-xl">
       <div class="flex items-center gap-3 mb-6">
         <div class="wd-logo-wrap w-14 h-14 rounded-xl overflow-hidden bg-black flex-shrink-0">
-          <img class="wd-logo-img" src="wash-depot-logo.png" onerror="this.classList.add('failed')" alt="Wash Depot logo" />
+          <img class="wd-logo-img" src="wash-depot-logo.png?v=2" onerror="this.classList.add('failed')" alt="Wash Depot logo" />
           <svg class="wd-logo-svg" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
         </div>
         <div>
@@ -195,7 +195,7 @@
       <div x-show="clerkPendingAccess">
         <h1 class="text-lg font-bold mb-1">Account pending access</h1>
         <p class="text-sm text-slate-500 mb-4">
-          Hi <span x-text="window.__CLERK_USER__?.name || 'there'"></span> — you're signed in, but your account hasn't been granted a role yet.
+          Hi <span x-text="window.__CLERK_USER__?.name || 'there'"></span>— you're signed in, but your account hasn't been granted a role yet.
           The Wash Depot administrator needs to invite you with the correct role and (for dealers) the right dealership.
         </p>
         <div class="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mb-4">
@@ -241,7 +241,7 @@
       </div>
 
         <p class="text-[11px] text-slate-400 mt-5 leading-relaxed">
-          Demo data is stored locally in your browser. Use <span class="kbd">⌘/Ctrl</span> + <span class="kbd">K</span> to search anywhere in the app.
+          Demo data is stored locally in your browser. Use <span class="kbd">⌘/Ctrl</span>+ <span class="kbd">K</span>to search anywhere in the app.
           Reset everything from Settings.
         </p>
       </div>
@@ -257,7 +257,7 @@
   <aside class="w-60 flex-shrink-0 flex flex-col" style="background:#000; color:#fff;">
     <div class="px-4 pt-5 pb-4 flex flex-col items-center text-center" style="background:#000;">
       <div class="wd-logo-wrap w-24 h-24 rounded-full overflow-hidden flex-shrink-0" style="background:#000;">
-        <img class="wd-logo-img w-full h-full object-contain" src="wash-depot-logo.png" onerror="this.classList.add('failed')" alt="Wash Depot" />
+        <img class="wd-logo-img w-full h-full object-contain" src="wash-depot-logo.png?v=2" onerror="this.classList.add('failed')" alt="Wash Depot" />
         <svg class="wd-logo-svg w-full h-full" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
       </div>
       <div class="text-[10px] uppercase tracking-[0.18em] text-white/60 mt-2 font-bold" x-text="session.role === 'staff' ? 'Operations' : 'Dealer Portal'"></div>
@@ -274,8 +274,8 @@
               <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.overview ? '' : '-rotate-90'">▾</span>
             </button>
             <div x-show="navOpen.overview" class="space-y-0.5">
-              <a @click.prevent="view='total'" :class="{'active': view==='total'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏠 Business Overview</a>
-              <a @click.prevent="view='insights'" :class="{'active': view==='insights'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">✨ AI Insights</a>
+              <a @click.prevent="view='total'" :class="{'active': view==='total'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Business Overview</a>
+              <a @click.prevent="view='insights'" :class="{'active': view==='insights'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">AI Insights</a>
             </div>
           </div>
 
@@ -286,13 +286,13 @@
               <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.detailing ? '' : '-rotate-90'">▾</span>
             </button>
             <div x-show="navOpen.detailing" class="space-y-0.5">
-              <a @click.prevent="view='dashboard'" :class="{'active': view==='dashboard'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📊 Dashboard</a>
-              <a @click.prevent="view='bookings'" :class="{'active': view==='bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📅 Bookings <span x-show="upcomingBookings.length>0" class="ml-auto bg-cyan-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="upcomingBookings.length"></span></a>
-              <a @click.prevent="view='intake'" :class="{'active': view==='intake'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">➕ New Intake</a>
-              <a @click.prevent="view='board'" :class="{'active': view==='board'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🚗 Active Jobs</a>
-              <a @click.prevent="view='vehicles'" :class="{'active': view==='vehicles'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🗂 All Vehicles</a>
-              <a @click.prevent="view='dealerships'" :class="{'active': view==='dealerships'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🏢 Dealerships</a>
-              <a x-show="isOwner" @click.prevent="view='billing'" :class="{'active': view==='billing'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💵 Billing</a>
+              <a @click.prevent="view='dashboard'" :class="{'active': view==='dashboard'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Dashboard</a>
+              <a @click.prevent="view='bookings'" :class="{'active': view==='bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Bookings <span x-show="upcomingBookings.length>0" class="ml-auto bg-cyan-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="upcomingBookings.length"></span></a>
+              <a @click.prevent="view='intake'" :class="{'active': view==='intake'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">New Intake</a>
+              <a @click.prevent="view='board'" :class="{'active': view==='board'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Active Jobs</a>
+              <a @click.prevent="view='vehicles'" :class="{'active': view==='vehicles'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">All Vehicles</a>
+              <a @click.prevent="view='dealerships'" :class="{'active': view==='dealerships'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Dealerships</a>
+              <a x-show="isOwner" @click.prevent="view='billing'" :class="{'active': view==='billing'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Billing</a>
             </div>
           </div>
 
@@ -303,11 +303,11 @@
               <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.washretail ? '' : '-rotate-90'">▾</span>
             </button>
             <div x-show="navOpen.washretail" class="space-y-0.5">
-              <a @click.prevent="view='lane'" :class="{'active': view==='lane'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📷 Live Lane</a>
-              <a @click.prevent="view='wash'" :class="{'active': view==='wash'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💧 Wash Line</a>
-              <a @click.prevent="view='customers'" :class="{'active': view==='customers'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">👥 Customers (CRM)</a>
-              <a @click.prevent="view='customer-app'" :class="{'active': view==='customer-app'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📱 Customer App</a>
-              <a @click.prevent="view='retail'" :class="{'active': view==='retail'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🛒 Retail Products</a>
+              <a @click.prevent="view='lane'" :class="{'active': view==='lane'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Live Lane</a>
+              <a @click.prevent="view='wash'" :class="{'active': view==='wash'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Wash Line</a>
+              <a @click.prevent="view='customers'" :class="{'active': view==='customers'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Customers (CRM)</a>
+              <a @click.prevent="view='customer-app'" :class="{'active': view==='customer-app'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Customer App</a>
+              <a @click.prevent="view='retail'" :class="{'active': view==='retail'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Retail Products</a>
             </div>
           </div>
 
@@ -318,9 +318,9 @@
               <span class="text-white/30 text-[10px] transition-transform" :class="navOpen.other ? '' : '-rotate-90'">▾</span>
             </button>
             <div x-show="navOpen.other" class="space-y-0.5">
-              <a @click.prevent="view='notifications'" :class="{'active': view==='notifications'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">🔔 Notifications <span x-show="unreadStaffCount>0" class="ml-auto bg-amber-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="unreadStaffCount"></span></a>
-              <a @click.prevent="view='reports'" :class="{'active': view==='reports'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📈 Reports</a>
-              <a @click.prevent="view='settings'" :class="{'active': view==='settings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">⚙️ Settings</a>
+              <a @click.prevent="view='notifications'" :class="{'active': view==='notifications'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Notifications <span x-show="unreadStaffCount>0" class="ml-auto bg-amber-400 text-slate-900 text-[10px] px-1.5 rounded-full" x-text="unreadStaffCount"></span></a>
+              <a @click.prevent="view='reports'" :class="{'active': view==='reports'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Reports</a>
+              <a @click.prevent="view='settings'" :class="{'active': view==='settings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Settings</a>
             </div>
           </div>
         </div>
@@ -328,9 +328,9 @@
       <!-- Dealer nav -->
       <template x-if="session.role === 'dealer'">
         <div>
-          <a @click.prevent="view='d-bookings'" :class="{'active': view==='d-bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">📅 My Bookings</a>
-          <a @click.prevent="view='d-schedule'; resetBooking()" :class="{'active': view==='d-schedule'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">➕ Schedule Service</a>
-          <a @click.prevent="view='d-invoices'" :class="{'active': view==='d-invoices'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">💵 Invoices &amp; Payments</a>
+          <a @click.prevent="view='d-bookings'" :class="{'active': view==='d-bookings'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">My Bookings</a>
+          <a @click.prevent="view='d-schedule'; resetBooking()" :class="{'active': view==='d-schedule'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Schedule Service</a>
+          <a @click.prevent="view='d-invoices'" :class="{'active': view==='d-invoices'}" class="nav-item flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer">Invoices &amp; Payments</a>
         </div>
       </template>
     </nav>
@@ -342,7 +342,7 @@
           <div class="truncate font-semibold" x-text="session.name"></div>
           <div class="text-white/60 text-[11px]" x-text="session.role === 'staff' ? session.staffRole : currentDealership?.name"></div>
         </div>
-        <button @click="logout()" title="Sign out" class="hover:bg-white/10 p-1.5 rounded">↩︎</button>
+        <button @click="logout()" title="Sign out" class="hover:bg-white/10 px-2 py-1 rounded text-xs">Sign out</button>
       </div>
     </div>
   </aside>
@@ -352,7 +352,7 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
       <div class="px-6 py-3 flex items-center gap-4">
         <div class="flex-1">
-          <input @click="commandOpen=true" placeholder="Search vehicles, dealers, VIN, stock #…  (⌘K)" class="w-full max-w-md px-3 py-1.5 text-sm rounded-md border border-slate-200 bg-slate-50 focus:bg-white" readonly />
+          <input @click="commandOpen=true" placeholder="Search vehicles, dealers, VIN, stock #… (⌘K)" class="w-full max-w-md px-3 py-1.5 text-sm rounded-md border border-slate-200 bg-slate-50 focus:bg-white" readonly />
         </div>
         <div class="text-xs text-slate-500" x-text="formatDate(now, 'long')"></div>
       </div>
@@ -420,14 +420,13 @@
               <div class="space-y-2 text-sm">
                 <template x-for="a in alerts" :key="a.id">
                   <div class="flex items-start gap-2 p-2 rounded-md" :class="a.level==='danger'?'bg-rose-50':'bg-amber-50'">
-                    <span x-text="a.level==='danger'?'⚠️':'🔔'"></span>
                     <div class="flex-1">
                       <div class="font-semibold text-xs" x-text="a.title"></div>
                       <div class="text-xs text-slate-600" x-text="a.body"></div>
                     </div>
                   </div>
                 </template>
-                <div x-show="alerts.length===0" class="text-xs text-slate-400 p-2">All good — no alerts. ✨</div>
+                <div x-show="alerts.length===0" class="text-xs text-slate-400 p-2">All good — no alerts. </div>
               </div>
             </div>
           </div>
@@ -488,7 +487,7 @@
             <div>
               <h1 class="text-2xl font-black tracking-tight">Bookings</h1>
               <p class="text-sm text-slate-500">
-                <span x-text="filteredBookings.length"></span> of <span x-text="upcomingBookings.length"></span> upcoming
+                <span x-text="filteredBookings.length"></span>of <span x-text="upcomingBookings.length"></span>upcoming
                 <span x-show="bookingsFilterActive">· <button @click="resetBookingsFilter()" class="text-teal-700 hover:underline">Clear filters</button></span>
               </p>
             </div>
@@ -581,10 +580,10 @@
                         <div class="flex justify-between"><span class="text-slate-500">Services</span><span class="font-semibold" x-text="v.services.length"></span></div>
                         <div x-show="canSeePrices" class="flex justify-between"><span class="text-slate-500">Est. total</span><span class="font-semibold" x-text="money(vehicleTotal(v))"></span></div>
                       </div>
-                      <div x-show="v.notes" class="text-[11px] text-slate-600 italic mb-2 line-clamp-2" x-text="'📝 ' + v.notes"></div>
+                      <div x-show="v.notes" class="text-[11px] text-slate-600 italic mb-2 line-clamp-2" x-text="v.notes"></div>
                       <div class="flex gap-2">
-                        <button x-show="!v.confirmed" @click="confirmBooking(v.id)" class="btn btn-primary text-xs flex-1">✓ Confirm</button>
-                        <button x-show="v.confirmed" disabled class="btn btn-outline text-xs flex-1 opacity-50 cursor-default">✓ Confirmed</button>
+                        <button x-show="!v.confirmed" @click="confirmBooking(v.id)" class="btn btn-primary text-xs flex-1">Confirm</button>
+                        <button x-show="v.confirmed" disabled class="btn btn-outline text-xs flex-1 opacity-50 cursor-default">Confirmed</button>
                         <button @click="setStatus(v.id, 'dropped')" class="btn btn-outline text-xs">Check in</button>
                         <button @click="openVehicle(v.id)" class="btn btn-outline text-xs">⋯</button>
                       </div>
@@ -595,7 +594,6 @@
             </template>
 
             <div x-show="!bookingsByDay.length" class="card p-12 text-center text-slate-400">
-              <div class="text-5xl mb-3">📅</div>
               <div class="font-bold mb-1" x-text="bookingsFilterActive ? 'No bookings match your filters' : 'No upcoming bookings'"></div>
               <div class="text-sm" x-show="!bookingsFilterActive">Dealers can schedule services from their portal.</div>
               <button x-show="bookingsFilterActive" @click="resetBookingsFilter()" class="text-sm text-teal-700 hover:underline mt-2">Clear filters →</button>
@@ -755,8 +753,8 @@
                       <div class="text-[11px] text-slate-500" x-text="'#' + v.stockNumber + ' · ' + v.color"></div>
                       <div class="flex items-center gap-1 mt-1">
                         <span class="text-[10px] text-slate-400" x-text="'Promised ' + relativeTime(v.promisedTime)"></span>
-                        <span x-show="v.arrivalMethod==='dropoff'" class="ml-auto text-[10px]" title="Dealer dropped off">📥</span>
-                        <span x-show="v.arrivalMethod==='pickup'" class="ml-auto text-[10px]" title="WD picked up">🚚</span>
+                        <span x-show="v.arrivalMethod==='dropoff'" class="ml-auto text-[10px]" title="Dealer dropped off"></span>
+                        <span x-show="v.arrivalMethod==='pickup'" class="ml-auto text-[10px]" title="WD picked up"></span>
                       </div>
                     </button>
                   </template>
@@ -796,32 +794,32 @@
                   <span class="text-xs uppercase font-bold tracking-wider text-slate-500" x-text="s.label"></span>
                 </div>
                 <div class="text-3xl font-black mt-1" x-text="vehiclesByStatus(s.code).length"></div>
-                <div class="text-[11px] text-slate-500 mt-1" x-show="canSeePrices && s.code !== 'completed'" x-text="money(vehiclesByStatus(s.code).reduce((sum, v) => sum + vehicleTotal(v), 0)) + ' value'"></div>
+                <div class="text-[11px] text-slate-500 mt-1" x-show="canSeePrices && s.code !== 'completed'" x-text="money(vehiclesByStatus(s.code).reduce((sum, v) =>sum + vehicleTotal(v), 0)) + ' value'"></div>
                 <div class="text-[11px] mt-2 space-y-0.5">
                   <template x-if="s.code === 'scheduled'">
                     <div class="text-slate-500">
-                      <span x-text="vehiclesByStatus(s.code).filter(v => { const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() && d.getTime() < today.getTime() + 86400000 }).length"></span> today
-                      · <span x-text="vehiclesByStatus(s.code).filter(v => { const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() + 86400000 && d.getTime() < today.getTime() + 7*86400000 }).length"></span> this week
+                      <span x-text="vehiclesByStatus(s.code).filter(v =>{ const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() && d.getTime() < today.getTime() + 86400000 }).length"></span>today
+                      · <span x-text="vehiclesByStatus(s.code).filter(v =>{ const d = new Date(v.dropOffTime); const today = new Date(); today.setHours(0,0,0,0); return d.getTime() >= today.getTime() + 86400000 && d.getTime() < today.getTime() + 7*86400000 }).length"></span>this week
                     </div>
                   </template>
                   <template x-if="s.code === 'dropped' || s.code === 'queue' || s.code === 'service' || s.code === 'qc'">
                     <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
-                      <span x-text="vehiclesByStatus(s.code).filter(v=>isOverdue(v)).length"></span> overdue
+                      <span x-text="vehiclesByStatus(s.code).filter(v=>isOverdue(v)).length"></span>overdue
                       <span x-show="vehiclesByStatus(s.code).filter(v=>v.priority==='rush' || v.priority==='vip').length">
-                        · <span x-text="vehiclesByStatus(s.code).filter(v=>v.priority==='rush' || v.priority==='vip').length"></span> rush/VIP
+                        · <span x-text="vehiclesByStatus(s.code).filter(v=>v.priority==='rush' || v.priority==='vip').length"></span>rush/VIP
                       </span>
                     </div>
                   </template>
                   <template x-if="s.code === 'ready'">
                     <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
-                      <span x-text="vehiclesByStatus(s.code).filter(v => v.deliveryMethod === 'delivery').length"></span> to deliver
-                      · <span x-text="vehiclesByStatus(s.code).filter(v => v.deliveryMethod === 'pickup').length"></span> pickup
+                      <span x-text="vehiclesByStatus(s.code).filter(v =>v.deliveryMethod === 'delivery').length"></span>to deliver
+                      · <span x-text="vehiclesByStatus(s.code).filter(v =>v.deliveryMethod === 'pickup').length"></span>pickup
                     </div>
                   </template>
                   <template x-if="s.code === 'completed'">
                     <div class="text-slate-500" x-show="vehiclesByStatus(s.code).length">
-                      <span x-text="vehiclesByStatus(s.code).filter(v=>{ const today = new Date(); today.setHours(0,0,0,0); return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= today.getTime()) }).length"></span> today
-                      · <span x-text="vehiclesByStatus(s.code).filter(v=>{ const week = Date.now()-7*86400000; return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= week) }).length"></span> this week
+                      <span x-text="vehiclesByStatus(s.code).filter(v=>{ const today = new Date(); today.setHours(0,0,0,0); return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= today.getTime()) }).length"></span>today
+                      · <span x-text="vehiclesByStatus(s.code).filter(v=>{ const week = Date.now()-7*86400000; return v.statusHistory?.some(h=>h.status==='completed' && new Date(h.at).getTime() >= week) }).length"></span>this week
                     </div>
                   </template>
                 </div>
@@ -867,8 +865,8 @@
                       </span>
                     </td>
                     <td class="p-3 text-xs text-slate-500">
-                      <span x-show="v.arrivalMethod==='dropoff'">📥 Dropped off</span>
-                      <span x-show="v.arrivalMethod==='pickup'">🚚 We picked up</span>
+                      <span x-show="v.arrivalMethod==='dropoff'">Dropped off</span>
+                      <span x-show="v.arrivalMethod==='pickup'">We picked up</span>
                       <span x-show="!v.arrivalMethod" x-text="formatDate(v.dropOffTime)"></span>
                     </td>
                     <td class="p-3 text-xs" :class="isOverdue(v) ? 'text-rose-600 font-semibold' : 'text-slate-500'" x-text="formatDate(v.promisedTime)"></td>
@@ -899,9 +897,9 @@
                     <div class="font-bold" x-text="d.name"></div>
                     <div class="text-xs text-slate-500" x-text="d.address"></div>
                     <div class="flex flex-wrap gap-3 text-xs mt-2">
-                      <span><b x-text="vehiclesForDealer(d.id).filter(v=>v.status!=='completed').length"></b> active</span>
-                      <span><b x-text="vehiclesForDealer(d.id).length"></b> all-time</span>
-                      <span class="text-rose-600" x-show="canSeePrices && dealerOpenBalance(d.id)>0"><b x-text="money(dealerOpenBalance(d.id))"></b> open</span>
+                      <span><b x-text="vehiclesForDealer(d.id).filter(v=>v.status!=='completed').length"></b>active</span>
+                      <span><b x-text="vehiclesForDealer(d.id).length"></b>all-time</span>
+                      <span class="text-rose-600" x-show="canSeePrices && dealerOpenBalance(d.id)>0"><b x-text="money(dealerOpenBalance(d.id))"></b>open</span>
                     </div>
                   </div>
                   <button @click="openDealership(d.id)" class="btn btn-outline text-xs">Open</button>
@@ -1054,10 +1052,10 @@
 
           <!-- Stream tabs -->
           <div class="card p-2 mb-4 flex gap-1">
-            <button @click="reportStream='all'"       :class="reportStream==='all'       ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">All Streams</button>
-            <button @click="reportStream='detailing'" :class="reportStream==='detailing' ? 'bg-teal-600 text-white'  : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">🚗 Detailing</button>
-            <button @click="reportStream='wash'"      :class="reportStream==='wash'      ? 'bg-blue-600 text-white'  : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">💧 Wash Line</button>
-            <button @click="reportStream='retail'"    :class="reportStream==='retail'    ? 'bg-amber-600 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">🛒 Retail</button>
+            <button @click="reportStream='all'" :class="reportStream==='all' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">All Streams</button>
+            <button @click="reportStream='detailing'" :class="reportStream==='detailing' ? 'bg-teal-600 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">Detailing</button>
+            <button @click="reportStream='wash'" :class="reportStream==='wash' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">Wash Line</button>
+            <button @click="reportStream='retail'" :class="reportStream==='retail' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded text-xs font-semibold flex-1">Retail</button>
           </div>
 
           <!-- KPI cards with delta -->
@@ -1116,7 +1114,7 @@
               <template x-for="b in bucketed(reportStream, range.start, range.end, range.granularity)" :key="b.ts">
                 <div class="flex-1 min-w-[20px] flex flex-col items-center gap-1">
                   <div class="text-[9px] text-slate-400" x-show="bucketed(reportStream, range.start, range.end, range.granularity).length <= 14" x-text="canSeePrices ? money(b.revenue) : b.count"></div>
-                  <div class="w-full flex flex-col-reverse" :style="`height: ${Math.max(2, ((canSeePrices ? b.revenue : b.count) / Math.max(1, ...bucketed(reportStream, range.start, range.end, range.granularity).map(x => canSeePrices ? x.revenue : x.count))) * 100)}%`">
+                  <div class="w-full flex flex-col-reverse" :style="`height: ${Math.max(2, ((canSeePrices ? b.revenue : b.count) / Math.max(1, ...bucketed(reportStream, range.start, range.end, range.granularity).map(x =>canSeePrices ? x.revenue : x.count))) * 100)}%`">
                     <template x-if="reportStream==='all'">
                       <div class="w-full flex flex-col-reverse h-full">
                         <div class="bg-teal-600" :style="`flex:${b.byStream.detailing}`"></div>
@@ -1140,8 +1138,8 @@
             <div class="space-y-2">
               <template x-for="s in [
                 { key:'detailing', label:'Detailing', color:'#0f766e' },
-                { key:'wash',      label:'Wash Line', color:'#3b82f6' },
-                { key:'retail',    label:'Retail',    color:'#f59e0b' }
+                { key:'wash', label:'Wash Line', color:'#3b82f6' },
+                { key:'retail', label:'Retail', color:'#f59e0b' }
               ]" :key="s.key">
                 <div>
                   <div class="flex justify-between text-sm">
@@ -1212,7 +1210,7 @@
                   <div>
                     <div class="flex justify-between">
                       <span class="font-semibold" x-text="row.name"></span>
-                      <span class="text-xs"><b x-text="row.count"></b> units<span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
+                      <span class="text-xs"><b x-text="row.count"></b>units<span x-show="canSeePrices" x-text="' · ' + money(row.revenue)"></span></span>
                     </div>
                     <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
                       <div class="h-full bg-amber-500" :style="`width:${(row.revenue/Math.max(1, ...rows.map(r=>r.revenue)))*100}%`"></div>
@@ -1350,7 +1348,7 @@
 
           <div class="grid lg:grid-cols-3 gap-4">
             <div class="card p-5">
-              <h3 class="font-bold mb-3">💧 Wash highlights</h3>
+              <h3 class="font-bold mb-3">Wash highlights</h3>
               <div class="text-sm space-y-1.5">
                 <div class="flex justify-between"><span class="text-slate-500">Most popular</span><span class="font-semibold" x-text="washPackageMix[0]?.name + ' (' + Math.round(washPackageMix[0]?.pct||0) + '%)'"></span></div>
                 <div class="flex justify-between"><span class="text-slate-500">Avg ticket</span><span class="font-semibold" x-text="money(washSales.length ? washSales.reduce((s,x)=>s+x.amount,0)/washSales.length : 0)"></span></div>
@@ -1359,7 +1357,7 @@
               <button @click="view='wash'" class="text-xs text-teal-700 hover:underline mt-3">Open wash dashboard →</button>
             </div>
             <div class="card p-5">
-              <h3 class="font-bold mb-3">🛒 Retail highlights</h3>
+              <h3 class="font-bold mb-3">Retail highlights</h3>
               <div class="text-sm space-y-1.5">
                 <div class="flex justify-between"><span class="text-slate-500">Top product</span><span class="font-semibold" x-text="topRetailProducts[0]?.name"></span></div>
                 <div class="flex justify-between"><span class="text-slate-500">Avg basket</span><span class="font-semibold" x-text="money(retailSales.length ? retailSales.reduce((s,x)=>s+x.total,0)/retailSales.length : 0)"></span></div>
@@ -1368,7 +1366,7 @@
               <button @click="view='retail'" class="text-xs text-teal-700 hover:underline mt-3">Open retail dashboard →</button>
             </div>
             <div class="card p-5">
-              <h3 class="font-bold mb-3">🚗 Detailing highlights</h3>
+              <h3 class="font-bold mb-3">Detailing highlights</h3>
               <div class="text-sm space-y-1.5">
                 <div class="flex justify-between"><span class="text-slate-500">Active jobs</span><span class="font-semibold" x-text="kpis.inHouse"></span></div>
                 <div class="flex justify-between"><span class="text-slate-500">Outstanding AR</span><span class="font-semibold" x-text="money(billingTotals.outstanding)"></span></div>
@@ -1386,27 +1384,27 @@
           <div class="flex items-end justify-between mb-5">
             <div>
               <h1 class="text-2xl font-black tracking-tight flex items-center gap-2">
-                📷 Live Wash Lane
+                 Live Wash Lane
                 <span class="scan-dot"></span>
               </h1>
               <p class="text-sm text-slate-500">AI camera reads plates as cars enter. CRM lookup is instant. New customers glow cyan.</p>
             </div>
             <div class="flex gap-2 items-center">
               <button @click="toggleAutoScan()" class="btn text-sm" :class="autoScan ? 'btn-primary' : 'btn-outline'" x-text="autoScan ? '⏸ Auto-scan ON' : '▶ Auto-scan'"></button>
-              <button @click="simulatePlateScan()" class="btn btn-primary text-sm">📷 Simulate scan</button>
+              <button @click="simulatePlateScan()" class="btn btn-primary text-sm">Simulate scan</button>
             </div>
           </div>
 
           <!-- Camera status strip -->
           <div class="card p-3 mb-5 flex items-center gap-3 bg-slate-900 text-slate-100 border-slate-800">
-            <div class="w-10 h-10 rounded bg-black flex items-center justify-center text-xl">📹</div>
+            <div class="w-10 h-10 rounded bg-black flex items-center justify-center text-xl"></div>
             <div class="flex-1">
               <div class="text-sm font-bold flex items-center gap-2">
                 <span x-show="cameraConfig.connected" x-text="cameraConfig.name + ' · Online'"></span>
                 <span x-show="!cameraConfig.connected">Camera not connected — running simulation</span>
                 <span class="scan-dot"></span>
               </div>
-              <div class="text-xs text-slate-400">Last detection: <span x-text="cameraConfig.lastDetectionAt ? relativeTime(cameraConfig.lastDetectionAt) : '—'"></span> · <span x-text="liveLane.length"></span> in queue</div>
+              <div class="text-xs text-slate-400">Last detection: <span x-text="cameraConfig.lastDetectionAt ? relativeTime(cameraConfig.lastDetectionAt) : '—'"></span>· <span x-text="liveLane.length"></span>in queue</div>
             </div>
             <div class="text-[10px] uppercase tracking-wider text-amber-400 font-bold">Placeholder — wire to real ALPR camera later</div>
           </div>
@@ -1414,7 +1412,7 @@
           <!-- Tier legend -->
           <div class="card p-3 mb-5 text-xs flex flex-wrap gap-3 items-center">
             <span class="font-bold text-slate-700">Tier signals:</span>
-            <span class="tier-badge new">✨ First Time</span>
+            <span class="tier-badge new">First Time</span>
             <span class="tier-badge regular">Regular</span>
             <span class="tier-badge loyal">Loyal</span>
             <span class="tier-badge vip">VIP</span>
@@ -1438,10 +1436,10 @@
                 <!-- New customer state -->
                 <template x-if="!l.customerId">
                   <div>
-                    <div class="text-xl font-black text-cyan-700 mb-1">✨ First-time customer</div>
+                    <div class="text-xl font-black text-cyan-700 mb-1">First-time customer</div>
                     <div class="text-xs text-slate-500 mb-3">Plate not in CRM yet — capture their info and earn the visit.</div>
                     <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-3 text-xs mb-3">
-                      <div class="font-bold text-cyan-800 mb-1">💡 Play</div>
+                      <div class="font-bold text-cyan-800 mb-1">Play</div>
                       <div class="text-slate-700">Greet warmly, recommend Premium Wash. Offer $5 off if they join Unlimited Membership.</div>
                     </div>
                   </div>
@@ -1467,10 +1465,10 @@
                       </div>
                     </div>
                     <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs mb-3">
-                      <div class="font-bold text-amber-800 mb-1">💡 Upsell</div>
+                      <div class="font-bold text-amber-800 mb-1">Upsell</div>
                       <div class="text-slate-700" x-text="suggestUpsell(customerById(l.customerId))"></div>
                     </div>
-                    <div x-show="customerById(l.customerId).notes?.length" class="text-[11px] text-slate-600 italic mb-3 line-clamp-2" x-text="'📝 &quot;' + (customerById(l.customerId).notes[0]?.text || '') + '&quot;'"></div>
+                    <div x-show="customerById(l.customerId).notes?.length" class="text-[11px] text-slate-600 italic mb-3 line-clamp-2" x-text="'&quot;' + (customerById(l.customerId).notes[0]?.text || '') + '&quot;'"></div>
                     <div class="text-[10px] text-slate-400 uppercase tracking-wider">Tap to open profile →</div>
                   </div>
                 </template>
@@ -1487,7 +1485,7 @@
                       <template x-for="p in washPackages" :key="p.id"><option :value="p.id" :selected="l.assignedPackageId===p.id" x-text="p.name"></option></template>
                     </select>
                     <button @click="advanceLane(l.id)" class="text-[11px] bg-teal-600 hover:bg-teal-700 text-white px-2 py-1 rounded font-bold">→</button>
-                    <button x-show="!l.customerId" @click="openGiftModal(null, l.plate)" class="text-[11px] bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-1 rounded font-bold">🎁 Gift</button>
+                    <button x-show="!l.customerId" @click="openGiftModal(null, l.plate)" class="text-[11px] bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-1 rounded font-bold">Gift</button>
                     <button @click="removeFromLane(l.id)" class="text-[11px] text-rose-600 hover:text-rose-700 px-1">×</button>
                   </div>
                 </div>
@@ -1496,7 +1494,6 @@
 
             <!-- Empty state -->
             <div x-show="!liveLane.length" class="md:col-span-2 lg:col-span-3 card p-12 text-center text-slate-400">
-              <div class="text-6xl mb-3">📷</div>
               <div class="font-bold mb-1">No cars in the lane right now</div>
               <div class="text-sm">Click "Simulate scan" to see a plate detection happen.</div>
             </div>
@@ -1557,7 +1554,7 @@
                     <td class="p-3">
                       <div class="font-semibold flex items-center gap-1.5">
                         <span x-text="customerName(c)"></span>
-                        <span x-show="c.signupSource==='mobile-app' || c.tags?.includes('app-signup')" title="Joined via mobile app" class="text-xs">📱</span>
+                        <span x-show="c.signupSource==='mobile-app' || c.tags?.includes('app-signup')" title="Joined via mobile app" class="text-xs"></span>
                       </div>
                       <div class="text-xs text-slate-500" x-text="(c.email || c.phone || '—')"></div>
                     </td>
@@ -1581,7 +1578,7 @@
         <div>
           <div class="flex items-end justify-between mb-5">
             <div>
-              <h1 class="text-2xl font-black tracking-tight">📱 Customer Mobile App</h1>
+              <h1 class="text-2xl font-black tracking-tight">Customer Mobile App</h1>
               <p class="text-sm text-slate-500">Preview of what customers see in the Wash Depot app. Install as a PWA on iOS/Android — no app store needed.</p>
             </div>
             <div class="flex gap-2 items-center">
@@ -1611,7 +1608,7 @@
                   <div style="background:#000; color:#fff; padding: 16px;">
                     <div class="flex items-center gap-2">
                       <div class="wd-logo-wrap w-8 h-8 rounded bg-black flex-shrink-0">
-                        <img class="wd-logo-img" src="wash-depot-logo.png" onerror="this.classList.add('failed')" />
+                        <img class="wd-logo-img" src="wash-depot-logo.png?v=2" onerror="this.classList.add('failed')" />
                         <svg class="wd-logo-svg" viewBox="0 0 200 200"><use href="#wd-logo"/></svg>
                       </div>
                       <div class="flex-1">
@@ -1638,7 +1635,7 @@
                             <div class="flex-1 h-2 rounded-full" :style="i <= appLoyaltyProgress.count ? 'background:#22d3ee' : 'background:rgba(255,255,255,.18)'"></div>
                           </template>
                         </div>
-                        <div class="text-xs text-white/80" x-text="appLoyaltyProgress.remaining + ' more to your next free wash 🎁'"></div>
+                        <div class="text-xs text-white/80" x-text="appLoyaltyProgress.remaining + ' more to your next free wash '"></div>
                       </div>
 
                       <!-- Wait time / Live lane preview -->
@@ -1648,7 +1645,7 @@
                           <span class="scan-dot"></span>
                         </div>
                         <div class="text-3xl font-black mt-1">
-                          <span x-show="appQueueWait.cars > 0" x-text="'~' + appQueueWait.mins + ' min'"></span>
+                          <span x-show="appQueueWait.cars >0" x-text="'~' + appQueueWait.mins + ' min'"></span>
                           <span x-show="appQueueWait.cars === 0" class="text-emerald-600">No wait</span>
                         </div>
                         <div class="text-xs text-slate-500" x-text="appQueueWait.cars + ' cars in line'"></div>
@@ -1661,7 +1658,7 @@
                         <template x-for="g in appActiveGifts" :key="g.id">
                           <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-2">
                             <div class="font-bold text-sm text-amber-900" x-text="promotionById(g.promoId)?.name"></div>
-                            <div class="text-xs text-amber-800 mt-0.5">Code <span class="font-mono font-bold" x-text="g.code"></span> · expires <span x-text="formatDate(g.expiresAt)"></span></div>
+                            <div class="text-xs text-amber-800 mt-0.5">Code <span class="font-mono font-bold" x-text="g.code"></span>· expires <span x-text="formatDate(g.expiresAt)"></span></div>
                           </div>
                         </template>
                       </div>
@@ -1669,22 +1666,22 @@
                       <!-- Quick actions -->
                       <div class="grid grid-cols-2 gap-2">
                         <button @click="customerApp.tab='vehicles'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
-                          <div class="text-2xl mb-1">🚗</div>
+                          <div class="text-2xl mb-1"></div>
                           <div class="text-xs font-bold">My Vehicles</div>
                           <div class="text-[10px] text-slate-500" x-text="(appCustomer?.vehicleMake || '') + ' ' + (appCustomer?.vehicleModel || '')"></div>
                         </button>
                         <button @click="customerApp.tab='visits'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
-                          <div class="text-2xl mb-1">📋</div>
+                          <div class="text-2xl mb-1"></div>
                           <div class="text-xs font-bold">Visit history</div>
                           <div class="text-[10px] text-slate-500" x-text="appCustomerVisits.length + ' visits'"></div>
                         </button>
                         <button @click="customerApp.tab='promos'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
-                          <div class="text-2xl mb-1">🎁</div>
+                          <div class="text-2xl mb-1"></div>
                           <div class="text-xs font-bold">Promos &amp; rewards</div>
                           <div class="text-[10px] text-slate-500" x-text="appActiveGifts.length + ' active'"></div>
                         </button>
                         <button @click="customerApp.tab='line'" class="bg-white border border-slate-200 rounded-xl p-3 text-left">
-                          <div class="text-2xl mb-1">📷</div>
+                          <div class="text-2xl mb-1"></div>
                           <div class="text-xs font-bold">Live line feed</div>
                           <div class="text-[10px] text-slate-500" x-text="appQueueWait.cars + ' in line'"></div>
                         </button>
@@ -1696,7 +1693,7 @@
                       <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
                       <div class="text-lg font-black mb-3">My vehicles</div>
                       <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                        <div class="text-2xl mb-2">🚗</div>
+                        <div class="text-2xl mb-2"></div>
                         <div class="font-black text-base" x-text="(appCustomer?.vehicleMake || '') + ' ' + (appCustomer?.vehicleModel || '')"></div>
                         <div class="text-xs text-slate-500" x-text="appCustomer?.vehicleColor || '—'"></div>
                         <div class="font-mono font-bold text-sm bg-slate-100 inline-block px-2 py-1 rounded mt-2" x-text="appCustomer?.plate"></div>
@@ -1708,7 +1705,7 @@
                         </div>
 
                         <div x-show="!appCustomer?.membership" class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                          <div class="font-bold text-blue-900 text-sm">💡 Save with Unlimited</div>
+                          <div class="font-bold text-blue-900 text-sm">Save with Unlimited</div>
                           <div class="text-xs text-blue-700 mt-1">$35/mo for unlimited Premium washes. Pays for itself after 2 visits.</div>
                           <button class="mt-2 bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded">Join Unlimited</button>
                         </div>
@@ -1721,7 +1718,6 @@
                       <div class="text-lg font-black mb-3">Promotions &amp; rewards</div>
 
                       <div x-show="!appActiveGifts.length" class="text-center py-8 text-slate-400 text-sm">
-                        <div class="text-4xl mb-2">🎁</div>
                         <div>No active offers right now.</div>
                         <div class="text-xs mt-1">Keep washing to unlock rewards!</div>
                       </div>
@@ -1746,11 +1742,11 @@
                           <div class="text-slate-500" x-text="appLoyaltyProgress.count + '/' + appLoyaltyProgress.target + ' visits this round'"></div>
                         </div>
                         <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
-                          <div class="font-bold">🎂 Birthday wash</div>
+                          <div class="font-bold">Birthday wash</div>
                           <div class="text-slate-500">Free Premium during your birthday month</div>
                         </div>
                         <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
-                          <div class="font-bold">👋 Refer a friend</div>
+                          <div class="font-bold">Refer a friend</div>
                           <div class="text-slate-500">$5 off for both of you when they visit</div>
                         </div>
                       </div>
@@ -1763,12 +1759,12 @@
                       <div class="space-y-2">
                         <template x-for="v in appCustomerVisits.slice(0,20)" :key="v.id">
                           <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm">💧</div>
+                            <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm"></div>
                             <div class="flex-1">
                               <div class="font-bold text-sm" x-text="washPackageById(v.packageId)?.name || 'Wash'"></div>
                               <div class="text-[11px] text-slate-500" x-text="formatDate(v.at,'long')"></div>
                             </div>
-                            <div class="text-sm font-bold" x-text="v.amount > 0 ? money(v.amount) : 'Member'"></div>
+                            <div class="text-sm font-bold" x-text="v.amount >0 ? money(v.amount) : 'Member'"></div>
                           </div>
                         </template>
                       </div>
@@ -1778,12 +1774,12 @@
                     <div x-show="customerApp.tab==='line'">
                       <button @click="customerApp.tab='home'" class="text-xs text-slate-500 mb-3">← Back</button>
                       <div class="text-lg font-black mb-1">Live line feed</div>
-                      <div class="text-xs text-slate-500 mb-4 flex items-center gap-2"><span class="scan-dot"></span> Updated in real time from the AI camera</div>
+                      <div class="text-xs text-slate-500 mb-4 flex items-center gap-2"><span class="scan-dot"></span>Updated in real time from the AI camera</div>
 
                       <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color:#fff; border-radius: 16px; padding: 18px; margin-bottom: 14px;">
                         <div class="text-[11px] uppercase tracking-widest text-white/60 mb-1">Estimated wait</div>
                         <div class="text-4xl font-black">
-                          <span x-show="appQueueWait.cars > 0" x-text="'~' + appQueueWait.mins + ' min'"></span>
+                          <span x-show="appQueueWait.cars >0" x-text="'~' + appQueueWait.mins + ' min'"></span>
                           <span x-show="appQueueWait.cars === 0" class="text-emerald-400">No wait!</span>
                         </div>
                         <div class="text-xs text-white/70 mt-1" x-text="appQueueWait.cars + ' cars currently in line'"></div>
@@ -1794,18 +1790,18 @@
                         <div class="text-[11px] uppercase tracking-widest text-slate-500 font-bold mb-3">In line right now</div>
                         <div class="flex items-end gap-1 mb-2" style="height: 50px;">
                           <template x-for="(_, i) in liveLane" :key="i">
-                            <div class="flex-1 bg-blue-500 rounded-t" :style="`opacity: ${1 - i*0.12};`" title="🚗"></div>
+                            <div class="flex-1 bg-blue-500 rounded-t" :style="`opacity: ${1 - i*0.12};`" title=""></div>
                           </template>
                           <template x-if="!liveLane.length">
                             <div class="flex-1 text-center text-emerald-600 text-xs italic">Lane is empty — come now!</div>
                           </template>
                         </div>
-                        <div class="text-[10px] text-slate-500">⬅ Front of line · End ➡</div>
+                        <div class="text-[10px] text-slate-500">Front of line → End</div>
                       </div>
 
                       <!-- Alert setup -->
                       <div class="bg-cyan-50 border border-cyan-200 rounded-2xl p-4">
-                        <div class="font-bold text-cyan-900 mb-1">🔔 Get notified when it's quiet</div>
+                        <div class="font-bold text-cyan-900 mb-1">Get notified when it's quiet</div>
                         <div class="text-xs text-cyan-800 mb-3">We'll alert you the moment the line drops below your threshold.</div>
 
                         <label class="text-xs font-semibold block mb-1">Alert me when ≤</label>
@@ -1819,25 +1815,25 @@
                         <label class="text-xs font-semibold block mb-1">Send via</label>
                         <div class="flex gap-2 mb-3">
                           <label class="flex-1 flex items-center gap-2 bg-white border border-cyan-300 rounded-lg p-2 cursor-pointer text-xs" :class="{'bg-cyan-100': customerApp.alertChannel==='sms'}">
-                            <input type="radio" value="sms" x-model="customerApp.alertChannel" /> 📱 SMS
+                            <input type="radio" value="sms" x-model="customerApp.alertChannel" />SMS
                           </label>
                           <label class="flex-1 flex items-center gap-2 bg-white border border-cyan-300 rounded-lg p-2 cursor-pointer text-xs" :class="{'bg-cyan-100': customerApp.alertChannel==='push'}">
-                            <input type="radio" value="push" x-model="customerApp.alertChannel" /> 🔔 Push
+                            <input type="radio" value="push" x-model="customerApp.alertChannel" />Push
                           </label>
                         </div>
 
-                        <button @click="toggleAppAlert()" class="w-full font-bold text-sm py-2.5 rounded-lg" :class="customerApp.alertEnabled ? 'bg-rose-600 text-white' : 'bg-cyan-600 text-white'" x-text="customerApp.alertEnabled ? '✓ Alert active — tap to cancel' : 'Set alert'"></button>
+                        <button @click="toggleAppAlert()" class="w-full font-bold text-sm py-2.5 rounded-lg" :class="customerApp.alertEnabled ? 'bg-rose-600 text-white' : 'bg-cyan-600 text-white'" x-text="customerApp.alertEnabled ? ' Alert active — tap to cancel' : 'Set alert'"></button>
                       </div>
                     </div>
                   </div>
 
                   <!-- Bottom tab bar -->
                   <div style="background:#fff; border-top: 1px solid #e2e8f0; padding: 8px 4px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;">
-                    <button @click="customerApp.tab='home'"     :class="customerApp.tab==='home'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🏠</span><span class="text-[9px] font-bold">Home</span></button>
-                    <button @click="customerApp.tab='vehicles'" :class="customerApp.tab==='vehicles'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🚗</span><span class="text-[9px] font-bold">Vehicles</span></button>
-                    <button @click="customerApp.tab='line'"     :class="customerApp.tab==='line'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">📷</span><span class="text-[9px] font-bold">Line</span></button>
-                    <button @click="customerApp.tab='promos'"   :class="customerApp.tab==='promos'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">🎁</span><span class="text-[9px] font-bold">Promos</span></button>
-                    <button @click="customerApp.tab='visits'"   :class="customerApp.tab==='visits'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base">📋</span><span class="text-[9px] font-bold">Visits</span></button>
+                    <button @click="customerApp.tab='home'" :class="customerApp.tab==='home'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base"></span><span class="text-[9px] font-bold">Home</span></button>
+                    <button @click="customerApp.tab='vehicles'" :class="customerApp.tab==='vehicles'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base"></span><span class="text-[9px] font-bold">Vehicles</span></button>
+                    <button @click="customerApp.tab='line'" :class="customerApp.tab==='line'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base"></span><span class="text-[9px] font-bold">Line</span></button>
+                    <button @click="customerApp.tab='promos'" :class="customerApp.tab==='promos'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base"></span><span class="text-[9px] font-bold">Promos</span></button>
+                    <button @click="customerApp.tab='visits'" :class="customerApp.tab==='visits'?'text-slate-900':'text-slate-400'" class="flex flex-col items-center gap-0.5 p-1"><span class="text-base"></span><span class="text-[9px] font-bold">Visits</span></button>
                   </div>
                 </div>
               </div>
@@ -1846,29 +1842,29 @@
             <!-- Side info panel -->
             <div class="flex-1 space-y-4">
               <div class="card p-5">
-                <h3 class="font-bold mb-2 flex items-center gap-2">📲 Progressive Web App</h3>
-                <p class="text-sm text-slate-600 mb-3">Customers don't need the App Store. They open <span class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">wash-depot-app.vercel.app/customer-app</span> on their phone, and the browser will prompt them to add it to their home screen — works just like a native app.</p>
+                <h3 class="font-bold mb-2 flex items-center gap-2">Progressive Web App</h3>
+                <p class="text-sm text-slate-600 mb-3">Customers don't need the App Store. They open <span class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">wash-depot-app.vercel.app/customer-app</span>on their phone, and the browser will prompt them to add it to their home screen — works just like a native app.</p>
                 <div class="text-xs space-y-1 text-slate-600">
-                  <div>✓ Works offline (cached recent visits + active promos)</div>
-                  <div>✓ Push notifications for line alerts</div>
-                  <div>✓ App icon on home screen</div>
-                  <div>✓ Full-screen, no browser chrome</div>
+                  <div>Works offline (cached recent visits + active promos)</div>
+                  <div>Push notifications for line alerts</div>
+                  <div>App icon on home screen</div>
+                  <div>Full-screen, no browser chrome</div>
                 </div>
               </div>
 
               <div class="card p-5">
-                <h3 class="font-bold mb-2">🎁 Loyalty system</h3>
+                <h3 class="font-bold mb-2">Loyalty system</h3>
                 <ul class="text-sm space-y-1.5 text-slate-700 list-disc list-inside">
-                  <li><b>Punch card:</b> 10 paid washes = 1 free Premium</li>
-                  <li><b>Birthday wash:</b> Free Premium during birthday month</li>
-                  <li><b>Referral:</b> $5 credit each side</li>
-                  <li><b>Tier perks:</b> VIPs get priority + complimentary upgrade once a quarter</li>
-                  <li><b>Membership:</b> Unlimited Premium for $35/mo</li>
+                  <li><b>Punch card:</b>10 paid washes = 1 free Premium</li>
+                  <li><b>Birthday wash:</b>Free Premium during birthday month</li>
+                  <li><b>Referral:</b>$5 credit each side</li>
+                  <li><b>Tier perks:</b>VIPs get priority + complimentary upgrade once a quarter</li>
+                  <li><b>Membership:</b>Unlimited Premium for $35/mo</li>
                 </ul>
               </div>
 
               <div class="card p-5">
-                <h3 class="font-bold mb-2">📷 Live line + alerts</h3>
+                <h3 class="font-bold mb-2">Live line + alerts</h3>
                 <p class="text-sm text-slate-600 mb-2">The mobile app shows a live wait estimate based on AI camera detections. Customers can set an alert ("Notify me when ≤3 cars") and get an SMS or push notification when traffic dies down — driving impulse visits during slow periods.</p>
                 <p class="text-xs text-slate-500">Real notifications need a Twilio + Web Push integration (next milestone). The toggle in the preview simulates the flow.</p>
               </div>
@@ -1947,7 +1943,7 @@
             <div class="text-sm divide-y divide-slate-100 max-h-72 overflow-y-auto">
               <template x-for="s in washSales.slice(0,30)" :key="s.id">
                 <div class="py-2 flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-sm">💧</div>
+                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-sm"></div>
                   <div class="flex-1">
                     <div class="font-semibold text-sm" x-text="washPackageById(s.packageId)?.name"></div>
                     <div class="text-xs text-slate-500" x-text="formatDate(s.at,'long')"></div>
@@ -1973,9 +1969,9 @@
 
           <!-- Tabs -->
           <div class="card p-1 mb-4 inline-flex gap-1 text-sm">
-            <button @click="retailTab='overview'" :class="retailTab==='overview' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📊 Overview</button>
-            <button @click="retailTab='catalog'"  :class="retailTab==='catalog'  ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📦 Catalog &amp; Inventory</button>
-            <button @click="retailTab='receive'; $nextTick(()=>$refs.skuInput?.focus())"  :class="retailTab==='receive'  ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">📥 Receive (SKU scan)</button>
+            <button @click="retailTab='overview'" :class="retailTab==='overview' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">Overview</button>
+            <button @click="retailTab='catalog'" :class="retailTab==='catalog' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">Catalog &amp; Inventory</button>
+            <button @click="retailTab='receive'; $nextTick(()=>$refs.skuInput?.focus())" :class="retailTab==='receive' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded font-semibold">Receive (SKU scan)</button>
           </div>
 
         <!-- ============ OVERVIEW TAB (existing dashboard) ============ -->
@@ -2009,7 +2005,7 @@
                     <div class="flex-1 min-w-0">
                       <div class="flex justify-between">
                         <span class="font-semibold" x-text="p.name"></span>
-                        <span class="text-xs"><b x-text="p.count"></b> sold<span x-show="canSeePrices" x-text="' · ' + money(p.revenue)"></span></span>
+                        <span class="text-xs"><b x-text="p.count"></b>sold<span x-show="canSeePrices" x-text="' · ' + money(p.revenue)"></span></span>
                       </div>
                       <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
                         <div class="h-full bg-amber-500" :style="`width:${(p.count/Math.max(1,topRetailProducts[0]?.count||1))*100}%`"></div>
@@ -2028,7 +2024,7 @@
                   <div>
                     <div class="flex justify-between text-sm">
                       <span class="font-semibold" x-text="c.name"></span>
-                      <span class="text-xs"><b x-text="c.count"></b> units<span x-show="canSeePrices" x-text="' · ' + money(c.revenue)"></span></span>
+                      <span class="text-xs"><b x-text="c.count"></b>units<span x-show="canSeePrices" x-text="' · ' + money(c.revenue)"></span></span>
                     </div>
                     <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
                       <div class="h-full bg-amber-500" :style="`width:${c.pct}%`"></div>
@@ -2114,7 +2110,7 @@
                       <td class="p-3 text-xs"><span class="px-2 py-0.5 bg-slate-100 rounded-full" x-text="p.category"></span></td>
                       <td class="p-3 text-right font-semibold" x-show="canSeePrices" x-text="money(p.cost||0)"></td>
                       <td class="p-3 text-right font-semibold" x-show="canSeePrices" x-text="money(p.price||0)"></td>
-                      <td class="p-3 text-right text-xs" x-show="canSeePrices" :class="margin(p) > 50 ? 'text-emerald-700 font-semibold' : margin(p) < 30 ? 'text-rose-600' : ''" x-text="Math.round(margin(p)) + '%'"></td>
+                      <td class="p-3 text-right text-xs" x-show="canSeePrices" :class="margin(p) >50 ? 'text-emerald-700 font-semibold' : margin(p) < 30 ? 'text-rose-600' : ''" x-text="Math.round(margin(p)) + '%'"></td>
                       <td class="p-3 text-right">
                         <div class="flex items-center justify-end gap-1" @click.stop>
                           <button @click="adjustStock(p.id, -1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 text-sm font-bold">−</button>
@@ -2141,7 +2137,7 @@
           <!-- Scanner input -->
           <div class="card p-5 mb-4 bg-slate-900 text-white border-slate-700">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">📥</div>
+              <div class="w-10 h-10 rounded bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl"></div>
               <div class="flex-1">
                 <div class="font-bold text-base">Receive inventory</div>
                 <div class="text-xs text-slate-400">Scan SKU barcodes with your scanner gun (acts as a keyboard) or type manually + Enter.</div>
@@ -2168,7 +2164,7 @@
               <h3 class="font-bold">Pending receipt</h3>
               <div class="flex gap-2">
                 <button x-show="receiveBatch.length" @click="receiveBatch=[]" class="btn btn-outline text-xs">Clear</button>
-                <button @click="confirmReceipt()" :disabled="!receiveBatch.length" class="btn btn-primary text-sm" :class="!receiveBatch.length && 'opacity-40 cursor-not-allowed'">✓ Confirm receipt</button>
+                <button @click="confirmReceipt()" :disabled="!receiveBatch.length" class="btn btn-primary text-sm" :class="!receiveBatch.length && 'opacity-40 cursor-not-allowed'">Confirm receipt</button>
               </div>
             </div>
             <table class="w-full text-sm">
@@ -2334,7 +2330,7 @@
         <div>
           <div class="flex items-end justify-between mb-5">
             <div>
-              <h1 class="text-2xl font-black tracking-tight flex items-center gap-2">✨ AI Insights</h1>
+              <h1 class="text-2xl font-black tracking-tight flex items-center gap-2">AI Insights</h1>
               <p class="text-sm text-slate-500">Patterns and recommendations across your detailing operation. Updates automatically as you work.</p>
             </div>
             <span class="text-xs text-slate-400" x-text="'Based on ' + insights.totalCompleted + ' completed jobs'"></span>
@@ -2354,7 +2350,7 @@
           <!-- Recommendations -->
           <div class="card p-5 mb-5 bg-gradient-to-br from-teal-50 to-blue-50 border-teal-200">
             <div class="flex items-center gap-2 mb-3">
-              <span class="text-xl">💡</span>
+              <span class="text-xl"></span>
               <h3 class="font-bold">Recommendations</h3>
             </div>
             <div class="space-y-2">
@@ -2375,7 +2371,7 @@
 
             <!-- Top dealerships -->
             <div class="card p-5" x-show="canSeePrices">
-              <h3 class="font-bold mb-3 flex items-center gap-2">🏢 Highest-revenue dealerships <span class="text-xs font-normal text-slate-500">(90 days)</span></h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">Highest-revenue dealerships <span class="text-xs font-normal text-slate-500">(90 days)</span></h3>
               <div class="space-y-3">
                 <template x-for="(row, i) in insights.dealersByRevenue" :key="row.id">
                   <div class="flex items-center gap-3">
@@ -2398,7 +2394,7 @@
 
             <!-- Top dealerships by volume -->
             <div class="card p-5">
-              <h3 class="font-bold mb-3 flex items-center gap-2">🚗 Highest-volume dealerships <span class="text-xs font-normal text-slate-500">(90 days)</span></h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">Highest-volume dealerships <span class="text-xs font-normal text-slate-500">(90 days)</span></h3>
               <div class="space-y-3">
                 <template x-for="(row, i) in insights.dealersByVolume" :key="row.id">
                   <div class="flex items-center gap-3">
@@ -2421,7 +2417,7 @@
 
             <!-- Detailer leaderboard -->
             <div class="card p-5">
-              <h3 class="font-bold mb-3 flex items-center gap-2">🏆 Detailer leaderboard</h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">Detailer leaderboard</h3>
               <div class="space-y-3">
                 <template x-for="(row, i) in insights.detailerStats" :key="row.id">
                   <div class="flex items-center gap-3">
@@ -2430,7 +2426,7 @@
                     <div class="flex-1 min-w-0">
                       <div class="flex justify-between text-sm">
                         <span class="font-semibold" x-text="row.name"></span>
-                        <span class="text-xs"><b x-text="row.count"></b> cars</span>
+                        <span class="text-xs"><b x-text="row.count"></b>cars</span>
                       </div>
                       <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
                         <div class="h-full bg-teal-600" :style="`width:${row.pct}%`"></div>
@@ -2445,7 +2441,7 @@
 
             <!-- Bottlenecks -->
             <div class="card p-5">
-              <h3 class="font-bold mb-3 flex items-center gap-2">⏱️ Where time goes (avg per stage)</h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">⏱ Where time goes (avg per stage)</h3>
               <div class="space-y-2">
                 <template x-for="row in insights.stageBottlenecks" :key="row.code">
                   <div>
@@ -2467,14 +2463,14 @@
 
             <!-- Service mix -->
             <div class="card p-5">
-              <h3 class="font-bold mb-3 flex items-center gap-2">🧴 Service performance</h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">Service performance</h3>
               <div class="space-y-2">
                 <template x-for="row in insights.serviceStats" :key="row.id">
                   <div class="flex items-center gap-3">
                     <div class="flex-1 min-w-0">
                       <div class="flex justify-between text-sm">
                         <span class="font-semibold truncate" x-text="row.name"></span>
-                        <span class="text-xs"><b x-text="row.count"></b> times<span x-show="canSeePrices"> · <span x-text="money(row.revenue)"></span></span></span>
+                        <span class="text-xs"><b x-text="row.count"></b>times<span x-show="canSeePrices">· <span x-text="money(row.revenue)"></span></span></span>
                       </div>
                       <div class="h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
                         <div class="h-full bg-indigo-500" :style="`width:${row.pct}%`"></div>
@@ -2487,7 +2483,7 @@
 
             <!-- Day of week patterns -->
             <div class="card p-5">
-              <h3 class="font-bold mb-3 flex items-center gap-2">📅 Busiest days</h3>
+              <h3 class="font-bold mb-3 flex items-center gap-2">Busiest days</h3>
               <div class="flex items-end gap-2 h-32">
                 <template x-for="d in insights.dayOfWeek" :key="d.label">
                   <div class="flex-1 flex flex-col items-center gap-1">
@@ -2504,7 +2500,7 @@
 
           <!-- Service combos -->
           <div class="card p-5 mb-4">
-            <h3 class="font-bold mb-3 flex items-center gap-2">🧩 Most common service bundles</h3>
+            <h3 class="font-bold mb-3 flex items-center gap-2">Most common service bundles</h3>
             <p class="text-xs text-slate-500 mb-3">Services frequently ordered together — opportunities to package as a fixed-price bundle.</p>
             <div class="grid md:grid-cols-2 gap-3">
               <template x-for="(combo, i) in insights.combos" :key="i">
@@ -2527,13 +2523,13 @@
           <p class="text-sm text-slate-500 mb-5">Manage pricing, services, staff, and data.</p>
 
           <div class="flex gap-2 mb-5 border-b border-slate-200 flex-wrap">
-            <button x-show="isOwner" @click="settingsTab='users'; loadUsers()" :class="settingsTab==='users' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">👤 Users &amp; Invites</button>
-            <button x-show="isOwner" @click="settingsTab='dealerships'" :class="settingsTab==='dealerships' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">🏢 Dealerships</button>
-            <button x-show="canSeePrices" @click="settingsTab='pricing'" :class="settingsTab==='pricing' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">💵 Pricing & Line Items</button>
-            <button @click="settingsTab='catalog'" :class="settingsTab==='catalog' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">📋 Service Catalog</button>
-            <button @click="settingsTab='staff'" :class="settingsTab==='staff' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">👥 Detailers</button>
-            <button x-show="isOwner" @click="settingsTab='integrations'" :class="settingsTab==='integrations' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">🔌 Integrations</button>
-            <button x-show="isOwner" @click="settingsTab='data'" :class="settingsTab==='data' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">⚙️ Data</button>
+            <button x-show="isOwner" @click="settingsTab='users'; loadUsers()" :class="settingsTab==='users' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Users &amp; Invites</button>
+            <button x-show="isOwner" @click="settingsTab='dealerships'" :class="settingsTab==='dealerships' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Dealerships</button>
+            <button x-show="canSeePrices" @click="settingsTab='pricing'" :class="settingsTab==='pricing' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Pricing & Line Items</button>
+            <button @click="settingsTab='catalog'" :class="settingsTab==='catalog' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Service Catalog</button>
+            <button @click="settingsTab='staff'" :class="settingsTab==='staff' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Detailers</button>
+            <button x-show="isOwner" @click="settingsTab='integrations'" :class="settingsTab==='integrations' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Integrations</button>
+            <button x-show="isOwner" @click="settingsTab='data'" :class="settingsTab==='data' ? 'border-b-2 border-teal-600 text-teal-700' : 'text-slate-500'" class="px-4 py-2 font-semibold text-sm">Data</button>
           </div>
 
           <!-- ============ INTEGRATIONS TAB (Owner only) ============ -->
@@ -2559,7 +2555,7 @@
                     <div class="flex justify-between"><span class="text-slate-500">Access token</span><span class="font-mono text-xs" x-text="squareConfig.accessTokenMasked"></span></div>
                     <div class="flex justify-between"><span class="text-slate-500">Last sync</span><span x-text="squareConfig.lastSyncAt ? formatDate(squareConfig.lastSyncAt,'long') : 'never'"></span></div>
                     <div class="flex gap-2 mt-3">
-                      <button @click="syncSquare()" class="btn btn-primary text-sm">↻ Sync now</button>
+                      <button @click="syncSquare()" class="btn btn-primary text-sm">Sync now</button>
                       <button @click="if(confirm('Disconnect Square?')){ squareConfig = { connected:false, locationName:'', lastSyncAt:null, accessTokenMasked:'' }; persist(); toast('Square disconnected'); }" class="btn btn-outline text-sm">Disconnect</button>
                     </div>
                   </div>
@@ -2574,7 +2570,7 @@
             <!-- Twilio SMS card -->
             <div class="card p-5 mb-4" x-init="checkTwilioStatus()">
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-black flex-shrink-0">📱</div>
+                <div class="w-12 h-12 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-black flex-shrink-0"></div>
                 <div class="flex-1">
                   <div class="flex items-center gap-2">
                     <h3 class="font-bold text-base">Twilio SMS</h3>
@@ -2604,7 +2600,7 @@
                     <p class="text-[11px] text-slate-500 mt-2">
                       Get these at <a href="https://console.twilio.com/" target="_blank" class="text-teal-700 underline">console.twilio.com</a>. After saving, redeploy and refresh this page.
                     </p>
-                    <button @click="checkTwilioStatus()" class="btn btn-outline text-xs mt-2">↻ Recheck</button>
+                    <button @click="checkTwilioStatus()" class="btn btn-outline text-xs mt-2">Recheck</button>
                   </div>
                 </div>
               </div>
@@ -2662,7 +2658,7 @@
             <div class="card overflow-hidden mb-4">
               <div class="p-4 border-b border-slate-100 flex items-center justify-between">
                 <h3 class="font-bold">Pending invitations</h3>
-                <button @click="loadUsers()" class="text-xs text-teal-700 hover:underline">↻ Refresh</button>
+                <button @click="loadUsers()" class="text-xs text-teal-700 hover:underline">Refresh</button>
               </div>
               <table class="w-full text-sm">
                 <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
@@ -2841,8 +2837,8 @@
                                   <span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400">$</span>
                                   <input type="number" step="0.01" min="0" class="input pl-6 text-right font-bold" x-model.number="rate.price" @change="persist()" />
                                 </div>
-                                <div x-show="!rate.custom && serviceById(rate.serviceId) && rate.price !== serviceById(rate.serviceId).price" class="text-[10px] text-right mt-0.5" :class="rate.price > (serviceById(rate.serviceId)?.price||0) ? 'text-teal-700' : 'text-amber-700'">
-                                  <span x-text="(rate.price > (serviceById(rate.serviceId)?.price||0) ? '+' : '') + money(rate.price - (serviceById(rate.serviceId)?.price||0)) + ' vs standard'"></span>
+                                <div x-show="!rate.custom && serviceById(rate.serviceId) && rate.price !== serviceById(rate.serviceId).price" class="text-[10px] text-right mt-0.5" :class="rate.price >(serviceById(rate.serviceId)?.price||0) ? 'text-teal-700' : 'text-amber-700'">
+                                  <span x-text="(rate.price >(serviceById(rate.serviceId)?.price||0) ? '+' : '') + money(rate.price - (serviceById(rate.serviceId)?.price||0)) + ' vs standard'"></span>
                                 </div>
                               </td>
                               <td class="py-2 px-3 text-right">
@@ -2860,7 +2856,7 @@
                     <div class="mt-4 flex flex-wrap gap-2 items-center pt-3 border-t border-slate-200">
                       <select class="select text-sm flex-1 min-w-[200px]" @change="addRateFromCatalog(d.id, $event)">
                         <option value="">+ Add from service catalog…</option>
-                        <template x-for="s in services.filter(s => !d.rateSheet.find(r => r.serviceId === s.id))" :key="s.id">
+                        <template x-for="s in services.filter(s =>!d.rateSheet.find(r =>r.serviceId === s.id))" :key="s.id">
                           <option :value="s.id" x-text="s.name"></option>
                         </template>
                       </select>
@@ -2878,8 +2874,8 @@
           <!-- ============ CATALOG TAB ============ -->
           <div x-show="settingsTab==='catalog'">
             <div class="card p-5 mb-4 bg-teal-50/50 border-teal-200">
-              <h3 class="font-bold text-base mb-1">Service catalog<span x-show="canSeePrices"> & standard pricing</span></h3>
-              <p class="text-xs text-slate-600" x-show="canSeePrices">Define your services and the <b>standard price</b> Wash Depot charges for each. New dealerships start from these prices — you can override per dealership in the Pricing tab.</p>
+              <h3 class="font-bold text-base mb-1">Service catalog<span x-show="canSeePrices">& standard pricing</span></h3>
+              <p class="text-xs text-slate-600" x-show="canSeePrices">Define your services and the <b>standard price</b>Wash Depot charges for each. New dealerships start from these prices — you can override per dealership in the Pricing tab.</p>
               <p class="text-xs text-slate-600" x-show="!canSeePrices">Define the services Wash Depot offers. Pricing is managed by the owner.</p>
             </div>
             <div class="card overflow-hidden">
@@ -3129,13 +3125,13 @@
           <div class="space-y-2 mb-6">
             <template x-for="v in dealerBookings.filter(x=>x.status==='scheduled')" :key="v.id">
               <div class="card p-4 flex items-center gap-4 border-l-4 border-l-cyan-500">
-                <div class="w-12 h-12 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center text-xl">📅</div>
+                <div class="w-12 h-12 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center text-xl"></div>
                 <div class="flex-1">
                   <div class="font-bold" x-text="v.year + ' ' + v.make + ' ' + v.model + ' · #' + v.stockNumber"></div>
                   <div class="text-sm text-slate-600" x-text="formatDate(v.dropOffTime,'long') + ' · ' + timeSlotLabel(v.timeSlot)"></div>
                   <div class="text-xs text-slate-500 mt-0.5">
                     <span x-text="(v.deliveryMethod==='pickup' ? 'You drop off' : 'Wash Depot picks up')"></span>
-                    <span x-show="v.confirmed" class="ml-2 text-teal-700 font-semibold">✓ Confirmed</span>
+                    <span x-show="v.confirmed" class="ml-2 text-teal-700 font-semibold">Confirmed</span>
                     <span x-show="!v.confirmed" class="ml-2 text-amber-600 font-semibold">⏳ Awaiting confirmation</span>
                   </div>
                 </div>
@@ -3256,7 +3252,7 @@
             <div class="flex items-center justify-between pt-4 border-t border-slate-100">
               <div class="text-sm">
                 <span class="text-slate-500">Estimated total: </span>
-                <span class="font-bold text-lg" x-text="money(booking.services.reduce((s, sid) => s + (rateSheetFor(currentDealership.id).find(r=>r.serviceId===sid)?.price||0), 0))"></span>
+                <span class="font-bold text-lg" x-text="money(booking.services.reduce((s, sid) =>s + (rateSheetFor(currentDealership.id).find(r=>r.serviceId===sid)?.price||0), 0))"></span>
               </div>
               <div class="flex gap-2">
                 <button type="button" @click="view='d-bookings'" class="btn btn-outline">Cancel</button>
@@ -3292,9 +3288,9 @@
                     </div>
                     <div class="text-xs text-slate-500" x-text="'Issued ' + formatDate(inv.issuedAt) + ' · Due ' + formatDate(inv.dueAt) + ' · ' + inv.lineItems.length + ' line items'"></div>
                     <div x-show="inv.paymentMethod" class="text-xs text-teal-700 font-semibold mt-1">
-                      <span x-show="inv.status==='paid'">✓ Paid via <span x-text="paymentMethodLabel(inv.paymentMethod)"></span> on <span x-text="formatDate(inv.paidAt)"></span></span>
-                      <span x-show="inv.status==='pending_check'">📬 Check mailed — awaiting receipt</span>
-                      <span x-show="inv.status==='pending_ach' || inv.status==='pending_zelle'">⏳ <span x-text="paymentMethodLabel(inv.paymentMethod)"></span> payment submitted — pending confirmation</span>
+                      <span x-show="inv.status==='paid'">Paid via <span x-text="paymentMethodLabel(inv.paymentMethod)"></span>on <span x-text="formatDate(inv.paidAt)"></span></span>
+                      <span x-show="inv.status==='pending_check'">Check mailed — awaiting receipt</span>
+                      <span x-show="inv.status==='pending_ach' || inv.status==='pending_zelle'">⏳ <span x-text="paymentMethodLabel(inv.paymentMethod)"></span>payment submitted — pending confirmation</span>
                     </div>
                   </div>
                   <div class="text-right">
@@ -3371,9 +3367,9 @@
           <div class="card p-4 mb-4">
             <h3 class="font-bold mb-3">Notification preferences</h3>
             <div class="space-y-2 text-sm">
-              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.email" @change="persist()" /> Email — every status change</label>
-              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.sms" @change="persist()" /> SMS — only when "Ready for Pickup" or "Out for Delivery"</label>
-              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.inApp" @change="persist()" /> In-app notifications (always on by default)</label>
+              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.email" @change="persist()" />Email — every status change</label>
+              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.sms" @change="persist()" />SMS — only when "Ready for Pickup" or "Out for Delivery"</label>
+              <label class="flex items-center gap-2"><input type="checkbox" x-model="currentDealership.notificationPrefs.inApp" @change="persist()" />In-app notifications (always on by default)</label>
             </div>
           </div>
           <div class="card p-4">
@@ -3444,11 +3440,11 @@
                 </select>
                 <select class="select max-w-xs text-sm" x-model="activeVehicle.arrivalMethod" @change="persist()" title="How did the vehicle arrive at Wash Depot?">
                   <option value="">— Arrival method —</option>
-                  <option value="dropoff">📥 Dealer dropped off</option>
-                  <option value="pickup">🚚 Wash Depot picked up</option>
+                  <option value="dropoff">Dealer dropped off</option>
+                  <option value="pickup">Wash Depot picked up</option>
                 </select>
-                <button @click="sendCustomUpdate(activeVehicle.id)" class="btn btn-outline text-sm">📨 Send update</button>
-                <button @click="generateInvoiceForVehicle(activeVehicle.id)" class="btn btn-outline text-sm" x-show="canSeePrices && !activeVehicle.invoiceId">💵 Generate invoice</button>
+                <button @click="sendCustomUpdate(activeVehicle.id)" class="btn btn-outline text-sm">Send update</button>
+                <button @click="generateInvoiceForVehicle(activeVehicle.id)" class="btn btn-outline text-sm" x-show="canSeePrices && !activeVehicle.invoiceId">Generate invoice</button>
                 <button @click="openInvoice(activeVehicle.invoiceId)" class="btn btn-outline text-sm" x-show="canSeePrices && activeVehicle.invoiceId">View invoice</button>
               </div>
             </div>
@@ -3534,7 +3530,7 @@
               <div><div class="text-[10px] uppercase font-bold text-slate-500">Visits</div><div class="text-xl font-black" x-text="activeCustomer.visitCount"></div></div>
               <div x-show="canSeePrices"><div class="text-[10px] uppercase font-bold text-slate-500">Total spend</div><div class="text-xl font-black" x-text="money(activeCustomer.totalSpend)"></div></div>
               <div x-show="canSeePrices"><div class="text-[10px] uppercase font-bold text-slate-500">Avg ticket</div><div class="text-xl font-black" x-text="money(activeCustomer.visitCount ? activeCustomer.totalSpend/activeCustomer.visitCount : 0)"></div></div>
-              <div><div class="text-[10px] uppercase font-bold text-slate-500">Member</div><div class="text-xl font-black" x-text="activeCustomer.membership ? '✓' : '—'"></div></div>
+              <div><div class="text-[10px] uppercase font-bold text-slate-500">Member</div><div class="text-xl font-black" x-text="activeCustomer.membership ? '' : '—'"></div></div>
             </div>
 
             <!-- Contact info -->
@@ -3550,7 +3546,7 @@
 
             <!-- Upsell suggestion -->
             <div class="px-6 py-4 bg-amber-50 border-b border-amber-100">
-              <div class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">💡 Suggested play</div>
+              <div class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Suggested play</div>
               <div class="text-sm text-amber-900" x-text="suggestUpsell(activeCustomer)"></div>
             </div>
 
@@ -3582,7 +3578,7 @@
                       <div class="font-semibold" x-text="washPackageById(v.packageId)?.name || 'Wash'"></div>
                       <div class="text-xs text-slate-500" x-text="formatDate(v.at, 'long')"></div>
                     </div>
-                    <div class="text-sm font-bold" x-show="canSeePrices" x-text="v.amount > 0 ? money(v.amount) : 'Member'"></div>
+                    <div class="text-sm font-bold" x-show="canSeePrices" x-text="v.amount >0 ? money(v.amount) : 'Member'"></div>
                   </div>
                 </template>
                 <div x-show="!activeCustomerVisits.length" class="text-xs text-slate-400 italic">No visits recorded yet.</div>
@@ -3594,7 +3590,7 @@
           <div class="px-6 py-3 border-t border-slate-100 flex items-center justify-between flex-shrink-0 bg-white">
             <button @click="if(confirm('Delete this customer? This will not delete their visit history.')){ customers = customers.filter(c=>c.id!==activeCustomer.id); activeCustomerId=null; persist(); toast('Customer removed'); }" class="ab-btn ab-btn-danger">Delete</button>
             <div class="flex gap-2 ml-auto">
-              <button @click="openGiftModal(activeCustomer.id)" class="ab-btn ab-btn-ghost">🎁 Send gift</button>
+              <button @click="openGiftModal(activeCustomer.id)" class="ab-btn ab-btn-ghost">Send gift</button>
               <button @click="activeCustomerId=null" class="ab-btn ab-btn-primary">Done</button>
             </div>
           </div>
@@ -3773,7 +3769,7 @@
               <div class="space-y-3 pb-4" :class="i < dealershipDrawer.contacts.length-1 ? 'border-b border-slate-100' : ''">
                 <div class="flex items-center justify-between">
                   <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider" x-text="i===0 ? 'Primary contact' : 'Contact ' + (i+1)"></div>
-                  <button x-show="dealershipDrawer.contacts.length > 1" type="button" @click="dealershipDrawer.contacts.splice(i,1)" class="text-xs text-slate-400 hover:text-rose-600">Remove</button>
+                  <button x-show="dealershipDrawer.contacts.length >1" type="button" @click="dealershipDrawer.contacts.splice(i,1)" class="text-xs text-slate-400 hover:text-rose-600">Remove</button>
                 </div>
                 <input class="ab-input" placeholder="Full name" x-model="c.name" />
                 <div class="grid grid-cols-2 gap-3">
@@ -3857,7 +3853,7 @@
             <h2 class="text-lg font-black" x-text="'Invoice ' + activeInvoice.number"></h2>
             <span class="status-chip" :style="invoiceChipStyle(activeInvoice)" x-text="invoiceStatusLabel(activeInvoice)"></span>
           </div>
-          <button @click="window.print()" class="btn btn-outline text-xs">🖨️ Print</button>
+          <button @click="window.print()" class="btn btn-outline text-xs">Print</button>
           <button x-show="session.role==='staff' && activeInvoice.status!=='paid'" @click="markInvoicePaid(activeInvoice.id)" class="btn btn-primary text-xs">Mark paid</button>
           <button @click="activeInvoiceId=null" class="text-slate-400 hover:text-slate-700 text-2xl">×</button>
         </div>
@@ -3915,7 +3911,7 @@
     <div class="absolute inset-0 bg-slate-900/60" @click="giftModal.open=false"></div>
     <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full relative">
       <div class="p-5 border-b border-slate-200 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl">🎁</div>
+        <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl"></div>
         <div class="flex-1">
           <h3 class="font-black">Send a gift / promotion</h3>
           <p class="text-xs text-slate-500" x-text="giftModal.customerId ? customerName(customerById(giftModal.customerId)) : ('First-time customer · ' + giftModal.plate)"></p>
@@ -3963,7 +3959,7 @@
 
         <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
           <button @click="giftModal.open=false" class="btn btn-outline">Cancel</button>
-          <button @click="sendGift()" class="btn btn-primary">🎁 Send gift</button>
+          <button @click="sendGift()" class="btn btn-primary">Send gift</button>
         </div>
       </div>
     </div>
@@ -3982,13 +3978,13 @@
       </div>
       <div class="p-5 space-y-4">
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900">
-          <b>Prototype mode:</b> Paste your Square access token to simulate a connection. Real OAuth + transaction sync requires a backend (next milestone). For now we tag your existing demo data as "from Square" and refresh timestamps.
+          <b>Prototype mode:</b>Paste your Square access token to simulate a connection. Real OAuth + transaction sync requires a backend (next milestone). For now we tag your existing demo data as "from Square" and refresh timestamps.
         </div>
 
         <div>
           <label class="ab-label">Square Personal Access Token</label>
           <input type="password" class="ab-input font-mono" x-model="squareForm.accessToken" placeholder="EAAA…" />
-          <p class="text-[11px] text-slate-500 mt-1">Get this from <a href="https://developer.squareup.com/apps" target="_blank" class="text-teal-700 underline">developer.squareup.com/apps</a> → your app → Sandbox or Production → Access Token.</p>
+          <p class="text-[11px] text-slate-500 mt-1">Get this from <a href="https://developer.squareup.com/apps" target="_blank" class="text-teal-700 underline">developer.squareup.com/apps</a>→ your app → Sandbox or Production → Access Token.</p>
         </div>
 
         <div>
@@ -4032,7 +4028,7 @@
         <p class="text-sm text-slate-600 mb-2">Choose your payment method:</p>
 
         <button @click="payModal.method='ach'; payModal.step='ach'" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-teal-500 hover:bg-teal-50/30 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl">🏦</div>
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl"></div>
           <div class="flex-1">
             <div class="font-bold text-sm">ACH bank transfer</div>
             <div class="text-xs text-slate-500">Direct from your bank account · 1-3 business days</div>
@@ -4041,7 +4037,7 @@
         </button>
 
         <button @click="payModal.method='zelle'; payModal.step='zelle'" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-teal-500 hover:bg-teal-50/30 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xl">⚡</div>
+          <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xl"></div>
           <div class="flex-1">
             <div class="font-bold text-sm">Zelle</div>
             <div class="text-xs text-slate-500">Instant transfer from your bank's app · No fees</div>
@@ -4050,7 +4046,7 @@
         </button>
 
         <button @click="payModal.method='check'; payModal.step='check'" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-teal-500 hover:bg-teal-50/30 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xl">✉️</div>
+          <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xl"></div>
           <div class="flex-1">
             <div class="font-bold text-sm">Mail in a check</div>
             <div class="text-xs text-slate-500">Notify Wash Depot you're sending a paper check</div>
@@ -4121,7 +4117,7 @@
 
       <!-- Confirmation step -->
       <div x-show="payModal.step==='done'" class="p-8 text-center">
-        <div class="w-16 h-16 mx-auto rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-3xl mb-3">✓</div>
+        <div class="w-16 h-16 mx-auto rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-3xl mb-3"></div>
         <h4 class="font-black text-lg" x-text="payModal.method==='check' ? 'Check confirmation received' : 'Payment notification sent'"></h4>
         <p class="text-sm text-slate-600 mt-2 mb-5" x-text="payModal.method==='check' ? 'Wash Depot has been notified that your check is on the way. Once they receive and deposit it, your invoice will be marked paid.' : 'Wash Depot has been notified of your ' + paymentMethodLabel(payModal.method) + ' payment. They will confirm receipt and update this invoice shortly.'"></p>
         <button @click="payModal.open=false" class="btn btn-primary">Done</button>
@@ -4149,9 +4145,9 @@
         <div>
           <label class="label">Channels</label>
           <div class="flex gap-3 text-sm">
-            <label><input type="checkbox" x-model="compose.email" /> Email</label>
-            <label><input type="checkbox" x-model="compose.sms" /> SMS</label>
-            <label><input type="checkbox" x-model="compose.inApp" /> In-app</label>
+            <label><input type="checkbox" x-model="compose.email" />Email</label>
+            <label><input type="checkbox" x-model="compose.sms" />SMS</label>
+            <label><input type="checkbox" x-model="compose.inApp" />In-app</label>
           </div>
         </div>
         <div><label class="label">Subject</label><input class="input" x-model="compose.subject" /></div>
@@ -4230,7 +4226,6 @@
 <div class="fixed bottom-5 right-5 space-y-2 z-50">
   <template x-for="t in toasts" :key="t.id">
     <div class="toast-enter card px-4 py-2 shadow-lg flex items-center gap-2 text-sm" :class="t.type==='success'?'border-l-4 border-l-teal-500':'border-l-4 border-l-amber-500'">
-      <span x-text="t.type==='success'?'✓':'⚠️'"></span>
       <span x-text="t.message"></span>
     </div>
   </template>
@@ -4290,12 +4285,12 @@ function app() {
     autoScanTimer: null,
     giftModal: { open:false, customerId:null, plate:'', email:'', phone:'', promoId:'promo_5off', channel:'email', message:'' },
     promotions: [
-      { id:'promo_5off',     name:'$5 off any wash',           description:'Apply at next visit',          code:'WD5',     value:5,  type:'amount',  expiresInDays:30 },
-      { id:'promo_upgrade',  name:'Free Premium upgrade',      description:'Upgrade Express → Premium free', code:'UPGRADE', value:6,  type:'upgrade', expiresInDays:30 },
-      { id:'promo_20pct',    name:'20% off any detail',        description:'One-time use on a detail',      code:'DETAIL20',value:20, type:'percent', expiresInDays:60 },
-      { id:'promo_buy2',     name:'Buy 2 washes, get 1 free',  description:'On Premium or Ultimate',         code:'B2G1',    value:0,  type:'punch',   expiresInDays:90 },
-      { id:'promo_member',   name:'1 month Unlimited free',    description:'Free month of membership',       code:'TRYUNL',  value:35, type:'membership',expiresInDays:14 },
-      { id:'promo_birthday', name:'Birthday wash on us',        description:'Free Premium during birthday month', code:'BDAY',value:18, type:'comp',    expiresInDays:31 }
+      { id:'promo_5off', name:'$5 off any wash', description:'Apply at next visit', code:'WD5', value:5, type:'amount', expiresInDays:30 },
+      { id:'promo_upgrade', name:'Free Premium upgrade', description:'Upgrade Express → Premium free', code:'UPGRADE', value:6, type:'upgrade', expiresInDays:30 },
+      { id:'promo_20pct', name:'20% off any detail', description:'One-time use on a detail', code:'DETAIL20',value:20, type:'percent', expiresInDays:60 },
+      { id:'promo_buy2', name:'Buy 2 washes, get 1 free', description:'On Premium or Ultimate', code:'B2G1', value:0, type:'punch', expiresInDays:90 },
+      { id:'promo_member', name:'1 month Unlimited free', description:'Free month of membership', code:'TRYUNL', value:35, type:'membership',expiresInDays:14 },
+      { id:'promo_birthday', name:'Birthday wash on us', description:'Free Premium during birthday month', code:'BDAY',value:18, type:'comp', expiresInDays:31 }
     ],
     customerApp: { tab:'home', alertEnabled:false, alertThreshold:3, alertChannel:'sms', selectedCustomerId:null },
     newCustomerDrawer: null,
@@ -4318,13 +4313,13 @@ function app() {
     newInvoice: { dealershipId:'', vehicleIds: [] },
 
     STATUSES: [
-      { code:'scheduled',  label:'Scheduled',     bg:'#e2e8f0', fg:'#475569' },
-      { code:'dropped',    label:'Pickup/Drop Off', bg:'#dbeafe', fg:'#1d4ed8' },
-      { code:'queue',      label:'In Queue',      bg:'#fef3c7', fg:'#b45309' },
-      { code:'service',    label:'In Service',    bg:'#fce7f3', fg:'#9f1239' },
-      { code:'qc',         label:'Quality Check', bg:'#ede9fe', fg:'#6d28d9' },
-      { code:'ready',      label:'Ready',         bg:'#ccfbf1', fg:'#0f766e' },
-      { code:'completed',  label:'Completed',     bg:'#dcfce7', fg:'#166534' }
+      { code:'scheduled', label:'Scheduled', bg:'#e2e8f0', fg:'#475569' },
+      { code:'dropped', label:'Pickup/Drop Off', bg:'#dbeafe', fg:'#1d4ed8' },
+      { code:'queue', label:'In Queue', bg:'#fef3c7', fg:'#b45309' },
+      { code:'service', label:'In Service', bg:'#fce7f3', fg:'#9f1239' },
+      { code:'qc', label:'Quality Check', bg:'#ede9fe', fg:'#6d28d9' },
+      { code:'ready', label:'Ready', bg:'#ccfbf1', fg:'#0f766e' },
+      { code:'completed', label:'Completed', bg:'#dcfce7', fg:'#166534' }
     ],
 
     /* ========= init ========= */
@@ -4340,7 +4335,7 @@ function app() {
         this.autoLoginFromClerk(window.__CLERK_USER__);
       }
       // Auto-open the sidebar section that contains the active view
-      this.$watch('view', (v) => {
+      this.$watch('view', (v) =>{
         const s = this.viewToSection(v);
         if (s && this.navOpen && !this.navOpen[s]) this.navOpen[s] = true;
       });
@@ -4368,21 +4363,21 @@ function app() {
 
     /* ========= persistence ========= */
     applyState(data) {
-      this.services      = data.services      || [];
-      this.dealerships   = data.dealerships   || [];
-      this.detailers     = data.detailers     || [];
-      this.vehicles      = data.vehicles      || [];
-      this.invoices      = data.invoices      || [];
+      this.services = data.services || [];
+      this.dealerships = data.dealerships || [];
+      this.detailers = data.detailers || [];
+      this.vehicles = data.vehicles || [];
+      this.invoices = data.invoices || [];
       this.notifications = data.notifications || [];
-      this.washPackages  = data.washPackages  || [];
-      this.washSales     = data.washSales     || [];
+      this.washPackages = data.washPackages || [];
+      this.washSales = data.washSales || [];
       this.retailProducts= data.retailProducts|| [];
-      this.retailSales   = data.retailSales   || [];
-      this.squareConfig  = data.squareConfig  || { connected:false, locationName:'', lastSyncAt:null, accessTokenMasked:'' };
-      this.customers     = data.customers     || [];
-      this.visits        = data.visits        || [];
-      this.liveLane      = data.liveLane      || [];
-      this.cameraConfig  = data.cameraConfig  || { connected:false, name:'', lastDetectionAt:null };
+      this.retailSales = data.retailSales || [];
+      this.squareConfig = data.squareConfig || { connected:false, locationName:'', lastSyncAt:null, accessTokenMasked:'' };
+      this.customers = data.customers || [];
+      this.visits = data.visits || [];
+      this.liveLane = data.liveLane || [];
+      this.cameraConfig = data.cameraConfig || { connected:false, name:'', lastDetectionAt:null };
       this.retailReceivings = data.retailReceivings || [];
     },
     async load() {
@@ -4419,7 +4414,7 @@ function app() {
           if (!this.washPackages.length || !this.retailProducts.length) this.seedWashAndRetail();
           if (!this.customers.length) this.seedCRM();
           // migration: ensure each retail product has SKU, cost, etc.
-          this.retailProducts.forEach((p, i) => {
+          this.retailProducts.forEach((p, i) =>{
             if (!p.sku) p.sku = String(100000000000 + Math.floor(Math.random()*900000000000));
             if (typeof p.cost !== 'number') p.cost = +(p.price * 0.4).toFixed(2);
             if (typeof p.reorderPoint !== 'number') p.reorderPoint = Math.max(8, Math.floor((p.stock||0) * 0.4));
@@ -4468,9 +4463,9 @@ function app() {
             method:'POST', credentials:'include',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({ state: data })
-          }).then(r => {
+          }).then(r =>{
             if (!r.ok && r.status !== 503) console.warn('Cloud sync failed:', r.status);
-          }).catch(e => console.warn('Cloud sync error:', e));
+          }).catch(e =>console.warn('Cloud sync error:', e));
         }, 600);
       }
     },
@@ -4478,16 +4473,16 @@ function app() {
 
     /* ========= seed demo data ========= */
     seed() {
-      const id = (p)=> p + '_' + Math.random().toString(36).slice(2,9);
+      const id = (p)=>p + '_' + Math.random().toString(36).slice(2,9);
       const services = [
-        { id:'svc_exp',  name:'Express Wash',         description:'Exterior wash, vacuum, windows',          price: 25  },
-        { id:'svc_full', name:'Full Detail',          description:'Hand wash, clay bar, interior shampoo',   price: 165 },
-        { id:'svc_int',  name:'Interior Detail',      description:'Vacuum, shampoo, leather conditioning',   price: 110 },
-        { id:'svc_pol',  name:'Hand Polish & Wax',    description:'Paint correction lite + sealant',         price: 200 },
-        { id:'svc_eng',  name:'Engine Bay Detail',    description:'Degrease, dress, protect',                price: 75  },
-        { id:'svc_lot',  name:'Lot Prep',             description:'New-arrival prep for showroom',           price: 65  },
-        { id:'svc_odor', name:'Odor Treatment',       description:'Ozone + enzyme deep clean',               price: 140 },
-        { id:'svc_head', name:'Headlight Restoration',description:'UV haze removal + clear coat',            price: 90  }
+        { id:'svc_exp', name:'Express Wash', description:'Exterior wash, vacuum, windows', price: 25 },
+        { id:'svc_full', name:'Full Detail', description:'Hand wash, clay bar, interior shampoo', price: 165 },
+        { id:'svc_int', name:'Interior Detail', description:'Vacuum, shampoo, leather conditioning', price: 110 },
+        { id:'svc_pol', name:'Hand Polish & Wax', description:'Paint correction lite + sealant', price: 200 },
+        { id:'svc_eng', name:'Engine Bay Detail', description:'Degrease, dress, protect', price: 75 },
+        { id:'svc_lot', name:'Lot Prep', description:'New-arrival prep for showroom', price: 65 },
+        { id:'svc_odor', name:'Odor Treatment', description:'Ozone + enzyme deep clean', price: 140 },
+        { id:'svc_head', name:'Headlight Restoration',description:'UV haze removal + clear coat', price: 90 }
       ];
       this.services = services;
 
@@ -4498,7 +4493,7 @@ function app() {
         { id:'det_4', name:'Tyrell M.' }
       ];
 
-      const mkRate = (overrides={}) => services.map(s=>({ serviceId: s.id, price: overrides[s.id] ?? defaultPrice(s.id) }));
+      const mkRate = (overrides={}) =>services.map(s=>({ serviceId: s.id, price: overrides[s.id] ?? defaultPrice(s.id) }));
       function defaultPrice(sid){ return ({svc_exp:18, svc_full:140, svc_int:90, svc_pol:175, svc_eng:60, svc_lot:55, svc_odor:120, svc_head:75})[sid]||50; }
 
       this.dealerships = [
@@ -4534,7 +4529,7 @@ function app() {
 
       // Vehicles spread across statuses, dealerships, and time
       const now = Date.now();
-      const v = (overrides) => ({
+      const v = (overrides) =>({
         id: id('veh'),
         statusHistory: [{ status: overrides.status, at: overrides.dropOffTime, note:'Checked in' }],
         priority:'standard', deliveryMethod:'pickup', notes:'',
@@ -4542,22 +4537,22 @@ function app() {
       });
       const vehicleSeed = [
         // Active jobs
-        v({ dealershipId:'d_north', year:2023, make:'Toyota',     model:'RAV4',     color:'Pearl White', stockNumber:'NS-1402', vin:'JTMRWRFV5LD557831', services:['svc_lot','svc_int'], status:'service',    dropOffTime: now - 2*3600*1000, promisedTime: now + 3*3600*1000, notes:'Pet hair on rear seats — needs odor pass too' }),
-        v({ dealershipId:'d_north', year:2024, make:'Honda',      model:'CR-V',     color:'Crystal Black', stockNumber:'NS-1407', services:['svc_lot'], status:'queue', dropOffTime: now - 50*60*1000, promisedTime: now + 4*3600*1000 }),
-        v({ dealershipId:'d_apex',  year:2022, make:'Ford',       model:'F-150',    color:'Velocity Blue', stockNumber:'AP-9921', services:['svc_full','svc_eng'], status:'qc', dropOffTime: now - 4*3600*1000, promisedTime: now + 1*3600*1000, priority:'rush' }),
-        v({ dealershipId:'d_apex',  year:2021, make:'Chevy',      model:'Tahoe',    color:'Onyx Black', stockNumber:'AP-9930', services:['svc_full'], status:'dropped', dropOffTime: now - 20*60*1000, promisedTime: now + 6*3600*1000 }),
-        v({ dealershipId:'d_grand', year:2019, make:'Nissan',     model:'Altima',   color:'Gun Metal', stockNumber:'GA-552', services:['svc_exp','svc_lot'], status:'ready', dropOffTime: now - 5*3600*1000, promisedTime: now - 30*60*1000, deliveryMethod:'delivery' }),
-        v({ dealershipId:'d_grand', year:2020, make:'Hyundai',    model:'Sonata',   color:'Quartz White', stockNumber:'GA-560', services:['svc_full','svc_head'], status:'service', dropOffTime: now - 3*3600*1000, promisedTime: now + 90*60*1000 }),
-        v({ dealershipId:'d_summit',year:2024, make:'BMW',        model:'X5',       color:'Mineral White', stockNumber:'SM-2010', services:['svc_full','svc_pol'], status:'service', dropOffTime: now - 75*60*1000, promisedTime: now + 4*3600*1000, priority:'vip', deliveryMethod:'delivery' }),
-        v({ dealershipId:'d_summit',year:2023, make:'Audi',       model:'Q5',       color:'Glacier White', stockNumber:'SM-2015', services:['svc_int','svc_full'], status:'queue', dropOffTime: now - 30*60*1000, promisedTime: now + 5*3600*1000 }),
-        v({ dealershipId:'d_summit',year:2022, make:'BMW',        model:'330i',     color:'Jet Black', stockNumber:'SM-2018', services:['svc_lot'], status:'scheduled', dropOffTime: now + 90*60*1000, promisedTime: now + 8*3600*1000 }),
+        v({ dealershipId:'d_north', year:2023, make:'Toyota', model:'RAV4', color:'Pearl White', stockNumber:'NS-1402', vin:'JTMRWRFV5LD557831', services:['svc_lot','svc_int'], status:'service', dropOffTime: now - 2*3600*1000, promisedTime: now + 3*3600*1000, notes:'Pet hair on rear seats — needs odor pass too' }),
+        v({ dealershipId:'d_north', year:2024, make:'Honda', model:'CR-V', color:'Crystal Black', stockNumber:'NS-1407', services:['svc_lot'], status:'queue', dropOffTime: now - 50*60*1000, promisedTime: now + 4*3600*1000 }),
+        v({ dealershipId:'d_apex', year:2022, make:'Ford', model:'F-150', color:'Velocity Blue', stockNumber:'AP-9921', services:['svc_full','svc_eng'], status:'qc', dropOffTime: now - 4*3600*1000, promisedTime: now + 1*3600*1000, priority:'rush' }),
+        v({ dealershipId:'d_apex', year:2021, make:'Chevy', model:'Tahoe', color:'Onyx Black', stockNumber:'AP-9930', services:['svc_full'], status:'dropped', dropOffTime: now - 20*60*1000, promisedTime: now + 6*3600*1000 }),
+        v({ dealershipId:'d_grand', year:2019, make:'Nissan', model:'Altima', color:'Gun Metal', stockNumber:'GA-552', services:['svc_exp','svc_lot'], status:'ready', dropOffTime: now - 5*3600*1000, promisedTime: now - 30*60*1000, deliveryMethod:'delivery' }),
+        v({ dealershipId:'d_grand', year:2020, make:'Hyundai', model:'Sonata', color:'Quartz White', stockNumber:'GA-560', services:['svc_full','svc_head'], status:'service', dropOffTime: now - 3*3600*1000, promisedTime: now + 90*60*1000 }),
+        v({ dealershipId:'d_summit',year:2024, make:'BMW', model:'X5', color:'Mineral White', stockNumber:'SM-2010', services:['svc_full','svc_pol'], status:'service', dropOffTime: now - 75*60*1000, promisedTime: now + 4*3600*1000, priority:'vip', deliveryMethod:'delivery' }),
+        v({ dealershipId:'d_summit',year:2023, make:'Audi', model:'Q5', color:'Glacier White', stockNumber:'SM-2015', services:['svc_int','svc_full'], status:'queue', dropOffTime: now - 30*60*1000, promisedTime: now + 5*3600*1000 }),
+        v({ dealershipId:'d_summit',year:2022, make:'BMW', model:'330i', color:'Jet Black', stockNumber:'SM-2018', services:['svc_lot'], status:'scheduled', dropOffTime: now + 90*60*1000, promisedTime: now + 8*3600*1000 }),
         // Recently completed
-        v({ dealershipId:'d_north', year:2022, make:'Subaru',     model:'Outback',  color:'Cinnamon', stockNumber:'NS-1390', services:['svc_full'], status:'completed', dropOffTime: now - 28*3600*1000, promisedTime: now - 24*3600*1000 }),
-        v({ dealershipId:'d_apex',  year:2020, make:'Ram',        model:'1500',     color:'Diamond Red', stockNumber:'AP-9890', services:['svc_full','svc_eng','svc_pol'], status:'completed', dropOffTime: now - 30*3600*1000, promisedTime: now - 26*3600*1000 }),
-        v({ dealershipId:'d_grand', year:2018, make:'Mazda',      model:'CX-5',     color:'Soul Red', stockNumber:'GA-540', services:['svc_exp'], status:'completed', dropOffTime: now - 49*3600*1000, promisedTime: now - 45*3600*1000 }),
-        v({ dealershipId:'d_summit',year:2023, make:'BMW',        model:'X3',       color:'Brooklyn Grey', stockNumber:'SM-2002', services:['svc_full','svc_pol','svc_int'], status:'completed', dropOffTime: now - 75*3600*1000, promisedTime: now - 70*3600*1000 }),
-        v({ dealershipId:'d_north', year:2021, make:'Toyota',     model:'Camry',    color:'Ruby Pearl', stockNumber:'NS-1380', services:['svc_lot','svc_full'], status:'completed', dropOffTime: now - 100*3600*1000, promisedTime: now - 95*3600*1000 }),
-        v({ dealershipId:'d_apex',  year:2019, make:'Jeep',       model:'Wrangler', color:'Sting Grey', stockNumber:'AP-9870', services:['svc_full'], status:'completed', dropOffTime: now - 120*3600*1000, promisedTime: now - 115*3600*1000 })
+        v({ dealershipId:'d_north', year:2022, make:'Subaru', model:'Outback', color:'Cinnamon', stockNumber:'NS-1390', services:['svc_full'], status:'completed', dropOffTime: now - 28*3600*1000, promisedTime: now - 24*3600*1000 }),
+        v({ dealershipId:'d_apex', year:2020, make:'Ram', model:'1500', color:'Diamond Red', stockNumber:'AP-9890', services:['svc_full','svc_eng','svc_pol'], status:'completed', dropOffTime: now - 30*3600*1000, promisedTime: now - 26*3600*1000 }),
+        v({ dealershipId:'d_grand', year:2018, make:'Mazda', model:'CX-5', color:'Soul Red', stockNumber:'GA-540', services:['svc_exp'], status:'completed', dropOffTime: now - 49*3600*1000, promisedTime: now - 45*3600*1000 }),
+        v({ dealershipId:'d_summit',year:2023, make:'BMW', model:'X3', color:'Brooklyn Grey', stockNumber:'SM-2002', services:['svc_full','svc_pol','svc_int'], status:'completed', dropOffTime: now - 75*3600*1000, promisedTime: now - 70*3600*1000 }),
+        v({ dealershipId:'d_north', year:2021, make:'Toyota', model:'Camry', color:'Ruby Pearl', stockNumber:'NS-1380', services:['svc_lot','svc_full'], status:'completed', dropOffTime: now - 100*3600*1000, promisedTime: now - 95*3600*1000 }),
+        v({ dealershipId:'d_apex', year:2019, make:'Jeep', model:'Wrangler', color:'Sting Grey', stockNumber:'AP-9870', services:['svc_full'], status:'completed', dropOffTime: now - 120*3600*1000, promisedTime: now - 115*3600*1000 })
       ];
       // Build rich timelines for completed vehicles + assign detailers
       const detIds = ['det_1','det_2','det_3','det_4'];
@@ -4661,7 +4656,7 @@ function app() {
         // Bronze (occasional, 1-3 visits)
         ...Array(10).fill('bronze')
       ];
-      profiles.forEach((profile, idx) => {
+      profiles.forEach((profile, idx) =>{
         const fn = firstNames[Math.floor(Math.random()*firstNames.length)];
         const ln = lastNames[Math.floor(Math.random()*lastNames.length)];
         const veh = makes[Math.floor(Math.random()*makes.length)];
@@ -4669,9 +4664,9 @@ function app() {
         let visitCount, totalSpend, membership = null, tags = [];
         if (profile === 'member') { visitCount = 12 + Math.floor(Math.random()*20); membership = { type:'unlimited', startedAt: now - (60+Math.random()*180)*86400000, expiresAt: now + (15+Math.random()*30)*86400000 }; tags.push('membership'); }
         else if (profile === 'vip') { visitCount = 20 + Math.floor(Math.random()*30); tags.push('vip','high-spender'); }
-        else if (profile === 'gold')   visitCount = 10 + Math.floor(Math.random()*15);
+        else if (profile === 'gold') visitCount = 10 + Math.floor(Math.random()*15);
         else if (profile === 'silver') visitCount = 4 + Math.floor(Math.random()*5);
-        else                            visitCount = 1 + Math.floor(Math.random()*3);
+        else visitCount = 1 + Math.floor(Math.random()*3);
 
         // Generate visits historically
         const firstSeenAt = now - (Math.random()*180 + 30)*86400000;
@@ -4682,11 +4677,11 @@ function app() {
           // Package distribution influenced by profile
           let pkgId;
           const r = Math.random();
-          if (profile === 'vip')         pkgId = r < 0.6 ? 'wp_ult' : 'wp_pre';
+          if (profile === 'vip') pkgId = r < 0.6 ? 'wp_ult' : 'wp_pre';
           else if (profile === 'member') pkgId = 'wp_unl'; // member uses subscription, no per-wash charge
-          else if (profile === 'gold')   pkgId = r < 0.5 ? 'wp_pre' : (r < 0.85 ? 'wp_ult' : 'wp_exp');
+          else if (profile === 'gold') pkgId = r < 0.5 ? 'wp_pre' : (r < 0.85 ? 'wp_ult' : 'wp_exp');
           else if (profile === 'silver') pkgId = r < 0.55 ? 'wp_exp' : 'wp_pre';
-          else                            pkgId = r < 0.7 ? 'wp_exp' : 'wp_pre';
+          else pkgId = r < 0.7 ? 'wp_exp' : 'wp_pre';
 
           const pkg = this.washPackages.find(p=>p.id===pkgId);
           const amount = profile === 'member' ? 0 : (pkg?.price || 12);
@@ -4736,22 +4731,22 @@ function app() {
 
     seedWashAndRetail() {
       this.washPackages = [
-        { id:'wp_exp', name:'Express Wash',          price: 12, description:'Quick exterior wash + spot-free rinse' },
-        { id:'wp_pre', name:'Premium Wash',          price: 18, description:'Express + tire shine + underbody' },
-        { id:'wp_ult', name:'Ultimate Wash',         price: 25, description:'Premium + ceramic protectant + wax' },
-        { id:'wp_unl', name:'Unlimited Membership',  price: 35, description:'Monthly unlimited Premium washes' }
+        { id:'wp_exp', name:'Express Wash', price: 12, description:'Quick exterior wash + spot-free rinse' },
+        { id:'wp_pre', name:'Premium Wash', price: 18, description:'Express + tire shine + underbody' },
+        { id:'wp_ult', name:'Ultimate Wash', price: 25, description:'Premium + ceramic protectant + wax' },
+        { id:'wp_unl', name:'Unlimited Membership', price: 35, description:'Monthly unlimited Premium washes' }
       ];
       this.retailProducts = [
-        { id:'rp_coke',     sku:'049000028911', name:'Coke 20oz',             price: 2.50, cost: 1.10, category:'Drinks',     stock: 48, reorderPoint: 24, description:'Coca-Cola 20oz bottle',           supplier:'Coca-Cola Distrib.' },
-        { id:'rp_water',    sku:'012000001031', name:'Bottled Water 16oz',    price: 1.50, cost: 0.45, category:'Drinks',     stock: 96, reorderPoint: 48, description:'Spring water 16oz',                supplier:'Niagara' },
-        { id:'rp_redbull',  sku:'9002490100070', name:'Red Bull 8.4oz',       price: 4.00, cost: 1.85, category:'Drinks',     stock: 24, reorderPoint: 18, description:'Red Bull energy drink 8.4oz',     supplier:'Red Bull NA' },
-        { id:'rp_gatorade', sku:'052000338829', name:'Gatorade 20oz',         price: 3.00, cost: 1.35, category:'Drinks',     stock: 36, reorderPoint: 24, description:'Gatorade Thirst Quencher 20oz',   supplier:'PepsiCo' },
-        { id:'rp_air_pine', sku:'071241010012', name:'Pine Air Freshener',    price: 5.00, cost: 1.20, category:'Air Care',   stock: 30, reorderPoint: 15, description:'Little Trees Royal Pine',          supplier:'Car-Freshner Corp' },
-        { id:'rp_air_new',  sku:'071241010029', name:'New Car Air Freshener', price: 5.00, cost: 1.20, category:'Air Care',   stock: 28, reorderPoint: 15, description:'Little Trees New Car Scent',       supplier:'Car-Freshner Corp' },
-        { id:'rp_kleenex',  sku:'036000451887', name:'Kleenex Travel Pack',   price: 3.00, cost: 0.95, category:'Essentials', stock: 40, reorderPoint: 20, description:'Kleenex on-the-go 10ct travel',    supplier:'Kimberly-Clark' },
-        { id:'rp_wipes',    sku:'810081501122', name:'Microfiber Wipes',      price: 4.00, cost: 1.40, category:'Essentials', stock: 22, reorderPoint: 12, description:'3-pack microfiber detail wipes',   supplier:'Chemical Guys' },
-        { id:'rp_fluid',    sku:'041335404062', name:'Windshield Fluid 1gal', price: 8.00, cost: 3.20, category:'Auto Care',  stock: 18, reorderPoint: 10, description:'-20°F bug-wash windshield fluid', supplier:'Prestone' },
-        { id:'rp_tylenol',  sku:'300450449108', name:'Tylenol Travel Pack',   price: 4.00, cost: 1.55, category:'OTC',        stock: 16, reorderPoint: 8,  description:'Tylenol Extra Strength 2-pk',     supplier:'McNeil' }
+        { id:'rp_coke', sku:'049000028911', name:'Coke 20oz', price: 2.50, cost: 1.10, category:'Drinks', stock: 48, reorderPoint: 24, description:'Coca-Cola 20oz bottle', supplier:'Coca-Cola Distrib.' },
+        { id:'rp_water', sku:'012000001031', name:'Bottled Water 16oz', price: 1.50, cost: 0.45, category:'Drinks', stock: 96, reorderPoint: 48, description:'Spring water 16oz', supplier:'Niagara' },
+        { id:'rp_redbull', sku:'9002490100070', name:'Red Bull 8.4oz', price: 4.00, cost: 1.85, category:'Drinks', stock: 24, reorderPoint: 18, description:'Red Bull energy drink 8.4oz', supplier:'Red Bull NA' },
+        { id:'rp_gatorade', sku:'052000338829', name:'Gatorade 20oz', price: 3.00, cost: 1.35, category:'Drinks', stock: 36, reorderPoint: 24, description:'Gatorade Thirst Quencher 20oz', supplier:'PepsiCo' },
+        { id:'rp_air_pine', sku:'071241010012', name:'Pine Air Freshener', price: 5.00, cost: 1.20, category:'Air Care', stock: 30, reorderPoint: 15, description:'Little Trees Royal Pine', supplier:'Car-Freshner Corp' },
+        { id:'rp_air_new', sku:'071241010029', name:'New Car Air Freshener', price: 5.00, cost: 1.20, category:'Air Care', stock: 28, reorderPoint: 15, description:'Little Trees New Car Scent', supplier:'Car-Freshner Corp' },
+        { id:'rp_kleenex', sku:'036000451887', name:'Kleenex Travel Pack', price: 3.00, cost: 0.95, category:'Essentials', stock: 40, reorderPoint: 20, description:'Kleenex on-the-go 10ct travel', supplier:'Kimberly-Clark' },
+        { id:'rp_wipes', sku:'810081501122', name:'Microfiber Wipes', price: 4.00, cost: 1.40, category:'Essentials', stock: 22, reorderPoint: 12, description:'3-pack microfiber detail wipes', supplier:'Chemical Guys' },
+        { id:'rp_fluid', sku:'041335404062', name:'Windshield Fluid 1gal', price: 8.00, cost: 3.20, category:'Auto Care', stock: 18, reorderPoint: 10, description:'-20°F bug-wash windshield fluid', supplier:'Prestone' },
+        { id:'rp_tylenol', sku:'300450449108', name:'Tylenol Travel Pack', price: 4.00, cost: 1.55, category:'OTC', stock: 16, reorderPoint: 8, description:'Tylenol Extra Strength 2-pk', supplier:'McNeil' }
       ];
       // Generate 14 days of sales (today + 13 prior)
       const washSales = [], retailSales = [];
@@ -4767,7 +4762,7 @@ function app() {
         const hourCutoff = isToday ? now.getHours() : 19;
         for (let i = 0; i < washCount; i++) {
           const hour = 7 + Math.floor(Math.random()*Math.max(1, hourCutoff-7+1));
-          if (isToday && hour > now.getHours()) continue;
+          if (isToday && hour >now.getHours()) continue;
           const minute = Math.floor(Math.random()*60);
           const ts = new Date(day); ts.setHours(hour, minute, 0, 0);
           // Package distribution: 50% Express, 28% Premium, 14% Ultimate, 8% Unlimited
@@ -4784,7 +4779,7 @@ function app() {
         const retailCount = 20 + Math.floor(Math.random()*35);
         for (let i = 0; i < retailCount; i++) {
           const hour = 8 + Math.floor(Math.random()*Math.max(1, hourCutoff-8+1));
-          if (isToday && hour > now.getHours()) continue;
+          if (isToday && hour >now.getHours()) continue;
           const minute = Math.floor(Math.random()*60);
           const ts = new Date(day); ts.setHours(hour, minute, 0, 0);
           const itemCount = 1 + Math.floor(Math.random()*3);
@@ -4864,7 +4859,7 @@ function app() {
       if (this.isInvoiceOverdue(inv)) return 'background:#fee2e2;color:#991b1b';
       return 'background:#fef3c7;color:#92400e';
     },
-    channelIcon(c){ return c==='email'?'✉️':c==='sms'?'💬':'🔔'; },
+    channelIcon(c){ return ''; },
     channelStyle(c){ return c==='email'?'bg-blue-50 text-blue-700': c==='sms'?'bg-green-50 text-green-700' : 'bg-purple-50 text-purple-700'; },
     channelTextStyle(c){ return c==='email'?'bg-blue-100 text-blue-700': c==='sms'?'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'; },
 
@@ -4990,7 +4985,7 @@ function app() {
         const vs = this.vehiclesForDealer(d.id).filter(v=>v.status==='completed' && new Date(v.dropOffTime)>=cutoff);
         const revenue = vs.reduce((s,v)=>s+this.vehicleTotal(v),0);
         return { id:d.id, name:d.name, brandColor:d.brandColor, count: vs.length, revenue };
-      }).sort((a,b)=> this.canSeePrices ? (b.revenue-a.revenue) : (b.count-a.count));
+      }).sort((a,b)=>this.canSeePrices ? (b.revenue-a.revenue) : (b.count-a.count));
       const maxRev = Math.max(1, ...rows.map(r=>r.revenue));
       const maxCnt = Math.max(1, ...rows.map(r=>r.count));
       return rows.map(r=>({ ...r, pct: (r.revenue/maxRev)*100, countPct: (r.count/maxCnt)*100 }));
@@ -5020,11 +5015,11 @@ function app() {
     },
 
     /* ========= Product management ========= */
-    productBySku(sku){ if(!sku) return null; const s = String(sku).trim(); return this.retailProducts.find(p => p.sku === s); },
+    productBySku(sku){ if(!sku) return null; const s = String(sku).trim(); return this.retailProducts.find(p =>p.sku === s); },
     margin(p){ if (!p || !p.price) return 0; return ((p.price - (p.cost||0)) / p.price) * 100; },
     inventoryValue(p){ return (p.stock || 0) * (p.cost || 0); },
     get totalInventoryValue(){ return this.retailProducts.reduce((s,p)=>s+this.inventoryValue(p),0); },
-    get lowStockProducts(){ return this.retailProducts.filter(p => p.stock <= (p.reorderPoint || 0)); },
+    get lowStockProducts(){ return this.retailProducts.filter(p =>p.stock <= (p.reorderPoint || 0)); },
 
     openProductDrawer(idOrNew){
       if (idOrNew === 'new') {
@@ -5038,7 +5033,7 @@ function app() {
       const d = this.productDrawer;
       if (!d.name || !d.sku) { this.toast('Name and SKU required','warning'); return; }
       // SKU uniqueness
-      if (this.retailProducts.some(p => p.sku === d.sku && p.id !== d.id)) {
+      if (this.retailProducts.some(p =>p.sku === d.sku && p.id !== d.id)) {
         this.toast('SKU already exists','warning'); return;
       }
       d.price = +d.price || 0;
@@ -5090,7 +5085,7 @@ function app() {
         return;
       }
       // Add to receive batch
-      const existing = this.receiveBatch.find(b => b.productId === p.id);
+      const existing = this.receiveBatch.find(b =>b.productId === p.id);
       const incrementBy = this.receiveQuickMode ? 1 : (parseInt(prompt(`Quantity received for ${p.name}?`, '1')) || 0);
       if (incrementBy <= 0) { this.receiveSkuInput=''; return; }
       if (existing) existing.qty += incrementBy;
@@ -5099,7 +5094,7 @@ function app() {
     },
     addManualToBatch(productId){
       const p = this.retailProducts.find(x=>x.id===productId); if(!p) return;
-      const existing = this.receiveBatch.find(b => b.productId === p.id);
+      const existing = this.receiveBatch.find(b =>b.productId === p.id);
       if (existing) existing.qty += 1;
       else this.receiveBatch.unshift({ productId: p.id, qty: 1, sku: p.sku, name: p.name });
     },
@@ -5108,12 +5103,12 @@ function app() {
       if (b) b.qty = Math.max(0, +qty || 0);
     },
     removeFromBatch(productId){
-      this.receiveBatch = this.receiveBatch.filter(b => b.productId !== productId);
+      this.receiveBatch = this.receiveBatch.filter(b =>b.productId !== productId);
     },
     confirmReceipt(){
       if (!this.receiveBatch.length) { this.toast('Nothing to receive','warning'); return; }
       let totalUnits = 0, totalCost = 0;
-      this.receiveBatch.forEach(b => {
+      this.receiveBatch.forEach(b =>{
         const p = this.retailProducts.find(x=>x.id===b.productId);
         if (p) {
           p.stock = (p.stock||0) + b.qty;
@@ -5125,24 +5120,24 @@ function app() {
         id: 'rcv_'+Math.random().toString(36).slice(2,9),
         at: Date.now(),
         receivedBy: this.session?.name || 'Staff',
-        items: this.receiveBatch.map(b => ({ productId:b.productId, sku:b.sku, name:b.name, qty:b.qty })),
+        items: this.receiveBatch.map(b =>({ productId:b.productId, sku:b.sku, name:b.name, qty:b.qty })),
         totalUnits, totalCost
       });
       this.receiveBatch = [];
       this.persist();
-      this.toast(`✓ Received ${totalUnits} unit${totalUnits===1?'':'s'} (${this.money(totalCost)} at cost)`);
+      this.toast(` Received ${totalUnits} unit${totalUnits===1?'':'s'} (${this.money(totalCost)} at cost)`);
     },
 
     /* ========= Reporting helpers ========= */
     periodRange(period){
       const now = new Date();
-      const startOfDay = (d) => { const x = new Date(d); x.setHours(0,0,0,0); return x; };
-      const endOfDay   = (d) => { const x = new Date(d); x.setHours(23,59,59,999); return x; };
-      const addDays    = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
-      const startOfWeek= (d) => { const x = startOfDay(d); x.setDate(x.getDate() - x.getDay()); return x; }; // Sun start
-      const startOfMonth=(d) => { const x = startOfDay(d); x.setDate(1); return x; };
+      const startOfDay = (d) =>{ const x = new Date(d); x.setHours(0,0,0,0); return x; };
+      const endOfDay = (d) =>{ const x = new Date(d); x.setHours(23,59,59,999); return x; };
+      const addDays = (d, n) =>{ const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+      const startOfWeek= (d) =>{ const x = startOfDay(d); x.setDate(x.getDate() - x.getDay()); return x; }; // Sun start
+      const startOfMonth=(d) =>{ const x = startOfDay(d); x.setDate(1); return x; };
       const startOfQuarter=(d)=>{ const x = startOfMonth(d); x.setMonth(Math.floor(x.getMonth()/3)*3); return x; };
-      const startOfYear= (d) => { const x = startOfMonth(d); x.setMonth(0); return x; };
+      const startOfYear= (d) =>{ const x = startOfMonth(d); x.setMonth(0); return x; };
 
       let start, end, label, prevStart, prevEnd, prevLabel, granularity;
       switch(period){
@@ -5212,8 +5207,8 @@ function app() {
         }
         case 'custom': {
           start = this.reportCustomStart ? startOfDay(new Date(this.reportCustomStart)) : addDays(now, -29);
-          end   = this.reportCustomEnd   ? endOfDay(new Date(this.reportCustomEnd))     : endOfDay(now);
-          if (start > end) { const tmp = start; start = end; end = tmp; }
+          end = this.reportCustomEnd ? endOfDay(new Date(this.reportCustomEnd)) : endOfDay(now);
+          if (start >end) { const tmp = start; start = end; end = tmp; }
           const days = Math.ceil((end-start)/86400000);
           prevEnd = addDays(start,-1); prevEnd = endOfDay(prevEnd);
           prevStart = addDays(prevEnd,-(days-1)); prevStart = startOfDay(prevStart);
@@ -5229,13 +5224,13 @@ function app() {
     streamSales(stream, start, end){
       const out = [];
       if (stream === 'all' || stream === 'wash') {
-        this.washSales.forEach(s => { if (s.at >= start && s.at <= end) out.push({ stream:'wash', at: s.at, amount: s.amount, count: 1, packageId: s.packageId }); });
+        this.washSales.forEach(s =>{ if (s.at >= start && s.at <= end) out.push({ stream:'wash', at: s.at, amount: s.amount, count: 1, packageId: s.packageId }); });
       }
       if (stream === 'all' || stream === 'retail') {
-        this.retailSales.forEach(s => { if (s.at >= start && s.at <= end) out.push({ stream:'retail', at: s.at, amount: s.total, count: 1, items: s.items }); });
+        this.retailSales.forEach(s =>{ if (s.at >= start && s.at <= end) out.push({ stream:'retail', at: s.at, amount: s.total, count: 1, items: s.items }); });
       }
       if (stream === 'all' || stream === 'detailing') {
-        this.vehicles.forEach(v => {
+        this.vehicles.forEach(v =>{
           if (v.status !== 'completed') return;
           const completedEvent = v.statusHistory?.find(h=>h.status==='completed');
           const at = completedEvent ? new Date(completedEvent.at).getTime() : new Date(v.dropOffTime).getTime();
@@ -5248,7 +5243,7 @@ function app() {
     bucketKey(at, granularity){
       const d = new Date(at);
       if (granularity === 'hour') { d.setMinutes(0,0,0); return d.getTime(); }
-      if (granularity === 'day')  { d.setHours(0,0,0,0); return d.getTime(); }
+      if (granularity === 'day') { d.setHours(0,0,0,0); return d.getTime(); }
       if (granularity === 'week') { d.setHours(0,0,0,0); d.setDate(d.getDate() - d.getDay()); return d.getTime(); }
       if (granularity === 'month'){ d.setHours(0,0,0,0); d.setDate(1); return d.getTime(); }
       return d.getTime();
@@ -5256,7 +5251,7 @@ function app() {
     bucketLabel(ts, granularity){
       const d = new Date(ts);
       if (granularity === 'hour') return d.getHours() + ':00';
-      if (granularity === 'day')  return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+      if (granularity === 'day') return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
       if (granularity === 'week') return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
       if (granularity === 'month')return d.toLocaleString('en-US',{month:'short', year:'2-digit'});
       return '';
@@ -5273,17 +5268,17 @@ function app() {
         else if (granularity === 'week') d.setDate(d.getDate()+7);
         else if (granularity === 'month') d.setMonth(d.getMonth()+1);
         cursor = d.getTime();
-        if (out.length > 366) break; // safety
+        if (out.length >366) break; // safety
       }
       return out;
     },
     bucketed(stream, start, end, granularity){
       const sales = this.streamSales(stream, start, end);
       const buckets = {};
-      this.bucketsBetween(start, end, granularity).forEach(b => {
+      this.bucketsBetween(start, end, granularity).forEach(b =>{
         buckets[b] = { ts:b, label: this.bucketLabel(b, granularity), count:0, revenue:0, byStream: { detailing:0, wash:0, retail:0 } };
       });
-      sales.forEach(s => {
+      sales.forEach(s =>{
         const k = this.bucketKey(s.at, granularity);
         if (!buckets[k]) buckets[k] = { ts:k, label:this.bucketLabel(k,granularity), count:0, revenue:0, byStream:{detailing:0,wash:0,retail:0} };
         buckets[k].count += s.count;
@@ -5297,13 +5292,13 @@ function app() {
       const revenue = sales.reduce((s,x)=>s+x.amount,0);
       const count = sales.length;
       const byStream = { detailing:0, wash:0, retail:0 };
-      sales.forEach(s => byStream[s.stream] += s.amount);
+      sales.forEach(s =>byStream[s.stream] += s.amount);
       return { revenue, count, avg: count ? revenue/count : 0, byStream };
     },
     delta(curr, prev){
-      if (!prev) return { pct: curr ? 100 : 0, dir: curr > 0 ? 'up' : 'flat', diff: curr - prev };
+      if (!prev) return { pct: curr ? 100 : 0, dir: curr >0 ? 'up' : 'flat', diff: curr - prev };
       const pct = ((curr - prev) / prev) * 100;
-      return { pct: Math.round(pct*10)/10, dir: pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat', diff: curr - prev };
+      return { pct: Math.round(pct*10)/10, dir: pct >0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat', diff: curr - prev };
     },
 
     breakdownByDealership(start, end){
@@ -5368,7 +5363,7 @@ function app() {
     get upcomingBookings(){
       const now = Date.now();
       return this.vehicles
-        .filter(v => v.status === 'scheduled' && v.dropOffTime && v.dropOffTime >= now - 24*3600000)
+        .filter(v =>v.status === 'scheduled' && v.dropOffTime && v.dropOffTime >= now - 24*3600000)
         .sort((a,b)=>a.dropOffTime - b.dropOffTime);
     },
     get filteredBookings(){
@@ -5379,17 +5374,17 @@ function app() {
       const tomorrowStart = todayStart + 86400000;
       const weekEnd = todayStart + 7*86400000;
       const monthEnd = todayStart + 30*86400000;
-      return this.upcomingBookings.filter(v => {
+      return this.upcomingBookings.filter(v =>{
         if (f.dealershipId && v.dealershipId !== f.dealershipId) return false;
         if (f.confirm === 'confirmed' && !v.confirmed) return false;
         if (f.confirm === 'pending' && v.confirmed) return false;
         if (f.logistics !== 'all' && (v.deliveryMethod || 'pickup') !== f.logistics) return false;
         if (f.timeSlot !== 'all' && v.timeSlot !== f.timeSlot) return false;
         if (f.priority !== 'all' && (v.priority || 'standard') !== f.priority) return false;
-        if (f.date === 'today'    && (v.dropOffTime < todayStart || v.dropOffTime >= tomorrowStart)) return false;
+        if (f.date === 'today' && (v.dropOffTime < todayStart || v.dropOffTime >= tomorrowStart)) return false;
         if (f.date === 'tomorrow' && (v.dropOffTime < tomorrowStart || v.dropOffTime >= tomorrowStart + 86400000)) return false;
-        if (f.date === 'week'     && (v.dropOffTime < todayStart || v.dropOffTime >= weekEnd)) return false;
-        if (f.date === 'month'    && (v.dropOffTime < todayStart || v.dropOffTime >= monthEnd)) return false;
+        if (f.date === 'week' && (v.dropOffTime < todayStart || v.dropOffTime >= weekEnd)) return false;
+        if (f.date === 'month' && (v.dropOffTime < todayStart || v.dropOffTime >= monthEnd)) return false;
         if (q) {
           const blob = [
             v.year, v.make, v.model, v.color, v.stockNumber, v.vin, v.notes,
@@ -5418,7 +5413,7 @@ function app() {
     get dealerBookings(){
       if (!this.currentDealership) return [];
       return this.vehicles
-        .filter(v => v.dealershipId === this.currentDealership.id)
+        .filter(v =>v.dealershipId === this.currentDealership.id)
         .sort((a,b)=>(b.dropOffTime||0) - (a.dropOffTime||0));
     },
     timeSlotLabel(slot){ return ({ morning:'Morning (8am-12pm)', afternoon:'Afternoon (12-5pm)', anytime:'Anytime' })[slot] || slot; },
@@ -5512,10 +5507,10 @@ function app() {
     customerName(c){ return c ? `${c.firstName||''} ${c.lastName||''}`.trim() || c.plate : 'Unknown'; },
     customerTier(c){
       if (!c) return 'new';
-      if (c.tags?.includes('vip') || (c.totalSpend||0) > 500) return 'vip';
+      if (c.tags?.includes('vip') || (c.totalSpend||0) >500) return 'vip';
       const v = c.visitCount || 0;
       if (v === 0) return 'new';
-      const isMember = c.membership && new Date(c.membership.expiresAt) > Date.now();
+      const isMember = c.membership && new Date(c.membership.expiresAt) >Date.now();
       if (v >= 10 || isMember) return 'loyal';
       return 'regular';
     },
@@ -5647,13 +5642,13 @@ function app() {
         // ensure unique
         if (this.customerByPlate(plate)) return this.simulatePlateScan();
         this.liveLane.unshift({ id:'ll_'+Math.random().toString(36).slice(2,9), customerId:null, plate, detectedAt: Date.now(), status:'detected', isNew:true });
-        this.toast(`🎉 New customer detected: ${plate}`);
+        this.toast(` New customer detected: ${plate}`);
       } else {
         const c = this.customers[Math.floor(Math.random()*this.customers.length)];
         // skip if already in lane
         if (this.liveLane.some(x=>x.customerId===c.id)) return this.simulatePlateScan();
         this.liveLane.unshift({ id:'ll_'+Math.random().toString(36).slice(2,9), customerId:c.id, plate:c.plate, detectedAt: Date.now(), status:'detected' });
-        this.toast(`📷 Recognized: ${this.customerName(c)} (${this.tierLabel(this.customerTier(c))})`);
+        this.toast(` Recognized: ${this.customerName(c)} (${this.tierLabel(this.customerTier(c))})`);
       }
       // Cap lane at 6
       this.liveLane = this.liveLane.slice(0, 6);
@@ -5691,7 +5686,7 @@ function app() {
         this.customers.push(customer);
       }
       const pkg = this.washPackageById(packageId) || { id:'wp_pre', price: 18 };
-      const isMember = customer.membership && new Date(customer.membership.expiresAt) > Date.now();
+      const isMember = customer.membership && new Date(customer.membership.expiresAt) >Date.now();
       const amount = isMember ? 0 : (pkg.price || 0);
       const visit = {
         id:'v_'+Math.random().toString(36).slice(2,9),
@@ -5707,7 +5702,7 @@ function app() {
       customer.favoritePackageId = pkg.id;
       this.liveLane.splice(idx, 1);
       this.persist();
-      this.toast(`✓ Visit logged: ${this.customerName(customer)} — ${pkg.name}`);
+      this.toast(` Visit logged: ${this.customerName(customer)} — ${pkg.name}`);
     },
     removeFromLane(laneId){
       this.liveLane = this.liveLane.filter(l=>l.id!==laneId);
@@ -5791,14 +5786,14 @@ function app() {
         dealershipId: '',
         channel: g.channel,
         to: g.channel === 'email' ? g.email : g.phone,
-        subject: `🎁 ${promo.name} — Wash Depot`,
+        subject: ` ${promo.name} — Wash Depot`,
         body: `Hi${customer.firstName ? ' ' + customer.firstName : ''}, thanks for being part of the Wash Depot family! ${promo.name} — show this code at your next visit: ${promo.code}. ${g.message || ''} Expires ${new Date(Date.now() + promo.expiresInDays*86400000).toLocaleDateString()}.`,
         sentAt: Date.now(), delivered: true, readByDealer: false, internal: false
       });
 
       this.giftModal = { open:false, customerId:null, plate:'', email:'', phone:'', promoId:'promo_5off', channel:'email', message:'' };
       this.persist();
-      this.toast(`🎁 Sent "${promo.name}" via ${g.channel}`);
+      this.toast(` Sent "${promo.name}" via ${g.channel}`);
     },
     redeemGift(customerId, giftId){
       const c = this.customerById(customerId); if (!c) return;
@@ -5812,7 +5807,7 @@ function app() {
     get appCustomer(){
       if (this.customerApp.selectedCustomerId) return this.customerById(this.customerApp.selectedCustomerId);
       // default to a Loyal-tier customer for demo
-      return this.customers.find(c => this.customerTier(c) === 'loyal') || this.customers[0];
+      return this.customers.find(c =>this.customerTier(c) === 'loyal') || this.customers[0];
     },
     get appCustomerVisits(){ return this.appCustomer ? this.customerVisits(this.appCustomer.id) : []; },
     get appLoyaltyProgress(){
@@ -5826,7 +5821,7 @@ function app() {
     get appActiveGifts(){
       const c = this.appCustomer;
       if (!c?.gifts) return [];
-      return c.gifts.filter(g => !g.redeemed && g.expiresAt > Date.now());
+      return c.gifts.filter(g =>!g.redeemed && g.expiresAt >Date.now());
     },
     get appQueueWait(){
       const cars = this.liveLane.length;
@@ -5836,7 +5831,7 @@ function app() {
     toggleAppAlert(){
       this.customerApp.alertEnabled = !this.customerApp.alertEnabled;
       if (this.customerApp.alertEnabled) {
-        this.toast(`✓ Alert set — we'll ${this.customerApp.alertChannel==='sms' ? 'text' : 'push notify'} you when wait drops to ${this.customerApp.alertThreshold} cars or fewer`);
+        this.toast(` Alert set — we'll ${this.customerApp.alertChannel==='sms' ? 'text' : 'push notify'} you when wait drops to ${this.customerApp.alertThreshold} cars or fewer`);
       } else {
         this.toast('Alert turned off');
       }
@@ -5936,8 +5931,8 @@ function app() {
       return {
         detailing, wash, retail, total,
         detailingPct: total ? (detailing/total)*100 : 0,
-        washPct:      total ? (wash/total)*100      : 0,
-        retailPct:    total ? (retail/total)*100    : 0
+        washPct: total ? (wash/total)*100 : 0,
+        retailPct: total ? (retail/total)*100 : 0
       };
     },
 
@@ -5948,7 +5943,7 @@ function app() {
       const all = this.vehicles.filter(v=>v.status==='completed');
 
       // Helper: turnaround in ms for a vehicle
-      const turnaround = v => {
+      const turnaround = v =>{
         const start = new Date(v.dropOffTime);
         const endEvent = v.statusHistory.find(h=>h.status==='completed');
         return endEvent ? (new Date(endEvent.at) - start) : 0;
@@ -5962,14 +5957,14 @@ function app() {
         for (let i=0; i<hist.length-1; i++){
           const s = hist[i].status;
           const dt = new Date(hist[i+1].at) - new Date(hist[i].at);
-          if (dt > 0 && dt < 24*3600*1000) { // ignore overnight gaps
+          if (dt >0 && dt < 24*3600*1000) { // ignore overnight gaps
             stageMs[s] = (stageMs[s]||0) + dt;
             stageCounts[s] = (stageCounts[s]||0) + 1;
           }
         }
       });
       const stageBottlenecks = ['dropped','queue','service','qc','ready']
-        .filter(c => stageCounts[c])
+        .filter(c =>stageCounts[c])
         .map(c=>{
           const meta = this.statusMeta(c);
           const avgMs = stageMs[c]/stageCounts[c];
@@ -6081,23 +6076,23 @@ function app() {
       // Slow stage
       if (stageBottlenecks.length){
         const slowest = [...stageBottlenecks].sort((a,b)=>b.avgMins-a.avgMins)[0];
-        if (slowest.avgMins > 60) rec.push({
-          icon:'⏱️', severity:'medium',
+        if (slowest.avgMins >60) rec.push({
+          icon:'⏱', severity:'medium',
           title:`${slowest.label} is your biggest time sink (avg ${slowest.avgMins}m)`,
           body:`Consider adding a second person at ${slowest.label.toLowerCase()} during peak times, or breaking the step into a checklist to identify where time is lost.`
         });
       }
       // Detailer outlier
       if (detailerStats.length >= 2){
-        const fastest = detailerStats.find(d=>d.efficiencyVsAvg > 15);
+        const fastest = detailerStats.find(d=>d.efficiencyVsAvg >15);
         const slowest = detailerStats.find(d=>d.efficiencyVsAvg < -15);
         if (fastest) rec.push({
-          icon:'🏆', severity:'low',
+          icon:'', severity:'low',
           title:`${fastest.name} is ${fastest.efficiencyVsAvg}% faster than team avg`,
           body:`Have ${fastest.name.split(' ')[0]} document their workflow and run a 15-minute training. Replicating their process across the team could increase capacity.`
         });
         if (slowest) rec.push({
-          icon:'🔍', severity:'medium',
+          icon:'', severity:'medium',
           title:`${slowest.name} is ${Math.abs(slowest.efficiencyVsAvg)}% slower than team avg`,
           body:`Pair them with the top performer for a shift, or check if they're consistently being assigned harder jobs (full details vs express). Could also be equipment/station issue.`
         });
@@ -6106,8 +6101,8 @@ function app() {
       if (this.canSeePrices && dealersByRevenue.length){
         const top = dealersByRevenue[0];
         const share = totalRev90 ? (top.revenue/totalRev90)*100 : 0;
-        if (share > 40) rec.push({
-          icon:'⚠️', severity:'high',
+        if (share >40) rec.push({
+          icon:'', severity:'high',
           title:`${top.name} is ${Math.round(share)}% of revenue — concentration risk`,
           body:`Losing this account would drop revenue by ${Math.round(share)}%. Prioritize service excellence here AND prospect 1-2 similar-size accounts to diversify.`
         });
@@ -6116,7 +6111,7 @@ function app() {
       if (combos.length){
         const best = combos[0];
         rec.push({
-          icon:'🧩', severity:'low',
+          icon:'', severity:'low',
           title:`"${best.label}" is your most popular service combo (${best.count} jobs)`,
           body: this.canSeePrices
             ? `Avg total ${this.money(best.avgTotal)}. Package this as a named bundle with a small discount — easier to upsell, easier to schedule.`
@@ -6126,9 +6121,9 @@ function app() {
       // Day of week
       const peakDay = dowLabels[peakIdx];
       const slowDays = dowCount.map((c,i)=>({c,i})).filter(x=>x.c < maxDow*0.4).map(x=>dowLabels[x.i]);
-      if (peakDay && completed.length > 5){
+      if (peakDay && completed.length >5){
         rec.push({
-          icon:'📅', severity:'low',
+          icon:'', severity:'low',
           title:`${peakDay} is your busiest day`,
           body: slowDays.length
             ? `${peakDay} runs hot, ${slowDays.join('/')} runs slow. Consider offering dealerships a discount for slow-day drop-offs to smooth the workload.`
@@ -6141,7 +6136,7 @@ function app() {
         if (overdueInvs.length){
           const total = overdueInvs.reduce((s,i)=>s+i.total,0);
           rec.push({
-            icon:'💰', severity:'high',
+            icon:'', severity:'high',
             title:`${overdueInvs.length} invoice${overdueInvs.length>1?'s':''} overdue (${this.money(total)})`,
             body:`Send a friendly reminder today. Set up auto-reminders at 7 and 14 days past due to keep this from snowballing.`
           });
@@ -6151,7 +6146,7 @@ function app() {
       const overdueJobs = this.vehicles.filter(v=>this.isOverdue(v));
       if (overdueJobs.length >= 2){
         rec.push({
-          icon:'🚨', severity:'high',
+          icon:'', severity:'high',
           title:`${overdueJobs.length} jobs are past their promised time`,
           body:`Call those dealerships now with a new ETA — proactive communication beats waiting for them to ask. Then look at why: scheduling, staffing, or scope creep?`
         });
@@ -6159,40 +6154,40 @@ function app() {
       // Cross-stream insights
       if (this.canSeePrices) {
         const sb = this.streamBreakdown;
-        if (sb.total > 0) {
+        if (sb.total >0) {
           // Concentration in one stream
-          if (sb.detailingPct > 60) rec.push({
-            icon:'⚖️', severity:'medium',
+          if (sb.detailingPct >60) rec.push({
+            icon:'', severity:'medium',
             title:`Detailing is ${Math.round(sb.detailingPct)}% of revenue`,
             body:`Heavy detailing concentration. Wash Line and Retail are higher-margin per-labor-hour — push membership signups and retail attach at the wash line to balance.`
           });
-          if (sb.washPct > 60) rec.push({
-            icon:'⚖️', severity:'medium',
+          if (sb.washPct >60) rec.push({
+            icon:'', severity:'medium',
             title:`Wash Line is ${Math.round(sb.washPct)}% of revenue`,
             body:`The wash line carries the business. Detailing has higher per-vehicle revenue — consider promoting upsell from wash to detail with on-site signage and discount stacking.`
           });
           // Retail attach rate
           const washCount14 = this.last14DaysWash().reduce((s,d)=>s+d.count,0);
           const retailCount14 = this.last14DaysRetail().reduce((s,d)=>s+d.count,0);
-          if (washCount14 > 0) {
+          if (washCount14 >0) {
             const attachRate = (retailCount14/washCount14)*100;
             if (attachRate < 30) rec.push({
-              icon:'🛒', severity:'medium',
+              icon:'', severity:'medium',
               title:`Retail attach rate is only ${Math.round(attachRate)}%`,
               body:`For every 100 washes, only ${Math.round(attachRate)} retail purchases. Move impulse items (drinks, air fresheners) closer to checkout, or offer a $1 add-on combo with Premium washes.`
             });
             if (attachRate >= 50) rec.push({
-              icon:'🎯', severity:'low',
+              icon:'', severity:'low',
               title:`Strong retail attach: ${Math.round(attachRate)}%`,
               body:`Half your wash customers also buy retail. Test a single bundled "wash + drink + air freshener" SKU at $20 — captures the willingness to pay you've already established.`
             });
           }
           // Membership opportunity
           const unlimited = this.washPackageMix.find(p=>p.id==='wp_unl');
-          if (unlimited && washCount14 > 50) {
+          if (unlimited && washCount14 >50) {
             const memberPct = (unlimited.count/washCount14)*100;
             if (memberPct < 8) rec.push({
-              icon:'🎟️', severity:'medium',
+              icon:'', severity:'medium',
               title:`Only ${Math.round(memberPct)}% of washes are Memberships`,
               body:`Memberships smooth revenue and lock in repeat visits. Goal range is 15-25%. Train wash-line staff on a 30-second pitch: "Two washes pays for the month."`
             });
@@ -6200,7 +6195,7 @@ function app() {
           // Inventory low
           const lowStock = this.retailProducts.filter(p=>p.stock < 20);
           if (lowStock.length) rec.push({
-            icon:'📦', severity:'medium',
+            icon:'', severity:'medium',
             title:`${lowStock.length} retail SKU${lowStock.length>1?'s':''} running low`,
             body:`${lowStock.map(p=>p.name).join(', ')}. Reorder before stockout — lost retail sales hurt the highest-margin stream.`
           });
@@ -6241,22 +6236,22 @@ function app() {
       this.vehicles.forEach(v=>{
         const blob = [v.year, v.make, v.model, v.vin, v.stockNumber, v.color].join(' ').toLowerCase();
         if (blob.includes(q)) r.push({
-          key:'v_'+v.id, icon:'🚗',
+          key:'v_'+v.id, icon:'',
           title: `${v.year} ${v.make} ${v.model}`,
           subtitle: `${this.dealershipById(v.dealershipId)?.name} · #${v.stockNumber} · ${this.statusMeta(v.status).label}`,
-          action: ()=> this.openVehicle(v.id)
+          action: ()=>this.openVehicle(v.id)
         });
       });
       this.dealerships.forEach(d=>{
         if (d.name.toLowerCase().includes(q)) r.push({
-          key:'d_'+d.id, icon:'🏢', title: d.name, subtitle: d.address,
-          action: ()=> { if(this.session.role==='staff'){ this.view='dealerships'; this.openDealership(d.id); } }
+          key:'d_'+d.id, icon:'', title: d.name, subtitle: d.address,
+          action: ()=>{ if(this.session.role==='staff'){ this.view='dealerships'; this.openDealership(d.id); } }
         });
       });
       this.invoices.forEach(i=>{
         if (i.number.toLowerCase().includes(q)) r.push({
-          key:'i_'+i.id, icon:'💵', title: i.number, subtitle: this.dealershipById(i.dealershipId)?.name + ' · ' + this.money(i.total),
-          action: ()=> this.openInvoice(i.id)
+          key:'i_'+i.id, title: i.number, subtitle: this.dealershipById(i.dealershipId)?.name + ' · ' + this.money(i.total),
+          action: ()=>this.openInvoice(i.id)
         });
       });
       return r.slice(0,12);
@@ -6331,7 +6326,7 @@ function app() {
       const res = await this.sendSms(this.twilioTestForm.to, this.twilioTestForm.body);
       this.twilioTestForm.busy = false;
       if (res.ok) {
-        this.toast('✓ SMS sent (sid: ' + res.sid + ')');
+        this.toast('SMS sent (sid: ' + res.sid + ')');
         this.twilioTestForm.lastResult = 'Sent: ' + res.sid;
       } else {
         const msg = res.reason === 'not-configured' ? 'Twilio not configured. Add TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM to Vercel env vars.' : ('SMS failed: ' + (res.detail || res.reason));
@@ -6372,7 +6367,7 @@ function app() {
         this.notifications.push(note);
         // Real SMS dispatch (fire-and-forget)
         if (ch === 'sms' && to) {
-          this.sendSms(to, `Wash Depot: ${body}`).then(r => {
+          this.sendSms(to, `Wash Depot: ${body}`).then(r =>{
             note.delivered = !!r.ok;
             if (r.ok) note.twilioSid = r.sid; else note.smsError = r.reason;
             this.persist();
@@ -6624,7 +6619,7 @@ function app() {
         };
         this.notifications.push(note);
         if (ch === 'sms' && to) {
-          this.sendSms(to, `Wash Depot — ${this.compose.subject}\n\n${this.compose.body}`).then(r => {
+          this.sendSms(to, `Wash Depot — ${this.compose.subject}\n\n${this.compose.body}`).then(r =>{
             note.delivered = !!r.ok;
             if (r.ok) note.twilioSid = r.sid; else note.smsError = r.reason;
             this.persist();
@@ -6643,13 +6638,13 @@ function app() {
       const id = 'svc_'+Math.random().toString(36).slice(2,7);
       this.services.push({ id, name:'New service', description:'', price: 50 });
       // add default price to each dealership using catalog price
-      this.dealerships.forEach(d=> d.rateSheet.push({ serviceId:id, price: 50 }));
+      this.dealerships.forEach(d=>d.rateSheet.push({ serviceId:id, price: 50 }));
       this.persist();
     },
     addDetailer(){ this.detailers.push({ id:'det_'+Math.random().toString(36).slice(2,7), name:'New detailer' }); this.persist(); },
     removeServiceEverywhere(serviceId){
       this.services = this.services.filter(s=>s.id!==serviceId);
-      this.dealerships.forEach(d=> d.rateSheet = d.rateSheet.filter(r=>r.serviceId!==serviceId));
+      this.dealerships.forEach(d=>d.rateSheet = d.rateSheet.filter(r=>r.serviceId!==serviceId));
       this.persist(); this.toast('Service removed');
     },
     addRateFromCatalog(dealershipId, e){
@@ -6679,8 +6674,8 @@ function app() {
     async loadUsers(){
       try {
         const [u, i] = await Promise.all([
-          fetch('/api/users', { credentials:'include' }).then(r => r.ok ? r.json() : { users: [] }),
-          fetch('/api/invitations', { credentials:'include' }).then(r => r.ok ? r.json() : { invitations: [] })
+          fetch('/api/users', { credentials:'include' }).then(r =>r.ok ? r.json() : { users: [] }),
+          fetch('/api/invitations', { credentials:'include' }).then(r =>r.ok ? r.json() : { invitations: [] })
         ]);
         this.activeUsers = u.users || [];
         this.pendingInvites = i.invitations || [];
@@ -6743,7 +6738,7 @@ function app() {
     connectSquare(){
       if (!this.squareForm.accessToken || !this.squareForm.locationName) { this.toast('Both fields required','warning'); return; }
       const token = this.squareForm.accessToken;
-      const masked = token.length > 8 ? token.slice(0,4) + '…' + token.slice(-4) : '••••';
+      const masked = token.length >8 ? token.slice(0,4) + '…' + token.slice(-4) : '••••';
       this.squareConfig = {
         connected: true,
         locationName: this.squareForm.locationName,

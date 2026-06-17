@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Wash Depot" />
 <link rel="manifest" href="/manifest.webmanifest" />
-<link rel="apple-touch-icon" href="/icon-192.svg" />
-<link rel="icon" href="/icon-192.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+<link rel="icon" href="/icon-192.png?v=2" />
 <title>Wash Depot</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js"></script>
@@ -748,7 +748,7 @@ function customerApp() {
           const msg = `Wash Depot — line is short! ${this.queue.cars} cars in line, ~${this.queue.mins} min wait. Come on in!`;
           this.showToast(`🔔 ${msg}`);
           if (this.alert.channel === 'push' && 'Notification' in window && Notification.permission === 'granted') {
-            new Notification('Wash Depot — line is short!', { body: `${this.queue.cars} cars in line. Come on in!`, icon:'/icon-192.svg' });
+            new Notification('Wash Depot — line is short!', { body: `${this.queue.cars} cars in line. Come on in!`, icon:'/icon-192.png?v=2' });
           }
           if (this.alert.channel === 'sms' && this.customer?.phone) {
             fetch('/api/notifications/sms', {
